@@ -6,7 +6,7 @@ class LastFM extends React.Component {
     console.log(props);
     const { item_search } = props;
     this.state = {
-      artist: item_search == "" ? "data" : item_search,
+      artist: "juanes",
       error: null,
       isLoaded: false,
       items: []
@@ -14,18 +14,29 @@ class LastFM extends React.Component {
   }
 
   componentWillReceiveProps() {
+    console.log(this.props.item_search);
+    this.setState({
+      artist: this.props.item_search
+    });
+  }
+
+  componentWillReceiveProps() {
     const source = "http://ws.audioscrobbler.com/2.0/";
-    const method = "?method=artist.search&artist=";
+    // const method = "?method=artist.search&artist=";
+    const method = "?method=artist.gettoptracks&artist=";
     // const method = "method=artist.getinfo&artist=";
+
     const key = "&api_key=a0db55d657d3405364a7450efc1f97c4";
     const format = "&format=json";
-    fetch(`${source}${method}${this.state.artist}${key}${format}`)
+    fetch(`${source}${method}${this.props.item_search}${key}${format}`)
       .then(res => res.json())
       .then(
         result => {
+          console.log(result);
+
           this.setState({
             isLoaded: true,
-            items: result.results.artistmatches.artist
+            items: result.toptracks.track
           });
         },
         // Note: it's important to handle errors here
@@ -52,8 +63,10 @@ class LastFM extends React.Component {
         <ul>
           {items.map(item => (
             <li key={item.name}>
-              <img src={item.image[1]["#text"]} />
-              {item.name}
+              {console.log(item)}
+              <a href={item.url} target="_blank">
+                {item.name} +
+              </a>
             </li>
           ))}
         </ul>

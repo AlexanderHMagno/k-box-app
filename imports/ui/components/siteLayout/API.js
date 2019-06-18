@@ -63,10 +63,12 @@ class LastFM extends React.Component {
         <ul>
           {items.map(item => (
             <li key={item.name}>
-              {console.log(item)}
-              <a href={item.url} target="_blank">
-                {item.name} +
-              </a>
+              <div>
+                <a href={item.url} target="_blank">
+                  {item.name} +
+                </a>
+                <h1>{item.artist.name}</h1>
+              </div>
             </li>
           ))}
         </ul>

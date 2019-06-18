@@ -1,9 +1,10 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import Profile from "../../components/siteLayout/UserPage";
 
 const Profile = ({ classes }) => {
-  return <h1>Profile Page</h1>;
+  return <UserPage />;
 };
 
 export default Profile;

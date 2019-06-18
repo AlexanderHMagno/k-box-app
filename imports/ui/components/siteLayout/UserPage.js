@@ -6,7 +6,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Hidden from "@material-ui/core/Hidden";
 import Navigator from "./Navigator";
 import Content from "./Content";
-import Header from "./Header";
+import UserHeader from "./UserHeader";
 
 let theme = createMuiTheme({
   typography: {
@@ -184,7 +184,7 @@ class UserPage extends React.Component {
             </Hidden>
           </nav>
           <div className={classes.appContent}>
-            <Header onDrawerToggle={this.handleDrawerToggle} />
+            <UserHeader onDrawerToggle={this.handleDrawerToggle} />
             <main className={classes.mainContent}>
               <Content />
             </main>
@@ -195,8 +195,8 @@ class UserPage extends React.Component {
   }
 }
 
-Paperbase.propTypes = {
+UserPage.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Paperbase);
+export default withStyles(styles)(UserPage);

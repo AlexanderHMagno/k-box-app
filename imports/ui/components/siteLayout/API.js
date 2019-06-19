@@ -1,10 +1,10 @@
 import React from "react";
+import Song from "./Song_container";
 
 class LastFM extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
-    const { item_search } = props;
+    const { item_search, add } = props;
     this.state = {
       artist: "juanes",
       error: null,
@@ -32,8 +32,6 @@ class LastFM extends React.Component {
       .then(res => res.json())
       .then(
         result => {
-          console.log(result);
-
           this.setState({
             isLoaded: true,
             items: result.toptracks.track
@@ -53,6 +51,7 @@ class LastFM extends React.Component {
 
   render() {
     const { error, isLoaded, items } = this.state;
+
     // console.log(this.state);
     if (error) {
       return <div>Error: {error.message}</div>;
@@ -60,14 +59,15 @@ class LastFM extends React.Component {
       return <div>Loading...</div>;
     } else {
       return (
-        <ul>
+        <ul style={{ display: "flex", flexWrap: "wrap" }}>
           {items.map(item => (
-            <li key={item.name}>
+            <li key={item.name} style={{ listStyleType: "none", width: "30%" }}>
               <div>
-                <a href={item.url} target="_blank">
-                  {item.name} +
-                </a>
-                <h1>{item.artist.name}</h1>
+                <Song
+                  artist={item.artist.name}
+                  song={item.name}
+                  add={this.props.add.bind(this)}
+                />
               </div>
             </li>
           ))}

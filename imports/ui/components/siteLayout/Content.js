@@ -13,6 +13,8 @@ import { withStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import Api from "./API";
+import Links from "../../../api/links";
+
 // import RenderToLayer from "material-ui/internal/RenderToLayer";
 
 const styles = theme => ({
@@ -48,13 +50,20 @@ class Content extends React.Component {
       items: []
     };
   }
-
+  componentDidMount() {
+    let information = Links.find({});
+    window.information = information;
+  }
   search_name() {
     console.log(this.state.search_information);
   }
 
   set_information(information) {
     this.setState({ search_information: information });
+  }
+
+  insertLink(title, artist) {
+    Links.insert({ title, artist, createdAt: new Date() });
   }
 
   render() {
@@ -84,14 +93,14 @@ class Content extends React.Component {
                 />
               </Grid>
               <Grid item>
-                <Button
+                {/* <Button
                   variant="contained"
                   color="secondary"
                   className={classes.addUser}
                   onClick={() => this.search_name()}
                 >
                   Search
-                </Button>
+                </Button> */}
                 <Tooltip title="Reload">
                   <IconButton>
                     <RefreshIcon className={classes.block} color="inherit" />
@@ -103,9 +112,13 @@ class Content extends React.Component {
         </AppBar>
         <div className={classes.contentWrapper}>
           <Typography color="textSecondary" align="center">
-            Heya! Not songs found it.
+            {!this.state.search_information && "Heya! Not songs found it."}
           </Typography>
-          <Api item_search={this.state.search_information} />
+
+          <Api
+            item_search={this.state.search_information}
+            add={this.insertLink.bind(this)}
+          />
         </div>
       </Paper>
     );

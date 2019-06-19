@@ -18,25 +18,41 @@ import SettingsInputComponentIcon from "@material-ui/icons/SettingsInputComponen
 import TimerIcon from "@material-ui/icons/Timer";
 import SettingsIcon from "@material-ui/icons/Settings";
 import PhonelinkSetupIcon from "@material-ui/icons/PhonelinkSetup";
-
+// import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 const categories = [
   {
     id: "Your K-Zone",
     children: [
-      { id: "Karaoke", icon: <SettingsInputComponentIcon />, active: true },
-      { id: "Friends", icon: <PeopleIcon /> },
-      { id: "Favorites", icon: <PublicIcon /> },
-      { id: "Logout", icon: <SettingsEthernetIcon /> }
-    ]
-  },
-  {
-    id: "Settings (Coming soon)",
-    children: [
-      { id: "Profile", icon: <SettingsIcon /> },
-      { id: "Performance", icon: <TimerIcon /> },
-      { id: "Global Scores", icon: <PhonelinkSetupIcon /> }
+      {
+        id: "Karaoke",
+        icon: <SettingsInputComponentIcon />,
+        // active: false,
+        route: "/karoke"
+      },
+      { id: "Friends", icon: <PeopleIcon />, route: "/karoke" },
+      {
+        id: "Favorites",
+        icon: <PublicIcon />,
+        route: "/karoke"
+        // active: false
+      },
+      {
+        id: "Logout",
+        icon: <SettingsEthernetIcon />,
+        route: "/home"
+        // active: false
+      }
     ]
   }
+  // {
+  //   id: "Settings (Coming soon)",
+  //   children: [
+  //     { id: "Profile", icon: <SettingsIcon /> },
+  //     { id: "Performance", icon: <TimerIcon /> },
+  //     { id: "Global Scores", icon: <PhonelinkSetupIcon /> }
+  //   ]
+  // }
 ];
 
 const styles = theme => ({
@@ -52,7 +68,8 @@ const styles = theme => ({
     paddingBottom: 1,
     color: "rgba(255, 255, 255, 0.7)",
     "&:hover,&:focus": {
-      backgroundColor: "rgba(255, 255, 255, 0.08)"
+      backgroundColor: "rgba(255, 255, 255, 0.08)",
+      color: "#f50057"
     }
   },
   itemCategory: {
@@ -66,8 +83,13 @@ const styles = theme => ({
     fontSize: 24,
     color: theme.palette.common.white
   },
-  itemActiveItem: {
-    color: "#f50057"
+  // itemActiveItem: {
+  //   color: "#f50057",
+  //   textDecoration: "none"
+  // },
+
+  navLinks: {
+    textDecoration: "none"
   },
   itemPrimary: {
     fontSize: "inherit"
@@ -103,13 +125,16 @@ function Navigator(props) {
           <ListItemIcon className={classes.itemIcon}>
             <HomeIcon />
           </ListItemIcon>
-          <ListItemText
-            classes={{
-              primary: classes.itemPrimary
-            }}
-          >
-            [user] Dashboard
-          </ListItemText>
+          <NavLink className={classes.navLinks} to="/profile">
+            <ListItemText
+              classes={{
+                // primary: classes.itemPrimary
+                primary: classes.item
+              }}
+            >
+              [user] Dashboard
+            </ListItemText>
+          </NavLink>
         </ListItem>
         {categories.map(({ id, children }) => (
           <React.Fragment key={id}>
@@ -122,21 +147,28 @@ function Navigator(props) {
                 {id}
               </ListItemText>
             </ListItem>
-            {children.map(({ id: childId, icon, active }) => (
-              <ListItem
-                key={childId}
-                button
-                className={clsx(classes.item, active && classes.itemActiveItem)}
-              >
-                <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
-                <ListItemText
-                  classes={{
-                    primary: classes.itemPrimary
-                  }}
+            {children.map(({ id: childId, icon, route }) => (
+              <NavLink to={route} className={classes.navLinks}>
+                <ListItem
+                  key={childId}
+                  button
+                  className={clsx(
+                    classes.item
+                    // active && classes.itemActiveItem
+                  )}
                 >
-                  {childId}
-                </ListItemText>
-              </ListItem>
+                  <ListItemIcon className={classes.itemIcon}>
+                    {icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    classes={{
+                      primary: classes.itemPrimary
+                    }}
+                  >
+                    {childId}
+                  </ListItemText>
+                </ListItem>
+              </NavLink>
             ))}
             <Divider className={classes.divider} />
           </React.Fragment>

@@ -96,7 +96,7 @@ function Header(props) {
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
               <Typography color="inherit" variant="h5" component="h1">
-                Dashboard
+                Karaoke
               </Typography>
             </Grid>
             <Grid item>
@@ -127,10 +127,10 @@ function Header(props) {
         elevation={0}
       >
         <Tabs value={0} textColor="inherit">
-          <Tab textColor="inherit" label="Users" />
-          <Tab textColor="inherit" label="Sign-in method" />
-          <Tab textColor="inherit" label="Templates" />
-          <Tab textColor="inherit" label="Usage" />
+          <Tab textColor="inherit" label="Current Rooms" />
+          <Tab textColor="inherit" label="Join a Room" />
+          <Tab textColor="inherit" label="Create a Room" />
+          {/* <Tab textColor="inherit" label="Usage" /> */}
         </Tabs>
       </AppBar>
     </React.Fragment>

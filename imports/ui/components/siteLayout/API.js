@@ -4,7 +4,6 @@ import Song from "./Song_container";
 class LastFM extends React.Component {
   constructor(props) {
     super(props);
-    const { item_search, add } = props;
     this.state = {
       artist: "juanes",
       error: null,
@@ -14,7 +13,6 @@ class LastFM extends React.Component {
   }
 
   componentWillReceiveProps() {
-    console.log(this.props.item_search);
     this.setState({
       artist: this.props.item_search
     });
@@ -63,11 +61,7 @@ class LastFM extends React.Component {
           {items.map(item => (
             <li key={item.name} style={{ listStyleType: "none", width: "30%" }}>
               <div>
-                <Song
-                  artist={item.artist.name}
-                  song={item.name}
-                  add={this.props.add.bind(this)}
-                />
+                <Song artist={item.artist.name} title={item.name} />
               </div>
             </li>
           ))}

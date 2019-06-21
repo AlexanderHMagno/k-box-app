@@ -16,7 +16,9 @@
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "react-router": "^5.0.1",
-    "react-router-dom": "^5.0.1"
+    "react-router-dom": "^5.0.1",
+    "sweetalert2": "^8.12.1",
+    "sweetalert2-react-content": "^1.1.0"
   },
   "meteor": {
     "mainModule": {

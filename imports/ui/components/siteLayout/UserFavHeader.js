@@ -15,6 +15,9 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
+import SettingsPowerIcon from "@material-ui/icons/SettingsPower";
+
+import Icon from "@material-ui/core/Icon";
 
 const lightColor = "rgba(255, 255, 255, 0.7)";
 
@@ -87,7 +90,7 @@ function Header(props) {
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
               <Typography color="inherit" variant="h5" component="h1">
-                Add Artists to Favourites
+                Keep adding music to your Favorites to enjoy the karoke feature!
               </Typography>
             </Grid>
             <Grid item>
@@ -118,7 +121,7 @@ function Header(props) {
         elevation={0}
       >
         <Tabs value={0} textColor="inherit">
-          <Tab textColor="inherit" label="Search K-Box Music Artists" />
+          <Tab textColor="inherit" label="My Favorites" />
         </Tabs>
       </AppBar>
     </React.Fragment>

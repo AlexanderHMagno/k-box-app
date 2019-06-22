@@ -1,9 +1,8 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import AccountForm from "../../components/AccountForm.js";
-import Accounts from "../../components/Accounts";
-
+import AccountForm from "../../components/siteLayout/AccountForm";
+// import { Form, Field } from "react-final-form";
 const Home = ({ classes }) => {
   return (
     <Grid
@@ -27,9 +26,7 @@ const Home = ({ classes }) => {
       </Grid>
       <Grid item xs={12} sm={12} md={6}>
         <Typography gutterBottom>Welcome home.</Typography>
-        {/* <AccountForm /> */}
-
-        <Accounts />
+        <AccountForm />
       </Grid>
     </Grid>
   );

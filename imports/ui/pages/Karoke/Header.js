@@ -19,6 +19,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Karaoke from "./subpages/Karaoke_content";
 import Create from "./subpages/Create_Room";
 import Join from "./subpages/Join_room";
+import Dashboard from "./Rooms/Dashboard";
 // +++++++++++++++++ TABS ++++++++++++++++++++++++++++
 
 function TabContainer(props) {
@@ -56,6 +57,7 @@ function SimpleTabs() {
           <Tab textColor="inherit" label="Available Rooms" />
           <Tab textColor="inherit" label="Create" />
           <Tab textColor="primary" label="Join" />
+          <Tab textColor="primary" label="Room" />
         </Tabs>
       </AppBar>
       {value === 0 && (
@@ -71,6 +73,11 @@ function SimpleTabs() {
       {value === 2 && (
         <TabContainer>
           <Join />
+        </TabContainer>
+      )}
+      {value === 3 && (
+        <TabContainer>
+          <Dashboard />
         </TabContainer>
       )}
     </div>

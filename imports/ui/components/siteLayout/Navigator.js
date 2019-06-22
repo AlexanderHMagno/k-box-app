@@ -147,8 +147,6 @@ class Navigator extends Component {
         console.log("error");
       } else {
         this.setState({ isLoggedin: !this.state.isLoggedin });
-        window.history.pushState(null, null, "/home");
-        window.history.go();
       }
     });
   }

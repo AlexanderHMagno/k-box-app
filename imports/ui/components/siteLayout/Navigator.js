@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { withStyles } from "@material-ui/core/styles";
@@ -13,36 +13,45 @@ import PeopleIcon from "@material-ui/icons/People";
 import DnsRoundedIcon from "@material-ui/icons/DnsRounded";
 import PermMediaOutlinedIcon from "@material-ui/icons/PhotoSizeSelectActual";
 import PublicIcon from "@material-ui/icons/Public";
-import SettingsEthernetIcon from "@material-ui/icons/SettingsEthernet";
+// import SettingsEthernetIcon from "@material-ui/icons/SettingsEthernet";
 import SettingsInputComponentIcon from "@material-ui/icons/SettingsInputComponent";
 import TimerIcon from "@material-ui/icons/Timer";
 import SettingsIcon from "@material-ui/icons/Settings";
 import PhonelinkSetupIcon from "@material-ui/icons/PhonelinkSetup";
-// import { Link } from "react-router-dom";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
+//import { NavLink } from "react-router-dom";
+import Avatar from "@material-ui/core/Avatar";
+import Grid from "@material-ui/core/Grid";
+import IconButton from "@material-ui/core/IconButton";
+import { Typography } from "@material-ui/core";
+import SettingsPowerIcon from "@material-ui/icons/SettingsPower";
+import { Meteor } from "meteor/meteor";
+import Home from "../../pages/Home/Home";
+
 const categories = [
   {
     id: "Your K-Zone",
     children: [
+      {
+        id: "Favorites",
+        icon: <PublicIcon />,
+        route: "/favorites"
+        // active: false
+      },
       {
         id: "Karaoke",
         icon: <SettingsInputComponentIcon />,
         // active: false,
         route: "/karoke"
       },
-      { id: "Friends", icon: <PeopleIcon />, route: "/karoke" },
-      {
-        id: "Favorites",
-        icon: <PublicIcon />,
-        route: "/karoke"
-        // active: false
-      },
-      {
-        id: "Logout",
-        icon: <SettingsEthernetIcon />,
-        route: "/home"
-        // active: false
-      }
+      { id: "Friends", icon: <PeopleIcon />, route: "/karoke" }
+
+      // {
+      //   id: "Logout",
+      //   icon: <SettingsEthernetIcon />,
+      //   route: "/home"
+      //   // active: false
+      // }
     ]
   }
   // {
@@ -103,79 +112,157 @@ const styles = theme => ({
   },
   logo: {
     width: "100%"
+  },
+  profileImg: {
+    borderRadius: "50%",
+    width: "100%"
+  },
+
+  logoutBtn: {
+    color: "white"
   }
 });
 
-function Navigator(props) {
-  const { classes, ...other } = props;
+// function Navigator(props) {
 
-  return (
-    <Drawer variant="permanent" {...other}>
-      <List disablePadding>
-        <ListItem
-          className={clsx(classes.firebase, classes.item, classes.itemCategory)}
-        >
-          <img
-            src={"http://www.kbktv.com/kbktv/images/kbox_logo_new.png"}
-            alt="logo"
-            className={clsx(classes.logo)}
-          />
-        </ListItem>
-        <ListItem className={clsx(classes.item, classes.itemCategory)}>
-          <ListItemIcon className={classes.itemIcon}>
+class Navigator extends Component {
+  // state = {
+  //   anchorEl: null
+  // };
+
+  // handleClick = event => {
+  //   this.setState({ anchorEl: event.currentTarget });
+  // };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoggedin: true
+    };
+  }
+
+  logout() {
+    Meteor.logout(err => {
+      if (err) {
+        console.log("error");
+      } else {
+        this.setState({ isLoggedin: !this.state.isLoggedin });
+        window.history.pushState(null, null, "/home");
+        window.history.go();
+      }
+    });
+  }
+
+  render() {
+    const { classes, ...other } = this.props;
+    return (
+      <Drawer variant="permanent" {...other}>
+        <List disablePadding>
+          <ListItem
+            className={clsx(
+              classes.firebase,
+              classes.item,
+              classes.itemCategory
+            )}
+          >
+            <img
+              src={"http://www.kbktv.com/kbktv/images/kbox_logo_new.png"}
+              alt="logo"
+              className={clsx(classes.logo)}
+            />
+          </ListItem>
+          <ListItem className={clsx(classes.item, classes.itemCategory)}>
+            {/* <ListItemIcon className={classes.itemIcon}>
             <HomeIcon />
-          </ListItemIcon>
-          <NavLink className={classes.navLinks} to="/profile">
-            <ListItemText
-              classes={{
-                // primary: classes.itemPrimary
-                primary: classes.item
-              }}
-            >
-              [user] Dashboard
-            </ListItemText>
-          </NavLink>
-        </ListItem>
-        {categories.map(({ id, children }) => (
-          <React.Fragment key={id}>
-            <ListItem className={classes.categoryHeader}>
+          </ListItemIcon> */}
+            <Link className={classes.navLinks} to="/profile">
               <ListItemText
                 classes={{
-                  primary: classes.categoryHeaderPrimary
+                  // primary: classes.itemPrimary
+                  primary: classes.item
                 }}
               >
-                {id}
-              </ListItemText>
-            </ListItem>
-            {children.map(({ id: childId, icon, route }) => (
-              <NavLink to={route} className={classes.navLinks}>
-                <ListItem
-                  key={childId}
-                  button
-                  className={clsx(
-                    classes.item
-                    // active && classes.itemActiveItem
-                  )}
-                >
-                  <ListItemIcon className={classes.itemIcon}>
-                    {icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    classes={{
-                      primary: classes.itemPrimary
-                    }}
+                <Grid item>
+                  <IconButton
+                    color="inherit"
+                    className={classes.iconButtonAvatar}
                   >
-                    {childId}
-                  </ListItemText>
-                </ListItem>
-              </NavLink>
-            ))}
-            <Divider className={classes.divider} />
-          </React.Fragment>
-        ))}
-      </List>
-    </Drawer>
-  );
+                    <img
+                      src={
+                        "https://avatarfiles.alphacoders.com/128/thumb-128244.jpg"
+                      }
+                      alt="logo"
+                      className={clsx(classes.profileImg)}
+                    />
+                    {/* <Avatar
+                    src="../../../../public/images/profilepic.jpg"
+                    alt="My Avatar"
+                  /> */}
+                  </IconButton>
+                </Grid>
+                {/* {Meteor.user()} */}
+              </ListItemText>
+              <Typography>4 Favorite Songs</Typography>
+            </Link>
+          </ListItem>
+          {categories.map(({ id, children }) => (
+            <React.Fragment key={id}>
+              <ListItem className={classes.categoryHeader}>
+                <ListItemText
+                  classes={{
+                    primary: classes.categoryHeaderPrimary
+                  }}
+                >
+                  {id}
+                </ListItemText>
+              </ListItem>
+              {children.map(({ id: childId, icon, route }) => (
+                <Link to={route} className={classes.navLinks} key={childId}>
+                  <ListItem
+                    // key={childId}
+                    // key={id}
+                    button
+                    className={clsx(
+                      classes.item
+                      // active && classes.itemActiveItem
+                    )}
+                  >
+                    <ListItemIcon className={classes.itemIcon}>
+                      {icon}
+                    </ListItemIcon>
+                    <ListItemText
+                      classes={{
+                        primary: classes.itemPrimary
+                      }}
+                    >
+                      {childId}
+                    </ListItemText>
+                  </ListItem>
+                </Link>
+              ))}
+              <Divider className={classes.divider} />
+              <Grid item>
+                <IconButton
+                  color="inherit"
+                  className={classes.iconButtonAvatar}
+                  onClick={this.logout.bind(this)}
+                >
+                  <SettingsPowerIcon
+                    className={classes.logoutBtn}
+                    alt="Logout"
+                  />
+                  <Typography className={classes.logoutBtn}>
+                    {" "}
+                    Logout{" "}
+                  </Typography>
+                </IconButton>
+              </Grid>
+            </React.Fragment>
+          ))}
+        </List>
+      </Drawer>
+    );
+  }
 }
 
 Navigator.propTypes = {

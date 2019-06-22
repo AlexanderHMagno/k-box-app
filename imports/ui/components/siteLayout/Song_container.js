@@ -13,7 +13,7 @@ import ADD_title from "@material-ui/icons/AddCircleSharp";
 import { withStyles } from "@material-ui/core/styles";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import Links from "../../../api/links";
+import { Links } from "../../../api/links";
 
 const MySwal = withReactContent(Swal);
 
@@ -119,9 +119,9 @@ class MediaControlCard extends React.Component {
             </Typography>
           </CardContent>
           <div className={classes.controls}>
-            <IconButton aria-label="Add this soing to your favorites">
+            <IconButton aria-label="Add this song to your favorites">
               {this.state.visible && (
-                <Tooltip title="Add to your favorites">
+                <Tooltip title="Add to favorites">
                   <ADD_title
                     className={classes.playIcon}
                     onClick={() => this.add_title(title, artist)}
@@ -129,10 +129,9 @@ class MediaControlCard extends React.Component {
                 </Tooltip>
               )}
               {!this.state.visible && (
-                <Tooltip title="Remove from your favorites">
+                <Tooltip title="Remove from favorites">
                   <ADD_title
                     className={classes.removetitle}
-                    titleAccess="Remove from favorites"
                     onClick={() => this.remove_title(title, artist)}
                   />
                 </Tooltip>

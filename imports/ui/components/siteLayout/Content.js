@@ -13,7 +13,6 @@ import { withStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import Api from "./API";
-import Links from "../../../api/links";
 
 // import RenderToLayer from "material-ui/internal/RenderToLayer";
 
@@ -52,10 +51,7 @@ class Content extends React.Component {
       items: []
     };
   }
-  componentDidMount() {
-    let information = Links.find({});
-    window.information = information;
-  }
+
   search_name() {
     console.log(this.state.search_information);
   }

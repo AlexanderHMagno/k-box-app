@@ -67,20 +67,11 @@ function Header(props) {
               </Typography> */}
             </Grid>
             <Grid item>
-              <Tooltip title="Alerts • No alters">
+              {/* <Tooltip title="Alerts • No alters">
                 <IconButton color="inherit">
                   <NotificationsIcon />
                 </IconButton>
-              </Tooltip>
-            </Grid>
-            <Grid item>
-              <IconButton color="inherit" className={classes.iconButtonAvatar}>
-                <Avatar
-                  className={classes.avatar}
-                  src="/static/images/avatar/1.jpg"
-                  alt="My Avatar"
-                />
-              </IconButton>
+              </Tooltip> */}
             </Grid>
           </Grid>
         </Toolbar>
@@ -110,11 +101,11 @@ function Header(props) {
               </Button> */}
             </Grid>
             <Grid item>
-              <Tooltip title="Help">
-                <IconButton color="inherit">
+              {/* <Tooltip title="Help"> */}
+              {/* <IconButton color="inherit">
                   <HelpIcon />
-                </IconButton>
-              </Tooltip>
+                </IconButton> */}
+              {/* </Tooltip> */}
             </Grid>
           </Grid>
         </Toolbar>

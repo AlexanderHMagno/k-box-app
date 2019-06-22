@@ -13,7 +13,6 @@ import { withStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import Api from "./API";
-import Links from "../../../api/links";
 
 // import RenderToLayer from "material-ui/internal/RenderToLayer";
 
@@ -43,17 +42,16 @@ const styles = theme => ({
 class Content extends React.Component {
   constructor(props) {
     super(props);
+    this.search_value = React.createRef();
     this.state = {
       search_information: "",
       error: null,
       isLoaded: false,
+
       items: []
     };
   }
-  componentDidMount() {
-    let information = Links.find({});
-    window.information = information;
-  }
+
   search_name() {
     console.log(this.state.search_information);
   }
@@ -62,8 +60,11 @@ class Content extends React.Component {
     this.setState({ search_information: information });
   }
 
-  insertLink(title, artist) {
-    Links.insert({ title, artist, createdAt: new Date() });
+  reset_state() {
+    this.setState({
+      search_information: ""
+    });
+    this.search_value.current.firstElementChild.children[0].value = "";
   }
 
   render() {
@@ -84,11 +85,12 @@ class Content extends React.Component {
               <Grid item xs>
                 <TextField
                   fullWidth
-                  placeholder="Search by song, artist, or album"
+                  placeholder="Search by artist...."
                   InputProps={{
                     disableUnderline: true,
                     className: classes.searchInput
                   }}
+                  ref={this.search_value}
                   onChange={data => this.set_information(data.target.value)}
                 />
               </Grid>
@@ -101,8 +103,8 @@ class Content extends React.Component {
                 >
                   Search
                 </Button> */}
-                <Tooltip title="Reload">
-                  <IconButton>
+                <Tooltip title="Reset">
+                  <IconButton onClick={() => this.reset_state()}>
                     <RefreshIcon className={classes.block} color="inherit" />
                   </IconButton>
                 </Tooltip>
@@ -112,13 +114,11 @@ class Content extends React.Component {
         </AppBar>
         <div className={classes.contentWrapper}>
           <Typography color="textSecondary" align="center">
-            {!this.state.search_information && "Heya! Not songs found it."}
+            {!this.state.search_information && "Heya! Search for songs."}
           </Typography>
-
-          <Api
-            item_search={this.state.search_information}
-            add={this.insertLink.bind(this)}
-          />
+          {this.state.search_information && (
+            <Api item_search={this.state.search_information} />
+          )}
         </div>
       </Paper>
     );

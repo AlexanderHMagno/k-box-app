@@ -8,9 +8,16 @@ import Typography from "@material-ui/core/Typography";
 import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
-import ADD_song from "@material-ui/icons/AddCircleSharp";
+import Tooltip from "@material-ui/core/Tooltip";
+import ADD_title from "@material-ui/icons/AddCircleSharp";
+import { withStyles } from "@material-ui/core/styles";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import { Links } from "../../../api/links";
 
-const useStyles = makeStyles(theme => ({
+const MySwal = withReactContent(Swal);
+
+const styles = theme => ({
   card: {
     display: "flex",
     position: "relative",
@@ -44,33 +51,94 @@ const useStyles = makeStyles(theme => ({
     height: 38,
     width: 38,
     color: "green"
+  },
+  removetitle: {
+    height: 38,
+    width: 38,
+    color: "grey"
   }
-}));
+});
 
-export default function MediaControlCard(props) {
-  const classes = useStyles();
-  const theme = useTheme();
-  const { song, artist, add } = props;
-  return (
-    <Card className={classes.card}>
-      <div className={classes.details}>
-        <CardContent className={classes.content}>
-          <Typography component="h5" variant="h5">
-            {song.length > 20 ? song.substring(0, 20) + "..." : song}
-          </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
-            {artist}
-          </Typography>
-        </CardContent>
-        <div className={classes.controls}>
-          <IconButton aria-label="Add this soing to your favorites">
-            <ADD_song
-              className={classes.playIcon}
-              onClick={() => add(song, artist)}
-            />
-          </IconButton>
-        </div>
-        {/* <div className={classes.controls}>
+class MediaControlCard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: true,
+      id: ""
+    };
+  }
+
+  update_id() {
+    const { title, artist } = this.props;
+
+    const data = Links.find({ artist: artist, title: title }).fetch();
+    if (data.length > 0) {
+      this.setState({
+        visible: false,
+        id: data[0]._id
+      });
+    }
+  }
+  componentWillMount() {
+    this.update_id();
+  }
+  add_title(title, artist) {
+    Links.insert({ title, artist, createdAt: new Date() });
+    this.update_id();
+    MySwal.fire({
+      html: `<span>${title} of ${artist} <br>has been <b>Added</b> to your favorites</span>`,
+      type: "success",
+      confirmButtonColor: "green"
+    });
+    this.setState({
+      visible: !this.state.visible
+    });
+  }
+  remove_title(title, artist) {
+    Links.remove({ _id: this.state.id });
+    this.setState({
+      visible: !this.state.visible
+    });
+    MySwal.fire({
+      html: `<span>${title} of ${artist} <br>has been <b>Removed</b> from your favorites</span>`,
+      type: "error",
+      confirmButtonColor: "red"
+    });
+  }
+  render() {
+    const { classes, title, artist } = this.props;
+    return (
+      <Card className={classes.card}>
+        <div className={classes.details}>
+          <CardContent className={classes.content}>
+            <Typography component="h5" variant="h5">
+              {title.length > 20 ? title.substring(0, 20) + "..." : title}
+            </Typography>
+            <Typography variant="subtitle1" color="textSecondary">
+              {artist}
+            </Typography>
+          </CardContent>
+          <div className={classes.controls}>
+            <IconButton aria-label="Add this song to your favorites">
+              {this.state.visible && (
+                <Tooltip title="Add to favorites">
+                  <ADD_title
+                    className={classes.playIcon}
+                    onClick={() => this.add_title(title, artist)}
+                  />
+                </Tooltip>
+              )}
+              {!this.state.visible && (
+                <Tooltip title="Remove from favorites">
+                  <ADD_title
+                    className={classes.removetitle}
+                    onClick={() => this.remove_title(title, artist)}
+                  />
+                </Tooltip>
+              )}
+            </IconButton>
+          </div>
+          {/* <div className={classes.controls}>
           <IconButton aria-label="Previous">
             {theme.direction === "rtl" ? (
               <SkipNextIcon />
@@ -89,12 +157,15 @@ export default function MediaControlCard(props) {
             )}
           </IconButton>
         </div> */}
-      </div>
-      {/* <CardMedia
+        </div>
+        {/* <CardMedia
         className={classes.cover}
         image="/static/images/cards/live-from-space.jpg"
         title="Live from space album cover"
       /> */}
-    </Card>
-  );
+      </Card>
+    );
+  }
 }
+
+export default withStyles(styles)(MediaControlCard);

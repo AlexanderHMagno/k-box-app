@@ -14,7 +14,79 @@ import Tabs from "@material-ui/core/Tabs";
 import Toolbar from "@material-ui/core/Toolbar";
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
+import Karaoke from "./subpages/Karaoke_content";
+import Create from "./subpages/Create_Room";
+import Join from "./subpages/Join_room";
+import Dashboard from "./Rooms/Dashboard";
+// +++++++++++++++++ TABS ++++++++++++++++++++++++++++
+
+function TabContainer(props) {
+  return (
+    <Typography component="div" style={{ padding: 8 * 3 }}>
+      {props.children}
+    </Typography>
+  );
+}
+
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
+    backgroundColor: "#0f0302"
+    // theme.palette.background.paper
+  }
+}));
+
+function SimpleTabs() {
+  const classes = useStyles();
+  const [value, setValue] = React.useState(0);
+
+  function handleChange(event, newValue) {
+    setValue(newValue);
+  }
+
+  return (
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Tabs value={value} onChange={handleChange} textColor="inherit">
+          <Tab textColor="inherit" label="Available Rooms" />
+          <Tab textColor="inherit" label="Create" />
+          <Tab textColor="primary" label="Join" />
+          <Tab textColor="primary" label="Room" />
+        </Tabs>
+      </AppBar>
+      {value === 0 && (
+        <TabContainer>
+          <Karaoke />
+        </TabContainer>
+      )}
+      {value === 1 && (
+        <TabContainer>
+          <Create />
+        </TabContainer>
+      )}
+      {value === 2 && (
+        <TabContainer>
+          <Join />
+        </TabContainer>
+      )}
+      {value === 3 && (
+        <TabContainer>
+          <Dashboard />
+        </TabContainer>
+      )}
+    </div>
+  );
+}
+
+// +++++++++++++++++++End Tabs++++++++++++++++++++++++++++++++
+
+// +++++++++++++++++++HEADER++++++++++++++++++++++++++++++++
 
 const lightColor = "rgba(255, 255, 255, 0.7)";
 
@@ -96,7 +168,7 @@ function Header(props) {
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
               <Typography color="inherit" variant="h5" component="h1">
-                Dashboard
+                Karaoke
               </Typography>
             </Grid>
             <Grid item>
@@ -119,20 +191,7 @@ function Header(props) {
           </Grid>
         </Toolbar>
       </AppBar>
-      <AppBar
-        component="div"
-        className={classes.secondaryBar}
-        color="primary"
-        position="static"
-        elevation={0}
-      >
-        <Tabs value={0} textColor="inherit">
-          <Tab textColor="inherit" label="Users" />
-          <Tab textColor="inherit" label="Sign-in method" />
-          <Tab textColor="inherit" label="Templates" />
-          <Tab textColor="inherit" label="Usage" />
-        </Tabs>
-      </AppBar>
+      <SimpleTabs />
     </React.Fragment>
   );
 }

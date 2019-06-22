@@ -14,7 +14,6 @@ import { Link } from "react-router-dom";
 //import { Accounts } from "meteor/accounts-base";
 // import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-//import { Redirect } from "react-router-dom";
 
 class AccountForm extends Component {
   constructor(props) {
@@ -23,17 +22,17 @@ class AccountForm extends Component {
     this.state = {
       formToggle: true,
       hasAccount: true,
-      redirect: false,
+      newAccount: false,
       loggedin: false
     };
 
-    this.redirectToProfile = this.redirectToProfile.bind(this);
+    // this.redirectToProfile = this.redirectToProfile.bind(this);
   }
-  redirectToProfile() {
-    const { history } = this.props;
-    console.log(history, "checking");
-    if (history) history.push("/profile");
-  }
+  // redirectToProfile() {
+  //   const { history } = this.props;
+  //   console.log(history, "checking");
+  //   if (history) history.push("/profile");
+  // }
 
   // componentWillMount() {
   //   // will trigger the callback function whenever a new Route renders a component(as long as this component stays mounted as routes change)
@@ -49,34 +48,13 @@ class AccountForm extends Component {
     return (
       <Form
         onSubmit={values => {
-          console.log(values, "this is values");
-          // Accounts.createUser(values, er => {
-          //   if (er) {
-          //     throw new Meteor.Error("Existing Account already exists");
-          //   } else {
-          //     window.history.pushState(null, null, "/profile");
-          //     window.history.go();
-          //     // ()=> history.push("/profile")
-          //   }
-          // });
-          //   Meteor.loginWithPassword(values, () => history.push("/profile"));
-          if (this.state.hasAccount) {
+          if (this.state.formToggle) {
+            console.log(this.state.hasAccount, "triggerrr");
             Meteor.loginWithPassword(values.email, values.password, er => {
               if (er) {
                 throw new Meteor.Error("Inccorrect User or Password");
               } else {
-                // window.history.pushState({}, "", "/profile");
-                // window.history.go();
-                // window.location.reload();
-                // () => history.push("/profile");
-                // this.redirectToProfile();
                 this.setState({ loggedin: true });
-                // console.log("logged in");
-                // this.redirectToProfile;
-                // console.log("opps");
-                // Meteor.publish("foo.user", function() {
-                //   return Meteor.user();
-                // });
               }
             });
           } else {
@@ -84,9 +62,11 @@ class AccountForm extends Component {
               if (er) {
                 throw new Meteor.Error("Existing Account already exists");
               } else {
-                window.history.pushState(null, null, "/profile");
-                window.history.go();
+                // window.history.pushState(null, null, "/profile");
+                // window.history.go();
                 // ()=> history.push("/profile")
+                // this.setState({ newAccount: true });
+                this.setState({ loggedin: true });
               }
             });
           }

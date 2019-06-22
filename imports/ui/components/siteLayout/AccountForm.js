@@ -13,7 +13,8 @@ import { Meteor } from "meteor/meteor";
 import { Link } from "react-router-dom";
 //import { Accounts } from "meteor/accounts-base";
 // import { connect } from "react-redux";
-// import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+//import { Redirect } from "react-router-dom";
 
 class AccountForm extends Component {
   constructor(props) {
@@ -21,14 +22,18 @@ class AccountForm extends Component {
     super(props);
     this.state = {
       formToggle: true,
-      loggedIn: false
+      hasAccount: true,
+      redirect: false,
+      loggedin: false
     };
-  }
 
-  redirectToProfile = () => {
+    this.redirectToProfile = this.redirectToProfile.bind(this);
+  }
+  redirectToProfile() {
     const { history } = this.props;
+    console.log(history, "checking");
     if (history) history.push("/profile");
-  };
+  }
 
   // componentWillMount() {
   //   // will trigger the callback function whenever a new Route renders a component(as long as this component stays mounted as routes change)
@@ -40,9 +45,7 @@ class AccountForm extends Component {
 
   render() {
     const { classes } = this.props;
-
-    console.log("this", window.location);
-
+    console.log(`current meteor user is ${Meteor.user()}`);
     return (
       <Form
         onSubmit={values => {
@@ -57,32 +60,36 @@ class AccountForm extends Component {
           //   }
           // });
           //   Meteor.loginWithPassword(values, () => history.push("/profile"));
-          Meteor.loginWithPassword(values.email, values.password, function(er) {
-            if (er) {
-              throw new Meteor.Error(
-                "Inccorrect User or Password",
-                "Inccorrect User or Password"
-              );
-            } else {
-              window.history.pushState({}, "", "/profile");
-              window.history.go();
-              // window.location.reload();
-              //  () => history.push("/profile");
-              // this.redirectToProfile;
-              // console.log("opps");
-              return event.preventDefault();
-            }
-          });
-
-          Accounts.createUser(values, er => {
-            if (er) {
-              throw new Meteor.Error("Existing Account already exists");
-            } else {
-              window.history.pushState(null, null, "/profile");
-              window.history.go();
-              // ()=> history.push("/profile")
-            }
-          });
+          if (this.state.hasAccount) {
+            Meteor.loginWithPassword(values.email, values.password, er => {
+              if (er) {
+                throw new Meteor.Error("Inccorrect User or Password");
+              } else {
+                // window.history.pushState({}, "", "/profile");
+                // window.history.go();
+                // window.location.reload();
+                // () => history.push("/profile");
+                // this.redirectToProfile();
+                this.setState({ loggedin: true });
+                // console.log("logged in");
+                // this.redirectToProfile;
+                // console.log("opps");
+                // Meteor.publish("foo.user", function() {
+                //   return Meteor.user();
+                // });
+              }
+            });
+          } else {
+            Accounts.createUser(values, er => {
+              if (er) {
+                throw new Meteor.Error("Existing Account already exists");
+              } else {
+                window.history.pushState(null, null, "/profile");
+                window.history.go();
+                // ()=> history.push("/profile")
+              }
+            });
+          }
         }}
         render={({
           handleSubmit,
@@ -197,9 +204,10 @@ class AccountForm extends Component {
 
 AccountForm.propType = {
   classes: PropTypes.object.isRequired,
-  loginMutation: PropTypes.func,
-  signupMutation: PropTypes.func
+  history: PropTypes.object.isRequired
 };
-export default withStyles(styles)(AccountForm);
+//export default withStyles(styles)(AccountForm);
+export default withStyles(styles)(withRouter(AccountForm));
+//AccountForm;
 //export default withRouter(connect()(withStyles(styles)(AccountForm)));
 // export default withRouter(AccountForm);

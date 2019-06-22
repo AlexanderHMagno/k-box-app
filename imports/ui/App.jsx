@@ -11,8 +11,10 @@ import { BrowserRouter } from 'react-router-dom';
 import theme from './theme';
 import Layout from '../ui/router/layout';
 // import { ViewerProvider } from './context/ViewerProvider';
+import { withTracker } from "meteor/react-meteor-data";
 
 const App = () => {
+  console.log('app rerendering');
   return (
    
       <MuiThemeProvider theme={theme}>
@@ -27,4 +29,10 @@ const App = () => {
   );
 };
 
-export default App;
+// export default App;
+export default withTracker(() => {
+  const user = Meteor.user();
+	return {
+		user
+	};
+})(App);

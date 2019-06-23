@@ -4,9 +4,9 @@ import { createMuiTheme, withStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Hidden from "@material-ui/core/Hidden";
-import Navigator from "./Navigator";
-import Karaoke_Content from "../../pages/Karoke/subpages/Karaoke_content";
-import Header from "../../pages/Karoke/Header";
+import Navigator from "../../components/siteLayout/Navigator";
+import Content from "./Content";
+import UserHeader from "./UserFavHeader";
 
 let theme = createMuiTheme({
   typography: {
@@ -154,7 +154,7 @@ const styles = {
   }
 };
 
-class Paperbase extends React.Component {
+class UserPage extends React.Component {
   state = {
     mobileOpen: false
   };
@@ -184,8 +184,10 @@ class Paperbase extends React.Component {
             </Hidden>
           </nav>
           <div className={classes.appContent}>
-            <Header onDrawerToggle={this.handleDrawerToggle} />
-            <main className={classes.mainContent} />
+            <UserHeader onDrawerToggle={this.handleDrawerToggle} />
+            <main className={classes.mainContent}>
+              <Content />
+            </main>
           </div>
         </div>
       </ThemeProvider>
@@ -193,8 +195,8 @@ class Paperbase extends React.Component {
   }
 }
 
-Paperbase.propTypes = {
+UserPage.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Paperbase);
+export default withStyles(styles)(UserPage);

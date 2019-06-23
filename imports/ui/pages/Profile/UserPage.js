@@ -4,7 +4,7 @@ import { createMuiTheme, withStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Hidden from "@material-ui/core/Hidden";
-import Navigator from "./Navigator";
+import Navigator from "../../components/siteLayout/Navigator";
 import Content from "./Content";
 import UserHeader from "./UserHeader";
 

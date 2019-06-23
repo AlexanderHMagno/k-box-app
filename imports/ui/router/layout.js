@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from "react-router";
 import Home from "../pages/Home";
 import Profile from "../pages/Profile";
 import Karoke from "../pages/Karoke";
-import UserFavorites from "../components/siteLayout/UserFavorites";
+import Favorite from "../pages/Favorites";
 import { withTracker } from "meteor/react-meteor-data";
 
 class Router extends Component {
@@ -14,7 +14,7 @@ class Router extends Component {
           <Route exact path="/karoke" component={Karoke} />
           <Route exact path="/profile" component={Profile} />
           <Route exact path="/profile/:userid" component={Profile} />
-          <Route exact path="/favorites" component={UserFavorites} />
+          <Route exact path="/favorites" component={Favorite} />
           <Redirect from="*" to="/profile" />
         </Switch>
       </Fragment>

@@ -4,9 +4,8 @@ import { createMuiTheme, withStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Hidden from "@material-ui/core/Hidden";
-import Navigator from "./Navigator";
-import Content from "./Content";
-import UserFavHeader from "./UserFavHeader";
+import Navigator from "../../components/siteLayout/Navigator";
+import Header from "./Header";
 
 let theme = createMuiTheme({
   typography: {
@@ -154,7 +153,7 @@ const styles = {
   }
 };
 
-class UserFavorites extends React.Component {
+class Paperbase extends React.Component {
   state = {
     mobileOpen: false
   };
@@ -184,10 +183,8 @@ class UserFavorites extends React.Component {
             </Hidden>
           </nav>
           <div className={classes.appContent}>
-            <UserFavHeader onDrawerToggle={this.handleDrawerToggle} />
-            <main className={classes.mainContent}>
-              <Content />
-            </main>
+            <Header onDrawerToggle={this.handleDrawerToggle} />
+            <main className={classes.mainContent} />
           </div>
         </div>
       </ThemeProvider>
@@ -195,8 +192,8 @@ class UserFavorites extends React.Component {
   }
 }
 
-UserFavorites.propTypes = {
+Paperbase.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(UserFavorites);
+export default withStyles(styles)(Paperbase);

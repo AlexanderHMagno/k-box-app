@@ -1,10 +1,10 @@
 import React from "react";
 // import Grid from "@material-ui/core/Grid";
 // import Typography from "@material-ui/core/Typography";
-import UserPage from "./UserPage";
+import UserFavorite from "./UserFavorites";
 
 const Profile = ({ classes }) => {
-  return <UserPage />;
+  return <UserFavorite />;
 };
 
 export default Profile;

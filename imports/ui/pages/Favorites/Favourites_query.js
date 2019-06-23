@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Favorites } from "../../../api/favorites"
 import { withTracker } from 'meteor/react-meteor-data';
 
 // Task component - represents a single todo item

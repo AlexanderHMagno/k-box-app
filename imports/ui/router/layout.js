@@ -4,11 +4,10 @@ import Home from "../pages/Home";
 import Profile from "../pages/Profile";
 import Karoke from "../pages/Karoke";
 import Favorite from "../pages/Favorites";
-import { withTracker } from "meteor/react-meteor-data";
 
 class Router extends Component {
   render() {
-    const A = (
+    const userRoutes = (
       <Fragment>
         <Switch>
           <Route exact path="/karoke" component={Karoke} />
@@ -20,27 +19,20 @@ class Router extends Component {
       </Fragment>
     );
 
-    const B = (
+    const nonUserRoutes = (
       <Fragment>
         <Switch>
           <Route exact path="/home" component={Home} />
           <Redirect from="*" to="/home" />
-
-          {/* 
-
-    <Route exact path="/profile" component={Profile} />
-    <Route exact path="/profile/:userid" component={Profile} />
-    <Route exact path="/favorites" component={UserFavorites} />
-    <Redirect from="*" to="/profile" /> */}
         </Switch>
       </Fragment>
     );
 
-    console.log("IN THE ROUTING COMPONENT");
+    // console.log("IN THE ROUTING COMPONENT");
     if (Meteor.user()) {
-      return A;
+      return userRoutes;
     } else {
-      return B;
+      return nonUserRoutes;
     }
   }
 }

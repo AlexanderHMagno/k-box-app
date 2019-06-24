@@ -11,8 +11,7 @@ import PropTypes from "prop-types";
 import styles from "../styles";
 import { Meteor } from "meteor/meteor";
 import { Links } from "../../../api/links";
-//import { Accounts } from "meteor/accounts-base";
-// import { connect } from "react-redux";
+
 import { withRouter } from "react-router-dom";
 
 class AccountForm extends Component {
@@ -20,38 +19,20 @@ class AccountForm extends Component {
     console.log(props, "proppy");
     super(props);
     this.state = {
-      formToggle: true,
-      hasAccount: true,
-      newAccount: false,
-      loggedin: false
+      formToggle: true
     };
-
-    // this.redirectToProfile = this.redirectToProfile.bind(this);
   }
-  // redirectToProfile() {
-  //   const { history } = this.props;
-  //   console.log(history, "checking");
-  //   if (history) history.push("/profile");
-  // }
-
-  // componentWillMount() {
-  //   // will trigger the callback function whenever a new Route renders a component(as long as this component stays mounted as routes change)
-  //   this.props.history.listen(() => {
-  //     // view new URL
-  //     console.log("New URL", this.props.history.location.pathname);
-  //   });
-  // }
 
   render() {
     const { classes } = this.props;
-    console.log(`current meteor user is ${Meteor.user()}`);
+    // console.log(`current meteor user is ${Meteor.user()}`);
     return (
       <Form
         onSubmit={values => {
           if (this.state.formToggle) {
             Meteor.loginWithPassword(values.email, values.password, er => {
               if (er) {
-                throw new Meteor.Error("Inccorrect User or Password");
+                throw new Meteor.Error("Inccorrect Email or Password");
               }
             });
           } else {
@@ -189,8 +170,5 @@ AccountForm.propType = {
   classes: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired
 };
-//export default withStyles(styles)(AccountForm);
+
 export default withStyles(styles)(withRouter(AccountForm));
-//AccountForm;
-//export default withRouter(connect()(withStyles(styles)(AccountForm)));
-// export default withRouter(AccountForm);

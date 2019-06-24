@@ -7,7 +7,7 @@ import Layout from '../ui/router/layout';
 import { withTracker } from "meteor/react-meteor-data";
 
 const App = () => {
-  console.log('app rerendering');
+ 
   return (
    
       <MuiThemeProvider theme={theme}>
@@ -22,7 +22,7 @@ const App = () => {
   );
 };
 
-// export default App;
+
 export default withTracker(() => {
   const user = Meteor.user();
 	return {

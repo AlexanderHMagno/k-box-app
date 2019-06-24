@@ -10,7 +10,7 @@ import { Form, Field } from "react-final-form";
 import PropTypes from "prop-types";
 import styles from "../styles";
 import { Meteor } from "meteor/meteor";
-import { Link } from "react-router-dom";
+import { Links } from "../../../api/links";
 //import { Accounts } from "meteor/accounts-base";
 // import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
@@ -49,12 +49,9 @@ class AccountForm extends Component {
       <Form
         onSubmit={values => {
           if (this.state.formToggle) {
-            console.log(this.state.hasAccount, "triggerrr");
             Meteor.loginWithPassword(values.email, values.password, er => {
               if (er) {
                 throw new Meteor.Error("Inccorrect User or Password");
-              } else {
-                this.setState({ loggedin: true });
               }
             });
           } else {
@@ -62,11 +59,17 @@ class AccountForm extends Component {
               if (er) {
                 throw new Meteor.Error("Existing Account already exists");
               } else {
-                // window.history.pushState(null, null, "/profile");
-                // window.history.go();
-                // ()=> history.push("/profile")
-                // this.setState({ newAccount: true });
-                this.setState({ loggedin: true });
+                //Creates de user account
+                Links.insert({
+                  _id: Meteor.userId(),
+                  username: values.username,
+                  email: values.email,
+                  favorites: [],
+                  friends: [],
+                  rooms: []
+                });
+
+                console.log("this work");
               }
             });
           }

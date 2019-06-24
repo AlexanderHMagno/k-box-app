@@ -22,18 +22,6 @@ import Chart from "./Chart";
 import Current from "./Current";
 import Room_environment from "./Room_environment";
 
-function MadeWithLove() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Built with love by the "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Material-UI
-      </Link>
-      {" team."}
-    </Typography>
-  );
-}
-
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -115,7 +103,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Dashboard() {
+export default function Dashboard(props) {
+  const { structure } = props;
+  console.log(structure);
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -129,19 +119,28 @@ export default function Dashboard() {
   return (
     <div className={classes.root}>
       <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             {/* Chart */}
             <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <Chart />
+              <Paper
+                className={fixedHeightPaper}
+                style={{
+                  backgroundImage: `linear-gradient(to bottom,rgba(0, 0, 0, 0.52),rgba(0, 0, 0, 0.52)),url(${
+                    structure.image
+                  })`,
+                  backgroundPosition: "center",
+                  backgroundSize: "cover",
+                  color: "white"
+                }}
+              >
+                <Chart title={structure.name} return={structure.room_creator} />
               </Paper>
             </Grid>
             {/* Recent Current */}
             <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
-                <Current />
+                <Current bio={structure.bio} />
               </Paper>
             </Grid>
             {/* Recent Room_environment */}

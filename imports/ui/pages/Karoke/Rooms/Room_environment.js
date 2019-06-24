@@ -16,45 +16,31 @@ function createData(id, date, name, shipTo, paymentMethod, amount) {
 }
 
 const rows = [
-  createData(
-    0,
-    "16 Mar, 2019",
-    "Elvis Presley",
-    "Tupelo, MS",
-    "VISA ⠀•••• 3719",
-    312.44
-  ),
+  createData(0, "16 Mar, 2019", "Hey Baby", "Elvis Presley", "Alex", "3:44"),
   createData(
     1,
     "16 Mar, 2019",
+    "Yellow Submarine",
     "Paul McCartney",
-    "London, UK",
-    "VISA ⠀•••• 2574",
-    866.99
+    "Ying",
+    "4:25"
   ),
-  createData(
-    2,
-    "16 Mar, 2019",
-    "Tom Scholz",
-    "Boston, MA",
-    "MC ⠀•••• 1253",
-    100.81
-  ),
+  createData(2, "16 Mar, 2019", "Dancing", "Tom Scholz", "Zareef", "4:20"),
   createData(
     3,
     "16 Mar, 2019",
     "Michael Jackson",
-    "Gary, IN",
-    "AMEX ⠀•••• 2000",
-    654.39
+    "Michael Jackson",
+    "Tien",
+    "3:40"
   ),
   createData(
     4,
     "15 Mar, 2019",
+    "Naturia",
     "Bruce Springsteen",
-    "Long Branch, NJ",
-    "VISA ⠀•••• 5919",
-    212.79
+    "Natalia",
+    "2:25"
   )
 ];
 
@@ -76,7 +62,7 @@ export default function Orders() {
             <TableCell>Title</TableCell>
             <TableCell>Artist</TableCell>
             <TableCell>Singer </TableCell>
-            <TableCell align="right">...</TableCell>
+            <TableCell align="right">Duration</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -93,7 +79,7 @@ export default function Orders() {
       </Table>
       <div className={classes.seeMore}>
         <Link color="secondary" href="javascript:;">
-          See more orders
+          Add More Songs!
         </Link>
       </div>
     </React.Fragment>

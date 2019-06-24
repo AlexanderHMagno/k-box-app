@@ -1,27 +1,18 @@
 import React from "react";
 import Title from "./Title";
+import Link from "@material-ui/core/Link";
 
-// Generate Sales Data
-function createData(time, amount) {
-  return { time, amount };
-}
-
-const data = [
-  createData("00:00", 0),
-  createData("03:00", 300),
-  createData("06:00", 600),
-  createData("09:00", 800),
-  createData("12:00", 1500),
-  createData("15:00", 2000),
-  createData("18:00", 2400),
-  createData("21:00", 2400),
-  createData("24:00", undefined)
-];
-
-export default function Chart() {
+export default function Chart(props) {
   return (
     <React.Fragment>
-      <h1>Title</h1>
+      <Link
+        color="secondary"
+        onClick={() => props.return("returned")}
+        style={{ cursor: "pointer" }}
+      >
+        Go Back
+      </Link>
+      <h1>{props.title}</h1>
     </React.Fragment>
   );
 }

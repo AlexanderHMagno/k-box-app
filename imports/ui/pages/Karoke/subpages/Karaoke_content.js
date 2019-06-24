@@ -16,6 +16,7 @@ import Api from "../../../components/siteLayout/API";
 import { Rooms } from "../../../../api/links";
 import { makeStyles } from "@material-ui/core/styles";
 import Room_card from "./Room_Card";
+import Dashboard from "../Rooms/Dashboard";
 
 const user = "d1d1";
 
@@ -34,25 +35,22 @@ class CenteredGrid extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      rooms: []
+      rooms: [],
+      open_room: false,
+      room_info: []
     };
   }
 
   componentWillMount() {
-    //How to insert a room
-    // Rooms.insert({
-    //   name: "General",
-    //   image:
-    //     "https://cdn.pixabay.com/photo/2017/11/12/08/43/audio-2941753_1280.jpg",
-    //   bio:
-    //     "This room is dedicaded to any kind of music, Rock, Pop, And other artist.",
-    //   users:[],
-    //   tracks:[{owner,title,track}]
-    //   password:''
-    // });
-
     this.setState({
       rooms: Rooms.find({}).fetch()
+    });
+  }
+  create_room_environment(information) {
+    console.log(information);
+    this.setState({
+      open_room: !this.state.open_room,
+      room_info: information
     });
   }
 
@@ -60,21 +58,25 @@ class CenteredGrid extends React.Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <Grid container spacing={3}>
-          {this.state.rooms.map((room, index) => {
-            return (
-              <Grid item xs={12} sm={6} md={4} key={room.name + index}>
-                <Room_card
-                  className={classes.paper}
-                  name={`Room ${index + 1} - ${room.name}`}
-                  image={room.image}
-                  bio={room.bio}
-                  password={index + 1}
-                />
-              </Grid>
-            );
-          })}
-        </Grid>
+        {!this.state.open_room && (
+          <Grid container spacing={3}>
+            {this.state.rooms.map((room, index) => {
+              return (
+                <Grid item xs={12} sm={6} md={4} key={room.name + index}>
+                  <Room_card
+                    className={classes.paper}
+                    name={`Room ${index + 1} - ${room.name}`}
+                    image={room.image}
+                    bio={room.bio}
+                    password={index + 1}
+                    room_creator={this.create_room_environment.bind(this)}
+                  />
+                </Grid>
+              );
+            })}
+          </Grid>
+        )}
+        {this.state.open_room && <Dashboard structure={this.state.room_info} />}
       </div>
     );
   }

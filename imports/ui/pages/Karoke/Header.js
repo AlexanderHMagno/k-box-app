@@ -58,7 +58,6 @@ function SimpleTabs() {
           <Tab textColor="inherit" label="Available Rooms" />
           <Tab textColor="inherit" label="Create" />
           <Tab textColor="primary" label="Join" />
-          <Tab textColor="primary" label="Room" />
         </Tabs>
       </AppBar>
       {value === 0 && (
@@ -74,11 +73,6 @@ function SimpleTabs() {
       {value === 2 && (
         <TabContainer>
           <Join />
-        </TabContainer>
-      )}
-      {value === 3 && (
-        <TabContainer>
-          <Dashboard />
         </TabContainer>
       )}
     </div>

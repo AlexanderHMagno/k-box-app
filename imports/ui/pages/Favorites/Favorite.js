@@ -3,8 +3,8 @@ import React from "react";
 // import Typography from "@material-ui/core/Typography";
 import UserFavorite from "./UserFavorites";
 
-const Profile = ({ classes }) => {
+const Favorite = ({ classes }) => {
   return <UserFavorite />;
 };
 
-export default Profile;
+export default Favorite;

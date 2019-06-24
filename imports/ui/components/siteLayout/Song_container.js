@@ -16,7 +16,6 @@ import withReactContent from "sweetalert2-react-content";
 import { Links } from "../../../api/links";
 
 const MySwal = withReactContent(Swal);
-
 const styles = theme => ({
   card: {
     display: "flex",
@@ -69,21 +68,29 @@ class MediaControlCard extends React.Component {
   }
 
   update_id() {
-    const { title, artist } = this.props;
-
-    const data = Links.find({ artist: artist, title: title }).fetch();
-    if (data.length > 0) {
+    const { title, artist, owner } = this.props;
+    console.log(title, artist, owner);
+    const data = Links.find({
+      $and: [
+        { _id: owner },
+        { favorites: { $elemMatch: { title: title, artist: artist } } }
+      ]
+    }).count();
+    if (data > 0) {
       this.setState({
-        visible: false,
-        id: data[0]._id
+        visible: false
       });
     }
   }
   componentWillMount() {
     this.update_id();
   }
-  add_title(title, artist) {
-    Links.insert({ title, artist, createdAt: new Date() });
+  add_title(title, artist, owner) {
+    Links.update(
+      { _id: owner },
+      { $push: { favorites: { title, artist, createdAt: new Date() } } }
+    );
+    // Links.insert({ owner, title, artist, createdAt: new Date() });
     this.update_id();
     MySwal.fire({
       html: `<span>${title} of ${artist} <br>has been <b>Added</b> to your favorites</span>`,
@@ -94,8 +101,8 @@ class MediaControlCard extends React.Component {
       visible: !this.state.visible
     });
   }
-  remove_title(title, artist) {
-    Links.remove({ _id: this.state.id });
+  remove_title(title, artist, owner) {
+    Links.update({ _id: owner }, { $pull: { favorites: { title, artist } } });
     this.setState({
       visible: !this.state.visible
     });
@@ -105,8 +112,9 @@ class MediaControlCard extends React.Component {
       confirmButtonColor: "red"
     });
   }
+
   render() {
-    const { classes, title, artist } = this.props;
+    const { classes, title, artist, owner } = this.props;
     return (
       <Card className={classes.card}>
         <div className={classes.details}>
@@ -124,7 +132,7 @@ class MediaControlCard extends React.Component {
                 <Tooltip title="Add to favorites">
                   <ADD_title
                     className={classes.playIcon}
-                    onClick={() => this.add_title(title, artist)}
+                    onClick={() => this.add_title(title, artist, owner)}
                   />
                 </Tooltip>
               )}
@@ -132,7 +140,7 @@ class MediaControlCard extends React.Component {
                 <Tooltip title="Remove from favorites">
                   <ADD_title
                     className={classes.removetitle}
-                    onClick={() => this.remove_title(title, artist)}
+                    onClick={() => this.remove_title(title, artist, owner)}
                   />
                 </Tooltip>
               )}

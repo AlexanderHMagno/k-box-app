@@ -10,6 +10,8 @@ import { Form, Field } from "react-final-form";
 import PropTypes from "prop-types";
 import styles from "../styles";
 import { Meteor } from "meteor/meteor";
+import { Links } from "../../../api/links";
+
 import { withRouter } from "react-router-dom";
 
 class AccountForm extends Component {
@@ -37,6 +39,18 @@ class AccountForm extends Component {
             Accounts.createUser(values, er => {
               if (er) {
                 throw new Meteor.Error("Existing Account already exists");
+              } else {
+                //Creates de user account
+                Links.insert({
+                  _id: Meteor.userId(),
+                  username: values.username,
+                  email: values.email,
+                  favorites: [],
+                  friends: [],
+                  rooms: []
+                });
+
+                console.log("this work");
               }
             });
           }

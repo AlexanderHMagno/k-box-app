@@ -49,7 +49,8 @@ class LastFM extends React.Component {
 
   render() {
     const { error, isLoaded, items } = this.state;
-
+    const user_id = Meteor.userId();
+    console.log(items);
     // console.log(this.state);
     if (error) {
       return <div>Error: {error.message}</div>;
@@ -61,7 +62,11 @@ class LastFM extends React.Component {
           {items.map(item => (
             <li key={item.name} style={{ listStyleType: "none", width: "30%" }}>
               <div>
-                <Song artist={item.artist.name} title={item.name} />
+                <Song
+                  artist={item.artist.name}
+                  title={item.name}
+                  owner={user_id}
+                />
               </div>
             </li>
           ))}

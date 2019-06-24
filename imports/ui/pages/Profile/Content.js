@@ -52,12 +52,12 @@ class Content extends React.Component {
     };
   }
 
-  search_name() {
-    console.log(this.state.search_information);
-  }
-
   set_information(information) {
     this.setState({ search_information: information });
+  }
+
+  componentWillReceiveProps() {
+    this.setState({ api_visible: true });
   }
 
   reset_state() {
@@ -91,18 +91,23 @@ class Content extends React.Component {
                     className: classes.searchInput
                   }}
                   ref={this.search_value}
-                  onChange={data => this.set_information(data.target.value)}
+                  // onChange={data => this.set_information(data.target.value)}
                 />
               </Grid>
               <Grid item>
-                {/* <Button
+                <Button
                   variant="contained"
                   color="secondary"
                   className={classes.addUser}
-                  onClick={() => this.search_name()}
+                  onClick={() =>
+                    this.set_information(
+                      this.search_value.current.firstElementChild.children[0]
+                        .value
+                    )
+                  }
                 >
                   Search
-                </Button> */}
+                </Button>
                 <Tooltip title="Reset">
                   <IconButton onClick={() => this.reset_state()}>
                     <RefreshIcon className={classes.block} color="inherit" />
@@ -117,7 +122,11 @@ class Content extends React.Component {
             {!this.state.search_information && "Heya! Search for songs."}
           </Typography>
           {this.state.search_information && (
-            <Api item_search={this.state.search_information} />
+            <Api
+              item_search={
+                this.search_value.current.firstElementChild.children[0].value
+              }
+            />
           )}
         </div>
       </Paper>

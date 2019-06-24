@@ -5,8 +5,8 @@ import { ThemeProvider } from "@material-ui/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Hidden from "@material-ui/core/Hidden";
 import Navigator from "../../components/siteLayout/Navigator";
-import Content from "./Content";
-import UserHeader from "./UserFavHeader";
+import FavoriteContent from "./FavoriteContent";
+import FavSubHeader from "./FavSubHeader";
 
 let theme = createMuiTheme({
   typography: {
@@ -184,9 +184,9 @@ class UserPage extends React.Component {
             </Hidden>
           </nav>
           <div className={classes.appContent}>
-            <UserHeader onDrawerToggle={this.handleDrawerToggle} />
+            <FavSubHeader onDrawerToggle={this.handleDrawerToggle} />
             <main className={classes.mainContent}>
-              <Content />
+              <FavoriteContent />
             </main>
           </div>
         </div>

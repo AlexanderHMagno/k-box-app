@@ -30,7 +30,8 @@ const confirm_room = room => {
 
 export default function MediaCard(props) {
   const classes = useStyles();
-  const { name, image, bio, creator, f_creator } = props;
+  const { name, image, bio, creator, f_creator, room_creator } = props;
+
   const show_creator_button = creator === "Create";
   const show_join_button = creator === "Join";
 
@@ -54,7 +55,7 @@ export default function MediaCard(props) {
             <Button
               size="small"
               color="primary"
-              onClick={() => confirm_room(name)}
+              onClick={() => room_creator(props)}
             >
               Enter
             </Button>

@@ -5,20 +5,27 @@ class LastFM extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      artist: "juanes",
+      artist: "",
       error: null,
       isLoaded: false,
       items: []
     };
   }
 
-  componentWillReceiveProps() {
-    this.setState({
-      artist: this.props.item_search
-    });
+  // componentDidUpdate() {
+  //   this.update_component();
+  // }
+  componentWillMount() {
+    // this.setState({
+    //   artist: this.props.item_search
+    // });
+    this.update_component(this.props.item_search);
+  }
+  componentWillReceiveProps(data) {
+    this.update_component(data.item_search);
   }
 
-  componentWillReceiveProps() {
+  update_component(dataka) {
     const source = "http://ws.audioscrobbler.com/2.0/";
     // const method = "?method=artist.search&artist=";
     const method = "?method=artist.gettoptracks&artist=";
@@ -26,7 +33,7 @@ class LastFM extends React.Component {
 
     const key = "&api_key=a0db55d657d3405364a7450efc1f97c4";
     const format = "&format=json";
-    fetch(`${source}${method}${this.props.item_search}${key}${format}`)
+    fetch(`${source}${method}${dataka}${key}${format}`)
       .then(res => res.json())
       .then(
         result => {
@@ -50,10 +57,9 @@ class LastFM extends React.Component {
   render() {
     const { error, isLoaded, items } = this.state;
     const user_id = Meteor.userId();
-    console.log(items);
-    // console.log(this.state);
     if (error) {
-      return <div>Error: {error.message}</div>;
+      console.log("we have a problem:  ", error.message);
+      return <div>Heya, We couldn't find your song</div>;
     } else if (!isLoaded) {
       return <div>Loading...</div>;
     } else {

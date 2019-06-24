@@ -47,17 +47,23 @@ class Content extends React.Component {
       search_information: "",
       error: null,
       isLoaded: false,
-
       items: []
     };
   }
 
-  set_information(information) {
-    this.setState({ search_information: information });
+  search_name() {
+    console.log(this.state.search_information);
   }
 
-  componentWillReceiveProps() {
-    this.setState({ api_visible: true });
+  set_information() {
+    this.setState({
+      search_information: this.search_value.current.firstElementChild
+        .children[0].value
+    });
+  }
+
+  get_information() {
+    return this.state.search_information;
   }
 
   reset_state() {
@@ -99,12 +105,7 @@ class Content extends React.Component {
                   variant="contained"
                   color="secondary"
                   className={classes.addUser}
-                  onClick={() =>
-                    this.set_information(
-                      this.search_value.current.firstElementChild.children[0]
-                        .value
-                    )
-                  }
+                  onClick={() => this.set_information()}
                 >
                   Search
                 </Button>
@@ -121,12 +122,9 @@ class Content extends React.Component {
           <Typography color="textSecondary" align="center">
             {!this.state.search_information && "Heya! Search for songs."}
           </Typography>
+
           {this.state.search_information && (
-            <Api
-              item_search={
-                this.search_value.current.firstElementChild.children[0].value
-              }
-            />
+            <Api item_search={this.state.search_information} />
           )}
         </div>
       </Paper>

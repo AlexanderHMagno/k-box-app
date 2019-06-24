@@ -173,10 +173,10 @@ class Navigator extends Component {
                       className={clsx(classes.profileImg)}
                     /> */}
                   </IconButton>
+                  {Meteor.user().username}
                 </Grid>
-                {Meteor.user().username}
               </ListItemText>
-              <Typography>4 Favorite Songs</Typography>
+              {/* <Typography>4 Favorite Songs</Typography> */}
             </Link>
           </ListItem>
           {categories.map(({ id, children }) => (

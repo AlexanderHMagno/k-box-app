@@ -20,13 +20,13 @@ import { Links } from "../../../api/links";
 const styles = theme => ({});
 
 class FavoriteContent extends React.Component {
-  constructor(props) {
-    super(props);
+  // constructor(props) {
+  //   super(props);
 
-    this.state = {
-      id: ""
-    };
-  }
+  //   this.state = {
+  //     id: ""
+  //   };
+  // }
 
   // favorite_id() {
   //   const { title, artist } = this.props;
@@ -41,6 +41,29 @@ class FavoriteContent extends React.Component {
   // componentWillMount() {
   //   this.favorite_id();
   // }
+  constructor(props) {
+    super(props);
+    this.state = {
+      rooms: []
+    };
+  }
+
+  componentWillMount() {
+    //How to insert a room
+    // Rooms.insert({
+    //   name: "General",
+    //   image:
+    //     "https://cdn.pixabay.com/photo/2017/11/12/08/43/audio-2941753_1280.jpg",
+    //   bio:
+    //     "This room is dedicaded to any kind of music, Rock, Pop, And other artist.",
+    //   users:[],
+    //   tracks:[{owner,title,track}]
+    //   password:''
+    // });
+    this.setState({
+      // rooms: Rooms.find({}).fetch()
+    });
+  }
 
   render() {
     const { classes } = this.props;

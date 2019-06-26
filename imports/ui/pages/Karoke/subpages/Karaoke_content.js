@@ -47,7 +47,7 @@ class CenteredGrid extends React.Component {
     });
   }
   create_room_environment(information) {
-    console.log(information);
+    // console.log(information);
     this.setState({
       open_room: !this.state.open_room,
       room_info: information

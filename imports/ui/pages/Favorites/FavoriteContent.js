@@ -1,102 +1,92 @@
 import React from "react";
-import PropTypes from "prop-types";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
 import { withStyles } from "@material-ui/core/styles";
-import SearchIcon from "@material-ui/icons/Search";
-import RefreshIcon from "@material-ui/icons/Refresh";
-import Api from "../../components/siteLayout/API";
-// import { Meteor } from "meteor/mongo";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import { render } from "react-dom";
+// // import PropTypes from "prop-types";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { Links } from "../../../api/links";
-// import RenderToLayer from "material-ui/internal/RenderToLayer";
 
-const styles = theme => ({});
+import { Meteor } from "meteor/meteor";
+const styles = theme => ({
+  root: {
+    width: "100%",
+    marginTop: theme.spacing(3),
+    overflowX: "auto"
+    // "&:nth-of-type(odd)": {
+    //   backgroundColor: "pink"
+    // }
+  },
+  table: { flex: 1 },
+  styletable: {
+    backgroundColor: "#f50057",
+    fontSize: "24px"
+  },
+  el: { width: "50px" }
+});
 
 class FavoriteContent extends React.Component {
-  // constructor(props) {
-  //   super(props);
-
-  //   this.state = {
-  //     id: ""
-  //   };
-  // }
-
-  // favorite_id() {
-  //   const { title, artist } = this.props;
-  //   const showFavorite = Links.find({ artist: artist, title: title }).fetch();
-  //   if (showFavorite.length > 0) {
-  //     this.setState({
-  //       id: showFavorite[0]._id
-  //     });
-  //   }
-  // }
-
-  // componentWillMount() {
-  //   this.favorite_id();
-  // }
   constructor(props) {
     super(props);
     this.state = {
-      rooms: []
+      favorites: Links.find().fetch()
     };
   }
 
-  componentWillMount() {
-    //How to insert a room
-    // Rooms.insert({
-    //   name: "General",
-    //   image:
-    //     "https://cdn.pixabay.com/photo/2017/11/12/08/43/audio-2941753_1280.jpg",
-    //   bio:
-    //     "This room is dedicaded to any kind of music, Rock, Pop, And other artist.",
-    //   users:[],
-    //   tracks:[{owner,title,track}]
-    //   password:''
-    // });
-    this.setState({
-      // rooms: Rooms.find({}).fetch()
-    });
+  deletefav(i) {
+    const { favorites } = this.state;
+    favorites.splice(i, 1);
+    this.setState({ favorites });
   }
 
   render() {
     const { classes } = this.props;
-    // let getFavorites;
-
-    // let a = favorites;
-
-    // if (a != null) {
-    //   getFavorites = favorites.map(favorite => (
-    //     <MediaControlCard key={favorite.id} />
-    //   ));
-    // } else {
-    //   getFavorites = "";
-    // }
+    const { favorites } = this.state;
+    console.log(favorites);
 
     return (
-      <div className={classes.container}>
-        <div className={classes.subContainer}>
-          {/* <Grid container alignContent="center" spacing={16}>
-            <Grid item xs={12}> */}
-          <Grid container />
-          {/* {getFavorites} */}
-          {/* {console.log(Links.find.fetch())} */}
-          {/* </Grid>
-          </Grid> */}
-        </div>
-      </div>
+      <Paper className={classes.root}>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell className={classes.styletable}>Artist</TableCell>
+              <TableCell className={classes.styletable}>Song Title </TableCell>
+              <TableCell className={classes.styletable} />
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {favorites.map((fav, i) => {
+              if (fav.favorites) {
+                fav.favorites.map((data, i) => {
+                  console.log(data);
+                  return (
+                    <TableRow key={`row-${i}`}>
+                      <TableCell>{data.artist}</TableCell>
+                      <TableCell>{data.title}</TableCell>
+                      <TableCell className={classes.el}>
+                        <IconButton
+                          aria-label="Delete"
+                          onClick={this.deletefav.bind(this, i)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  );
+                });
+              }
+            })}
+          </TableBody>
+        </Table>
+      </Paper>
     );
   }
 }
-
-FavoriteContent.propTypes = {
-  classes: PropTypes.object.isRequired
-};
 
 export default withStyles(styles)(FavoriteContent);

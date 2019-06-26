@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import Check from "@material-ui/icons/Check";
 import { Links } from "../../../../api/links";
+import { Meteor } from "meteor/meteor";
 
 const MySwal = withReactContent(Swal);
 const useStyles = makeStyles({

@@ -111,8 +111,8 @@ class CenteredGrid extends React.Component {
     return (
       <div className={classes.root}>
         <Grid container spacing={3}>
-          {console.log(Links.find({}).fetch())}
-          {console.log(Rooms.find({}).fetch(), "rooms")}
+          {console.log(Links.find({}).fetch(), "links")}
+          {/* {console.log(Rooms.find({}).fetch(), "rooms")} */}
           <Grid item xs={12} sm={6} md={4}>
             {this.state.users.map((user, index) => {
               const links = Links.find({

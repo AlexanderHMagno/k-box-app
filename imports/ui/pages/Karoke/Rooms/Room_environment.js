@@ -6,6 +6,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import ADD_title from "@material-ui/icons/AddCircleSharp";
 import Title from "./Title";
 import { Links } from "../../../../api/links";
 
@@ -79,7 +80,11 @@ export default function Orders() {
       </Table>
       <div className={classes.seeMore}>
         <Link color="secondary" href="javascript:;">
-          Add More Songs!
+          Add More Songs!{" "}
+          <ADD_title
+            className={classes.removetitle}
+            onClick={() => this.remove_title(title, artist, owner)}
+          />
         </Link>
       </div>
     </React.Fragment>

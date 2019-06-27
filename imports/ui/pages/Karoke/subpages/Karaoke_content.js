@@ -43,11 +43,10 @@ class CenteredGrid extends React.Component {
 
   componentWillMount() {
     this.setState({
-      rooms: Rooms.find({}).fetch()
+      rooms: Rooms.find({ users: { user: Meteor.userId() } }).fetch()
     });
   }
   create_room_environment(information) {
-    // console.log(information);
     this.setState({
       open_room: !this.state.open_room,
       room_info: information
@@ -66,9 +65,13 @@ class CenteredGrid extends React.Component {
                   <Room_card
                     className={classes.paper}
                     name={`Room ${index + 1} - ${room.name}`}
+                    id={room._id}
                     image={room.image}
                     bio={room.bio}
-                    password={index + 1}
+                    password={room.password}
+                    admin={room.administrator}
+                    users={room.users}
+                    tracks={room.tracks}
                     room_creator={this.create_room_environment.bind(this)}
                   />
                 </Grid>

@@ -105,7 +105,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function Dashboard(props) {
   const { structure } = props;
-  // console.log(structure);
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -140,7 +139,11 @@ export default function Dashboard(props) {
             {/* Recent Current */}
             <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
-                <Current bio={structure.bio} />
+                <Current
+                  bio={structure.bio}
+                  admin={structure.admin}
+                  password={structure.password}
+                />
               </Paper>
             </Grid>
             {/* Recent Room_environment */}

@@ -21,6 +21,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import Chart from "./Chart";
 import Current from "./Current";
 import Room_environment from "./Room_environment";
+import Youtube from "./Youtube";
 
 const drawerWidth = 240;
 
@@ -85,7 +86,7 @@ const useStyles = makeStyles(theme => ({
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
-    height: "100vh",
+    height: "auto",
     overflow: "auto"
   },
   container: {
@@ -98,12 +99,19 @@ const useStyles = makeStyles(theme => ({
     overflow: "auto",
     flexDirection: "column"
   },
+  paper_black: {
+    padding: theme.spacing(2),
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
+    background: "black"
+  },
   fixedHeight: {
     height: 240
   }
 }));
 
-export default function Dashboard(props) {
+function Dashboard(props) {
   const { structure } = props;
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -146,6 +154,15 @@ export default function Dashboard(props) {
                 />
               </Paper>
             </Grid>
+            {/* Video Player */}
+            <Grid item xs={12}>
+              <Paper className={classes.paper_black}>
+                <Youtube
+                  songs={"hola"}
+                  style={{ display: "flex", justifyContent: "center" }}
+                />
+              </Paper>
+            </Grid>
             {/* Recent Room_environment */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
@@ -158,3 +175,5 @@ export default function Dashboard(props) {
     </div>
   );
 }
+
+export default Dashboard;

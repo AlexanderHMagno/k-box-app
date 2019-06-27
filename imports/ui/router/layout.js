@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import Profile from "../pages/Profile";
 import Karoke from "../pages/Karoke";
 import Favorite from "../pages/Favorites";
+import Friends from "../pages/Friends";
 
 class Router extends Component {
   render() {
@@ -14,6 +15,7 @@ class Router extends Component {
           <Route exact path="/profile" component={Profile} />
           <Route exact path="/profile/:userid" component={Profile} />
           <Route exact path="/favorites" component={Favorite} />
+          <Route exact path="/friends" component={Friends} />
           <Redirect from="*" to="/profile" />
         </Switch>
       </Fragment>

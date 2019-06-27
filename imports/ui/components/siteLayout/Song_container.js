@@ -69,7 +69,7 @@ class MediaControlCard extends React.Component {
 
   update_id() {
     const { title, artist, owner } = this.props;
-    console.log(title, artist, owner);
+    // console.log(title, artist, owner);
     const data = Links.find({
       $and: [
         { _id: owner },

@@ -42,7 +42,7 @@ const categories = [
         // active: false,
         route: "/karoke"
       },
-      { id: "Friends", icon: <PeopleIcon />, route: "/karoke" }
+      { id: "Friends", icon: <PeopleIcon />, route: "/friends" }
 
       // {
       //   id: "Logout",

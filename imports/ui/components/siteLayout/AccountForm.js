@@ -16,7 +16,6 @@ import { withRouter } from "react-router-dom";
 
 class AccountForm extends Component {
   constructor(props) {
-    console.log(props, "proppy");
     super(props);
     this.state = {
       formToggle: true
@@ -49,8 +48,6 @@ class AccountForm extends Component {
                   friends: [],
                   rooms: []
                 });
-
-                console.log("this work");
               }
             });
           }

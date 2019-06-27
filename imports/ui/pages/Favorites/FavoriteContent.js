@@ -12,16 +12,13 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Links } from "../../../api/links";
-
 import { Meteor } from "meteor/meteor";
+
 const styles = theme => ({
   root: {
     width: "100%",
     marginTop: theme.spacing(3),
     overflowX: "auto"
-    // "&:nth-of-type(odd)": {
-    //   backgroundColor: "pink"
-    // }
   },
   table: { flex: 1 },
   styletable: {
@@ -39,11 +36,11 @@ class FavoriteContent extends React.Component {
     };
   }
 
-  deletefav(i) {
-    const { favorites } = this.state;
-    favorites.splice(i, 1);
-    this.setState({ favorites });
-  }
+  // deletefav(i) {
+  //   const { favorites } = this.state;
+  //   favorites.splice(i, 1);
+  //   this.setState({ favorites });
+  // }
 
   render() {
     const { classes } = this.props;
@@ -63,7 +60,7 @@ class FavoriteContent extends React.Component {
           <TableBody>
             {favorites.map((fav, i) => {
               if (fav.favorites) {
-                fav.favorites.map((data, i) => {
+                return fav.favorites.map((data, i) => {
                   console.log(data);
                   return (
                     <TableRow key={`row-${i}`}>
@@ -72,7 +69,7 @@ class FavoriteContent extends React.Component {
                       <TableCell className={classes.el}>
                         <IconButton
                           aria-label="Delete"
-                          onClick={this.deletefav.bind(this, i)}
+                          // onClick={this.deletefav.bind(this, i)}
                         >
                           <DeleteIcon />
                         </IconButton>

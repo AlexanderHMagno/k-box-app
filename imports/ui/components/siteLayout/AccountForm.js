@@ -46,6 +46,8 @@ class AccountForm extends Component {
                   email: values.email,
                   favorites: [],
                   friends: [],
+                  addFriends: [],
+                  friendRequests: [],
                   rooms: []
                 });
               }
@@ -63,7 +65,7 @@ class AccountForm extends Component {
         }) => (
           <form onSubmit={handleSubmit}>
             {!this.state.formToggle && (
-              <FormControl fullWidth>
+              <FormControl fullWidth className={classes.formControl}>
                 <InputLabel htmlFor="fullname">Username</InputLabel>
 
                 <Field
@@ -102,11 +104,11 @@ class AccountForm extends Component {
             <FormControl fullWidth className={classes.formControl}>
               <InputLabel htmlFor="password">Password</InputLabel>
               <Field
+                type="password"
                 name="password"
                 render={({ input, meta }) => (
                   <Input
                     id="password"
-                    type="password"
                     inputProps={{
                       ...input,
                       autoComplete: "off"

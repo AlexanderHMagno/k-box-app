@@ -36,7 +36,7 @@ const useStyles = theme => ({
   }
 });
 
-class PendingRequest extends React.Component {
+class AddFriends extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -55,10 +55,8 @@ class PendingRequest extends React.Component {
           {/* {console.log(Rooms.find({}).fetch(), "rooms")} */}
           <Grid item xs={12} sm={6} md={4}>
             {this.state.friends.map((friend, index) => {
-              console.log(this.state.friends, "friendsss");
-              if (friend.friendRequests && friend.friendRequests[0]) {
-                // console.log(friend.friendsRequest, "boos");
-                return friend.friendRequests.map((data, i) => {
+              if (friend.addFriends && friend.addFriends[0]) {
+                return friend.addFriends.map((data, i) => {
                   console.log(data, "friend data");
                   return (
                     <div>
@@ -66,11 +64,10 @@ class PendingRequest extends React.Component {
                         key={index}
                         className={classes.paper}
                         name={data.username}
-                        // bio={user.emails && user.emails[0].address}
                         // fav={favoriteCount}
                         // email={"Number of Fav Songs"}
                         image={this.state.background_image}
-                        type={"Accept"}
+                        type={"Delete"}
                         // f_creator={() =>
                         //   ShowKboxUsers(this.friendRequest.bind(this))
                         //}
@@ -87,4 +84,4 @@ class PendingRequest extends React.Component {
   }
 }
 
-export default withStyles(useStyles)(PendingRequest);
+export default withStyles(useStyles)(AddFriends);

@@ -13,11 +13,9 @@ import { withStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import Api from "../../../components/siteLayout/API";
-import { Rooms } from "../../../../api/links";
+import { Links } from "../../../../api/links";
 import { makeStyles } from "@material-ui/core/styles";
 import User_card from "./User_Card";
-
-const user = "d1d1";
 
 const useStyles = theme => ({
   root: {
@@ -30,33 +28,14 @@ const useStyles = theme => ({
   }
 });
 
-class CenteredGrid extends React.Component {
+class FriendList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // rooms: []
-      // friends: Meteor.users.find({}).fetch(),
+      friends: Links.find({ _id: Meteor.userId() }).fetch(),
       background_image:
         "https://upload.wikimedia.org/wikipedia/commons/0/0c/Shure_mikrofon_55S.jpg"
     };
-  }
-
-  componentWillMount() {
-    //How to insert a room
-    // Rooms.insert({
-    //   name: "General",
-    //   image:
-    //     "https://cdn.pixabay.com/photo/2017/11/12/08/43/audio-2941753_1280.jpg",
-    //   bio:
-    //     "This room is dedicaded to any kind of music, Rock, Pop, And other artist.",
-    //   users:[],
-    //   tracks:[{owner,title,track}]
-    //   password:''
-    // });
-
-    this.setState({
-      rooms: Rooms.find({}).fetch()
-    });
   }
 
   render() {
@@ -64,36 +43,39 @@ class CenteredGrid extends React.Component {
     return (
       <div className={classes.root}>
         <Grid container spacing={3}>
-          {this.state.rooms.map((room, index) => {
-            return (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                {/* <User_card
-                  className={classes.paper}
-                  name={`Room ${index + 1} - ${room.name}`}
-                  image={room.image}
-                  // bio={room.bio}
-                  fav={room.fav}
-                  password={index + 1}
-                /> */}
-                <User_card
-                  className={classes.paper}
-                  name={user.username}
-                  // bio={user.emails && user.emails[0].address}
-                  // fav={favoriteCount}
-                  // email={"Number of Fav Songs"}
-                  image={this.state.background_image}
-                  // creator={"Request"}
-                />
-              </Grid>
-            );
-          })}
+          {console.log(Links.find({}).fetch(), "links")}
+          {/* {console.log(Rooms.find({}).fetch(), "rooms")} */}
+          <Grid item xs={12} sm={6} md={4}>
+            {this.state.friends.map((friend, index) => {
+              if (friend.friends && friend.friends[0]) {
+                return friend.friends.map((data, i) => {
+                  console.log(data, "friend data");
+                  console.log(data._id, "friend dataa");
+
+                  return (
+                    <div>
+                      <User_card
+                        key={index}
+                        className={classes.paper}
+                        name={data.username}
+                        image={this.state.background_image}
+                        // f_creator={() =>
+                        //   ShowKboxUsers(this.friendRequest.bind(this))
+                        //}
+                      />
+                    </div>
+                  );
+                });
+              }
+            })}
+          </Grid>
         </Grid>
       </div>
     );
   }
 }
 
-export default withStyles(useStyles)(CenteredGrid);
+export default withStyles(useStyles)(FriendList);
 
 // const myLinks = Links.find({
 //   email: user.emails && user.emails[0].address
@@ -105,3 +87,10 @@ export default withStyles(useStyles)(CenteredGrid);
 //     friends: myLinks.friends.
 //   }
 // })
+
+// friendRequest(owner, _id, username) {
+//   console.log(owner, "boo");
+//   Links.update(
+//     { _id: owner },
+//     { $push: { friends: { _id, username, createdAt: new Date() } } }
+//   );

@@ -18,7 +18,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
 import FriendList from "./subpages/FriendList";
 import Create from "./subpages/KboxUsers";
-import Join from "./subpages/PendingRequest";
+import PendingRequest from "./subpages/PendingRequest";
+import AddFriends from "./subpages/AddFriends";
 import Dashboard from "./Rooms/Dashboard";
 import SettingsPowerIcon from "@material-ui/icons/SettingsPower";
 import KboxUsers from "./subpages/KboxUsers";
@@ -59,6 +60,7 @@ function SimpleTabs() {
           <Tab textColor="inherit" label="Friends List" />
           <Tab textColor="inherit" label="K-BOX USERS" />
           <Tab textColor="primary" label="Pending Requests From K-BOX Users" />
+          <Tab textColor="primary" label="Pending Invitations to K-BOX Users" />
         </Tabs>
       </AppBar>
       {value === 0 && (
@@ -73,12 +75,13 @@ function SimpleTabs() {
       )}
       {value === 2 && (
         <TabContainer>
-          <Join />
+          <PendingRequest />
         </TabContainer>
       )}
       {value === 3 && (
         <TabContainer>
-          <Dashboard />
+          {/* <Dashboard /> */}
+          <AddFriends />
         </TabContainer>
       )}
     </div>
@@ -155,11 +158,7 @@ class Header extends Component {
                 </Grid>
               </Hidden>
               <Grid item xs />
-              {/* <Grid item>
-              <Typography className={classes.link} component="a" href="#">
-                Go to docs
-              </Typography>
-            </Grid> */}
+
               <Grid item>
                 <Tooltip title="Alerts • No alters">
                   <IconButton color="inherit">

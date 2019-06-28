@@ -16,6 +16,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 import SettingsPowerIcon from "@material-ui/icons/SettingsPower";
+import NavBar from "../../components/siteLayout/NavBar";
 const lightColor = "rgba(255, 255, 255, 0.7)";
 
 const styles = theme => ({
@@ -64,7 +65,8 @@ class Header extends Component {
     const { classes, onDrawerToggle } = this.props;
     return (
       <React.Fragment>
-        <AppBar color="primary" position="sticky" elevation={0}>
+        <NavBar onDrawerToggle={() => myFunction()} />
+        {/* <AppBar color="primary" position="sticky" elevation={0}>
           <Toolbar>
             <Grid container spacing={1} alignItems="center">
               <Hidden smUp>
@@ -80,11 +82,7 @@ class Header extends Component {
                 </Grid>
               </Hidden>
               <Grid item xs />
-              <Grid item>
-                {/* <Typography className={classes.link} component="a" href="#">
-                Go to docs
-              </Typography> */}
-              </Grid>
+              <Grid item />
               <Grid item>
                 <Tooltip title="Alerts • No alters">
                   <IconButton color="inherit">
@@ -122,7 +120,7 @@ class Header extends Component {
               </Grid>
             </Grid>
           </Toolbar>
-        </AppBar>
+        </AppBar> */}
         <AppBar
           component="div"
           className={classes.secondaryBar}
@@ -174,8 +172,8 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  classes: PropTypes.object.isRequired,
-  onDrawerToggle: PropTypes.func.isRequired
+  classes: PropTypes.object.isRequired
+  // onDrawerToggle: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(Header);

@@ -37,6 +37,18 @@ const delete_friend = room => {
 //   });
 // }
 
+// deleteFriend(id, name) {
+//   Links.update({ _id: owner }, { $pull: { friends: { id, name } } });
+//   this.setState({
+//     visible: !this.state.visible
+//   });
+//   MySwal.fire({
+//     html: `<span> Friend removed from Friends List </span>`,
+//     type: "success",
+//     confirmButtonColor: "green"
+//   });
+// }
+
 const AcceptFriend = create =>
   Swal.mixin({
     input: "text",
@@ -73,15 +85,13 @@ const RejectFriend = create =>
       }
     });
 
-export default function MediaCard(props) {
+export default function User_Card(props) {
   const classes = useStyles();
-  const { name, image, fav, creator, f_creator } = props;
-  const send_friend_request = creator === "Request";
-  const accept_friend_request = creator === "Accept";
-  // const links = Links.find({
-  //   email: user.emails && user.emails[0].address
-  // }).fetch();
-  // let favoriteCount = links[0].favorites.length;
+  const { name, image, fav, type, f_creator } = props;
+  console.log(fav, "this is fav");
+  const send_friend_request = type === "Request";
+  const accept_friend_request = type === "Accept";
+  const delete_friend_request = type === "Delete";
 
   return (
     <Card className={classes.card}>
@@ -90,19 +100,14 @@ export default function MediaCard(props) {
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
             {name}
-
-            {/* Meteor Username */}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            {/* has {fav} favourite songs */}
-            {/* favorited {favoriteCount.length > 2 ? "songs" : "song"} */}
-            favorited {fav <= 0 ? "no" : fav} {fav >= 1 ? " songs " : "song"}
-            {/* Number of Favorite SOngs */}
+            {fav ? fav : "no favorite "}
+            {fav > 1 ? "  favorite songs " : "song"}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        {/* Show Current TAB BUTTONS */}
         {!send_friend_request && !accept_friend_request && (
           <div>
             <Button
@@ -124,6 +129,7 @@ export default function MediaCard(props) {
             Send Friend Request
           </Button>
         )}
+
         {/* Show JOIN TAB BUTTONS */}
         {accept_friend_request && (
           <div>
@@ -135,6 +141,13 @@ export default function MediaCard(props) {
             </Button>
           </div>
         )}
+        {delete_friend_request &&
+          !accept_friend_request &&
+          !send_friend_request && (
+            <Button size="small" color="primary" onClick={() => f_creator()}>
+              Delete Friend Request
+            </Button>
+          )}
       </CardActions>
     </Card>
   );

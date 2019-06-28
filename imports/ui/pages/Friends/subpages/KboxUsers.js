@@ -27,8 +27,6 @@ import { Meteor } from "meteor/meteor";
 const MySwal = withReactContent(Swal);
 const user = "d1d1";
 
-///++++++++++++++++ ROOM CREATOR +++++++++++++++++
-
 const ShowKboxUsers = create =>
   Swal.mixin({
     input: "text",
@@ -50,8 +48,10 @@ const ShowKboxUsers = create =>
       }
     });
 
-///+++++++++++++++++++++ End Room Creator
-
+// Links.update(
+//   { _id: owner },
+//   { $push: { friends: { _id, username, createdAt: new Date() } } }
+// );
 const useStyles = theme => ({
   root: {
     flexGrow: 1
@@ -86,7 +86,7 @@ const useStyles = theme => ({
   }
 });
 
-class CenteredGrid extends React.Component {
+class KboxUsers extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -96,12 +96,11 @@ class CenteredGrid extends React.Component {
     };
   }
 
-  friendRequest(data_room) {
-    Rooms.insert({
-      name: data_room[0],
-      image: this.state.background_image,
-      fav: data_room[1]
-      // password: data_room[2]
+  friendRequest(data) {
+    Links.insert({
+      id: _id,
+      friendRequests: data[0],
+      image: this.state.background_image
     });
   }
 
@@ -113,6 +112,7 @@ class CenteredGrid extends React.Component {
         <Grid container spacing={3}>
           {console.log(Links.find({}).fetch(), "links")}
           {/* {console.log(Rooms.find({}).fetch(), "rooms")} */}
+          {console.log(Meteor.users.find({}).fetch(), "jfjf")}
           <Grid item xs={12} sm={6} md={4}>
             {this.state.users.map((user, index) => {
               const links = Links.find({
@@ -124,17 +124,20 @@ class CenteredGrid extends React.Component {
                 favoriteCount = links[0].favorites.length;
 
               return (
-                <User_card
-                  key={index}
-                  className={classes.paper}
-                  name={user.username}
-                  // bio={user.emails && user.emails[0].address}
-                  fav={favoriteCount}
-                  // email={"Number of Fav Songs"}
-                  image={this.state.background_image}
-                  creator={"Request"}
-                  f_creator={() => ShowKboxUsers(this.friendRequest.bind(this))}
-                />
+                <div className={classes.container} key={index}>
+                  <User_card
+                    className={classes.paper}
+                    name={user.username}
+                    // bio={user.emails && user.emails[0].address}
+                    fav={favoriteCount}
+                    // email={"Number of Fav Songs"}
+                    image={this.state.background_image}
+                    type={"Request"}
+                    f_creator={() =>
+                      ShowKboxUsers(this.friendRequest.bind(this))
+                    }
+                  />
+                </div>
               );
             })}
             ;
@@ -145,4 +148,4 @@ class CenteredGrid extends React.Component {
   }
 }
 
-export default withStyles(useStyles)(CenteredGrid);
+export default withStyles(useStyles)(KboxUsers);

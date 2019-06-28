@@ -13,7 +13,10 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Links } from "../../../api/links";
 import { Meteor } from "meteor/meteor";
-
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+// import { withTracker } from "meteor/react-meteor-data";
+const MySwal = withReactContent(Swal);
 const styles = theme => ({
   root: {
     width: "100%",
@@ -32,21 +35,42 @@ class FavoriteContent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      favorites: Links.find().fetch()
+      //  users: Meteor.users.find({ _id: Meteor.userId() }).fetch(),
+      favorites: Links.find({ _id: Meteor.userId() }).fetch(),
+      visible: true
     };
   }
 
   // deletefav(i) {
   //   const { favorites } = this.state;
-  //   favorites.splice(i, 1);
-  //   this.setState({ favorites });
+  //   if (favorites.favorites !== null) console.log("delete");
+  //   //  favorites.splice(i, 1);
+  //   //  this.setState({ favorites });
   // }
+  removeFav(title, artist, owner) {
+    console.log(owner, "owner");
+    console.log("Links", Links);
+    Links.update(
+      { _id: owner },
+      { $pull: { favorites: { title: title, artist: artist } } }
+    );
+    this.setState({
+      // visible: !this.state.visible
+    });
+    MySwal.fire({
+      html: `<span>${title} of ${artist} <br>has been <b>Removed</b> from your favorites</span>`,
+      type: "error",
+      confirmButtonColor: "red"
+    });
+  }
 
   render() {
-    const { classes } = this.props;
+    // const { classes } = this.props;
     const { favorites } = this.state;
     console.log(favorites);
+    console.log(this.state.users, "users");
 
+    const { classes, title, artist, owner } = this.props;
     return (
       <Paper className={classes.root}>
         <Table className={classes.table}>
@@ -70,6 +94,14 @@ class FavoriteContent extends React.Component {
                         <IconButton
                           aria-label="Delete"
                           // onClick={this.deletefav.bind(this, i)}
+
+                          onClick={() =>
+                            this.removeFav(
+                              data.artist,
+                              data.title,
+                              Meteor.userId()
+                            )
+                          }
                         >
                           <DeleteIcon />
                         </IconButton>
@@ -87,3 +119,10 @@ class FavoriteContent extends React.Component {
 }
 
 export default withStyles(styles)(FavoriteContent);
+
+// export default withTracker(() => {
+//   const user = Meteor.user();
+// 	return {
+// 		user
+// 	};
+// })withStyles(styles)(FavoriteContent);

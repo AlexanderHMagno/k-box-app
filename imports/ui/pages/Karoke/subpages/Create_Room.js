@@ -113,7 +113,9 @@ class CenteredGrid extends React.Component {
       users: [{ user: Meteor.userId() }],
       tracks: [],
       administrator: { _id: Meteor.userId(), username: Meteor.user().username },
-      password: data_room[2]
+      password: data_room[2],
+      public: "yes",
+      favorite_room: "no"
     });
   }
 

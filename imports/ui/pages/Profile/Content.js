@@ -74,7 +74,13 @@ class Content extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const {
+      classes,
+      source_of_request,
+      room_id,
+      favorite_room,
+      updating_room_state
+    } = this.props;
     return (
       <Paper className={classes.paper}>
         <AppBar
@@ -124,7 +130,13 @@ class Content extends React.Component {
           </Typography>
 
           {this.state.search_information && (
-            <Api item_search={this.state.search_information} />
+            <Api
+              item_search={this.state.search_information}
+              source_of_request={source_of_request}
+              room_id={room_id}
+              favorite_room={favorite_room}
+              updating_room_state={updating_room_state}
+            />
           )}
         </div>
       </Paper>

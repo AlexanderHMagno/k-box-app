@@ -1,24 +1,32 @@
 import React from "react";
 import YouTube from "react-youtube";
+import Typography from "@material-ui/core/Typography";
+import { Links } from "../../../../api/links";
 
 class Youtube extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      songs: [
-        "huaE85-V8u4",
-        "juanes la camisa negra",
-        "me vale mana",
-        "I wanna Dance with somebody Whitney Houston"
-      ],
-      position: 1,
+      songs: "",
+      position: 0,
       error_queue: 1
     };
   }
+
   componentWillReceiveProps() {
-    console.log(this.props);
+    console.log(this.props.songs.songs);
   }
-  compon;
+  componentWillMount() {
+    if (this.props.favorite_room === "yes") {
+      this.setState({
+        songs: this.props.songs[0].favorites.map(x => `${x.title}  ${x.artist}`)
+      });
+    } else {
+      this.setState({
+        songs: this.props.songs[0].tracks.map(x => `${x.title}  ${x.artist}`)
+      });
+    }
+  }
 
   videoOnReady(event) {
     // access to player in all event handlers via event.target
@@ -70,13 +78,24 @@ class Youtube extends React.Component {
     };
 
     return (
-      <YouTube
-        videoId={this.state.songs[0]}
-        opts={opts}
-        onReady={this.videoOnReady}
-        onEnd={this.nextSong.bind(this)}
-        onError={this.handleError.bind(this)}
-      />
+      <div>
+        {this.state.songs != 0 && (
+          <YouTube
+            videoId="epDoVwQ1ZLk"
+            // {this.state.songs[0]}
+            opts={opts}
+            onReady={this.videoOnReady}
+            onEnd={this.nextSong.bind(this)}
+            onError={this.handleError.bind(this)}
+          />
+        )}
+
+        {this.state.songs == 0 && (
+          <Typography variant="h6" color="secondary">
+            "Please Add more songs to this room"
+          </Typography>
+        )}
+      </div>
     );
   }
 }

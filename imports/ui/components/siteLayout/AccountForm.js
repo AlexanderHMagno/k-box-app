@@ -10,7 +10,7 @@ import { Form, Field } from "react-final-form";
 import PropTypes from "prop-types";
 import styles from "../styles";
 import { Meteor } from "meteor/meteor";
-import { Links } from "../../../api/links";
+import { Links, Rooms } from "../../../api/links";
 
 import { withRouter } from "react-router-dom";
 
@@ -31,7 +31,7 @@ class AccountForm extends Component {
           if (this.state.formToggle) {
             Meteor.loginWithPassword(values.email, values.password, er => {
               if (er) {
-                throw new Meteor.Error("Inccorrect Email or Password");
+                throw new Meteor.Error("Incorrect Email or Password");
               }
             });
           } else {
@@ -39,14 +39,32 @@ class AccountForm extends Component {
               if (er) {
                 throw new Meteor.Error("Existing Account already exists");
               } else {
+                const user_id = Meteor.userId();
                 //Creates de user account
                 Links.insert({
-                  _id: Meteor.userId(),
+                  _id: user_id,
                   username: values.username,
                   email: values.email,
                   favorites: [],
                   friends: [],
                   rooms: []
+                });
+
+                //Creates Favorites Room...
+                Rooms.insert({
+                  name: "Favorites",
+                  image:
+                    "https://cdn.pixabay.com/photo/2016/02/05/19/51/stained-glass-1181864_1280.jpg",
+                  bio: "My favorite songs",
+                  users: [{ user: user_id }],
+                  tracks: [],
+                  administrator: {
+                    _id: user_id,
+                    username: Meteor.user().username
+                  },
+                  password: user_id,
+                  public: "no",
+                  favorite_room: "yes"
                 });
               }
             });

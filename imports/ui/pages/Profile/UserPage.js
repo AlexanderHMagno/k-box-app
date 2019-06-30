@@ -186,7 +186,7 @@ class UserPage extends React.Component {
           <div className={classes.appContent}>
             <UserHeader onDrawerToggle={this.handleDrawerToggle} />
             <main className={classes.mainContent}>
-              <Content />
+              <Content source_of_request="search_favorites" room_id={1} />
             </main>
           </div>
         </div>

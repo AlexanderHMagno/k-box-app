@@ -3,11 +3,12 @@ import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
+import Typography from "@material-ui/core/Typography";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { render } from "react-dom";
-// // import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -28,12 +29,16 @@ const styles = theme => ({
     backgroundColor: "#f50057",
     fontSize: "24px"
   },
-  el: { width: "50px" }
+  el: { width: "50px" },
+  color: {
+    color: "white"
+  }
 });
 
 class FavoriteContent extends React.Component {
   constructor(props) {
     super(props);
+    this.checkFavorites = React.createRef();
     this.state = {
       //  users: Meteor.users.find({ _id: Meteor.userId() }).fetch(),
       favorites: Links.find({ _id: Meteor.userId() }).fetch(),
@@ -41,21 +46,14 @@ class FavoriteContent extends React.Component {
     };
   }
 
-  // deletefav(i) {
-  //   const { favorites } = this.state;
-  //   if (favorites.favorites !== null) console.log("delete");
-  //   //  favorites.splice(i, 1);
-  //   //  this.setState({ favorites });
-  // }
   removeFav(title, artist, owner) {
-    console.log(owner, "owner");
-    console.log("Links", Links);
     Links.update(
       { _id: owner },
       { $pull: { favorites: { title: title, artist: artist } } }
     );
     this.setState({
-      // visible: !this.state.visible
+      visible: !this.state.visible,
+      favorites: Links.find({ _id: Meteor.userId() }).fetch()
     });
     MySwal.fire({
       html: `<span>${title} of ${artist} <br>has been <b>Removed</b> from your favorites</span>`,
@@ -65,64 +63,70 @@ class FavoriteContent extends React.Component {
   }
 
   render() {
-    // const { classes } = this.props;
     const { favorites } = this.state;
-    console.log(favorites);
-    console.log(this.state.users, "users");
-
-    const { classes, title, artist, owner } = this.props;
+    let hasFavorites = false;
+    if (
+      favorites &&
+      favorites.length &&
+      favorites[0].favorites &&
+      favorites[0].favorites.length
+    ) {
+      hasFavorites = true;
+    }
+    console.log(this.state.favorites, "favvy");
+    const { classes } = this.props;
     return (
       <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.styletable}>Artist</TableCell>
-              <TableCell className={classes.styletable}>Song Title </TableCell>
-              <TableCell className={classes.styletable} />
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {favorites.map((fav, i) => {
-              if (fav.favorites) {
-                return fav.favorites.map((data, i) => {
-                  console.log(data);
-                  return (
-                    <TableRow key={`row-${i}`}>
-                      <TableCell>{data.artist}</TableCell>
-                      <TableCell>{data.title}</TableCell>
-                      <TableCell className={classes.el}>
-                        <IconButton
-                          aria-label="Delete"
-                          // onClick={this.deletefav.bind(this, i)}
+        <Typography color="textSecondary" align="center">
+          {!hasFavorites && "Start adding your favorites! "}
+        </Typography>
+        {hasFavorites && (
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell className={classes.styletable}>Artist</TableCell>
+                <TableCell className={classes.styletable}>Song Title</TableCell>
+                <TableCell className={classes.styletable} />
+              </TableRow>
+            </TableHead>
 
-                          onClick={() =>
-                            this.removeFav(
-                              data.artist,
-                              data.title,
-                              Meteor.userId()
-                            )
-                          }
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  );
-                });
-              }
-            })}
-          </TableBody>
-        </Table>
+            <TableBody>
+              {favorites.map((fav, i) => {
+                if (fav.favorites) {
+                  // console.log(fav.favorites.length, "favority");
+                  return fav.favorites.map((data, i) => {
+                    return (
+                      <TableRow key={`row-${i}`}>
+                        <TableCell>{data.artist}</TableCell>
+                        <TableCell>{data.title}</TableCell>
+                        <TableCell className={classes.el}>
+                          <IconButton
+                            aria-label="Delete"
+                            onClick={() =>
+                              this.removeFav(
+                                data.title,
+                                data.artist,
+                                Meteor.userId()
+                              )
+                            }
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  });
+                }
+              })}
+            </TableBody>
+          </Table>
+        )}
       </Paper>
     );
   }
 }
 
+FavoriteContent.propTypes = {
+  classes: PropTypes.object.isRequired
+};
 export default withStyles(styles)(FavoriteContent);
-
-// export default withTracker(() => {
-//   const user = Meteor.user();
-// 	return {
-// 		user
-// 	};
-// })withStyles(styles)(FavoriteContent);

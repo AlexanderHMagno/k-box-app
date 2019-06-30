@@ -16,7 +16,7 @@ import { Links } from "../../../api/links";
 import { Meteor } from "meteor/meteor";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-// import { withTracker } from "meteor/react-meteor-data";
+
 const MySwal = withReactContent(Swal);
 const styles = theme => ({
   root: {
@@ -40,7 +40,6 @@ class FavoriteContent extends React.Component {
     super(props);
     this.checkFavorites = React.createRef();
     this.state = {
-      //  users: Meteor.users.find({ _id: Meteor.userId() }).fetch(),
       favorites: Links.find({ _id: Meteor.userId() }).fetch(),
       visible: true
     };
@@ -93,7 +92,6 @@ class FavoriteContent extends React.Component {
             <TableBody>
               {favorites.map((fav, i) => {
                 if (fav.favorites) {
-                  // console.log(fav.favorites.length, "favority");
                   return fav.favorites.map((data, i) => {
                     return (
                       <TableRow key={`row-${i}`}>

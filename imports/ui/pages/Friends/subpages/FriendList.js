@@ -25,6 +25,9 @@ const useStyles = theme => ({
     padding: theme.spacing(2),
     textAlign: "center",
     color: theme.palette.text.secondary
+  },
+  container: {
+    width: "225px"
   }
 });
 
@@ -32,7 +35,10 @@ class FriendList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      friends: Links.find({ _id: Meteor.userId() }).fetch(),
+      friends: Links.find(
+        { _id: Meteor.userId() },
+        { friends: 1, _id: 0, status: "friends" }
+      ).fetch(),
       background_image:
         "https://upload.wikimedia.org/wikipedia/commons/0/0c/Shure_mikrofon_55S.jpg"
     };
@@ -43,29 +49,26 @@ class FriendList extends React.Component {
     return (
       <div className={classes.root}>
         <Grid container spacing={3}>
-          {console.log(Links.find({}).fetch(), "links")}
+          {/* {console.log(Links.find({}).fetch(), "links")}
+          {console.log(this.state.friends, "this is a friend")} */}
           {/* {console.log(Rooms.find({}).fetch(), "rooms")} */}
           <Grid item xs={12} sm={6} md={4}>
-            {this.state.friends.map((friend, index) => {
-              if (friend.friends && friend.friends[0]) {
-                return friend.friends.map((data, i) => {
-                  console.log(data, "friend data");
-                  console.log(data._id, "friend dataa");
-
-                  return (
-                    <div>
-                      <User_card
-                        key={index}
-                        className={classes.paper}
-                        name={data.username}
-                        image={this.state.background_image}
-                        // f_creator={() =>
-                        //   ShowKboxUsers(this.friendRequest.bind(this))
-                        //}
-                      />
-                    </div>
-                  );
-                });
+            {/* {console.log(this.state.friends[0].friends, "cake")} */}
+            {this.state.friends[0].friends.map((friend, index) => {
+              // console.log(friend, "friendsss");
+              if (friend.status === "friends") {
+                // console.log(friend, "this is what you render yen");
+                return (
+                  <div className={classes.container} key={index}>
+                    <User_card
+                      className={classes.paper}
+                      name={friend.username}
+                      image={this.state.background_image}
+                      type={"DeleteFriend"}
+                      id_user={friend._id}
+                    />
+                  </div>
+                );
               }
             })}
           </Grid>
@@ -74,6 +77,10 @@ class FriendList extends React.Component {
     );
   }
 }
+
+FriendList.propTypes = {
+  classes: PropTypes.object.isRequired
+};
 
 export default withStyles(useStyles)(FriendList);
 

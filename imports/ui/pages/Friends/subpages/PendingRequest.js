@@ -23,8 +23,6 @@ import Friend from "../Friend";
 
 const MySwal = withReactContent(Swal);
 
-const user = "d1d1";
-
 const useStyles = theme => ({
   root: {
     flexGrow: 1
@@ -33,6 +31,9 @@ const useStyles = theme => ({
     padding: theme.spacing(2),
     textAlign: "center",
     color: theme.palette.text.secondary
+  },
+  container: {
+    width: "225px"
   }
 });
 
@@ -40,7 +41,11 @@ class PendingRequest extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      friends: Links.find({ _id: Meteor.userId() }).fetch(),
+      friends: Links.find(
+        { _id: Meteor.userId() },
+        { friends: 1, _id: 0, status: "friendrequest" }
+      ).fetch(),
+      visble: true,
       background_image:
         "https://upload.wikimedia.org/wikipedia/commons/0/0c/Shure_mikrofon_55S.jpg"
     };
@@ -48,36 +53,41 @@ class PendingRequest extends React.Component {
 
   render() {
     const { classes } = this.props;
+
+    // console.log("alex: ", this.state.friends);
     return (
       <div className={classes.root}>
         <Grid container spacing={3}>
-          {console.log(Links.find({}).fetch(), "links")}
+          {/* {console.log(Links.find({}).fetch(), "links")} */}
           {/* {console.log(Rooms.find({}).fetch(), "rooms")} */}
           <Grid item xs={12} sm={6} md={4}>
-            {this.state.friends.map((friend, index) => {
-              console.log(this.state.friends, "friendsss");
-              if (friend.friendRequests && friend.friendRequests[0]) {
-                // console.log(friend.friendsRequest, "boos");
-                return friend.friendRequests.map((data, i) => {
-                  console.log(data, "friend data");
-                  return (
-                    <div>
-                      <User_card
-                        key={index}
-                        className={classes.paper}
-                        name={data.username}
-                        // bio={user.emails && user.emails[0].address}
-                        // fav={favoriteCount}
-                        // email={"Number of Fav Songs"}
-                        image={this.state.background_image}
-                        type={"Accept"}
-                        // f_creator={() =>
-                        //   ShowKboxUsers(this.friendRequest.bind(this))
-                        //}
-                      />
-                    </div>
-                  );
-                });
+            {/* {console.log(this.state.friends[0].friends)} */}
+            {this.state.friends[0].friends.map((friend, index) => {
+              // console.log(friend, "friendsss");
+              if (friend.status === "friendrequest") {
+                // console.log(friend, "this is what you render yen");
+                return (
+                  <div className={classes.container} key={index}>
+                    <User_card
+                      className={classes.paper}
+                      name={friend.username}
+                      image={this.state.background_image}
+                      type={"Accept"}
+                      id_user={friend._id}
+                      // onAcceptFriend={() => {
+                      //   this.setState({
+                      //     friends: Links.find(
+                      //       { _id: Meteor.userId() },
+                      //       { friends: 1, _id: 0, status: "friendrequest" }
+                      //     ).fetch()
+                      //   });
+                      // }}
+                      // onClick={() =>
+                      //   this.acceptRequest(friend.username, Meteor.userId())
+                      // }
+                    />
+                  </div>
+                );
               }
             })}
           </Grid>
@@ -87,4 +97,7 @@ class PendingRequest extends React.Component {
   }
 }
 
+PendingRequest.propTypes = {
+  classes: PropTypes.object.isRequired
+};
 export default withStyles(useStyles)(PendingRequest);

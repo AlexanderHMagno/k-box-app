@@ -21,32 +21,11 @@ import withReactContent from "sweetalert2-react-content";
 import User_card from "./User_Card";
 import { Rooms } from "../../../../api/links";
 import { Links } from "../../../../api/links";
-import images from "./images/images";
+// import images from "./images/images";
 import { Meteor } from "meteor/meteor";
 
 const MySwal = withReactContent(Swal);
 const user = "d1d1";
-
-const ShowKboxUsers = create =>
-  Swal.mixin({
-    input: "text",
-    confirmButtonText: "Next &rarr;",
-    showCancelButton: true
-  })
-    .queue([])
-    .then(result => {
-      if (result) {
-        // if (result.value) {
-        Swal.fire({
-          // title: "All done!",
-          // html: `Friend  Request Sent`,
-          // confirmButtonText: "Sucess!"
-          html: `<span> Friend  Request Sent </span>`,
-          type: "success",
-          confirmButtonColor: "green"
-        });
-      }
-    });
 
 // Links.update(
 //   { _id: owner },
@@ -83,6 +62,9 @@ const useStyles = theme => ({
   playIcon: {
     height: 38,
     width: 38
+  },
+  container: {
+    width: "225px"
   }
 });
 
@@ -91,18 +73,43 @@ class KboxUsers extends React.Component {
     super(props);
     this.state = {
       users: Meteor.users.find({}).fetch(),
+      visible: true,
       background_image:
         "https://upload.wikimedia.org/wikipedia/commons/0/0c/Shure_mikrofon_55S.jpg"
     };
   }
 
-  friendRequest(data) {
-    Links.insert({
-      id: _id,
-      friendRequests: data[0],
-      image: this.state.background_image
-    });
-  }
+  // friendRequest(data) {
+  //   Links.insert({
+  //     id: _id,
+  //     friendRequests: data[0],
+  //     image: this.state.background_image
+  //   });
+  // }
+
+  // sendRequest(owner, username, invitefriend) {
+  //   // console.log(owner, "this is owner");
+  //   // console.log(username, "this is username");
+  //   // console.log(invitefriend, "invite");
+  //   // console.log("Links is here ", Links);
+  //   Links.update(
+  //     { _id: owner },
+  //     {
+  //       $push: {
+  //         friends: { _id: _id, username: username, status: invitefriend }
+  //       }
+  //     }
+  //   );
+  //   this.setState({
+  //     visible: !this.state.visible,
+  //     friends: Links.find().fetch()
+  //   });
+  //   MySwal.fire({
+  //     html: `<span> Friend Invite has been sent to ${username} </span>`,
+  //     type: "sucess",
+  //     confirmButtonColor: "Green"
+  //   });
+  // }
 
   render() {
     const { classes } = this.props;
@@ -110,42 +117,47 @@ class KboxUsers extends React.Component {
     return (
       <div className={classes.root}>
         <Grid container spacing={3}>
-          {console.log(Links.find({}).fetch(), "links")}
+          {/* {console.log(Links.find({}).fetch(), "links")} */}
           {/* {console.log(Rooms.find({}).fetch(), "rooms")} */}
-          {console.log(Meteor.users.find({}).fetch(), "jfjf")}
+          {/* {console.log(Meteor.users.find({}).fetch(), "jfjf")} */}
           <Grid item xs={12} sm={6} md={4}>
-            {this.state.users.map((user, index) => {
-              const links = Links.find({
-                email: user.emails && user.emails[0].address
-              }).fetch();
-              let favoriteCount;
+            <div className={classes.boot}>
+              {this.state.users.map((user, index) => {
+                const links = Links.find({
+                  email: user.emails && user.emails[0].address
+                }).fetch();
+                let favoriteCount;
 
-              if (links && links[0].favorites)
-                favoriteCount = links[0].favorites.length;
+                if (links && links[0].favorites)
+                  favoriteCount = links[0].favorites.length;
 
-              return (
-                <div className={classes.container} key={index}>
-                  <User_card
-                    className={classes.paper}
-                    name={user.username}
-                    // bio={user.emails && user.emails[0].address}
-                    fav={favoriteCount}
-                    // email={"Number of Fav Songs"}
-                    image={this.state.background_image}
-                    type={"Request"}
-                    f_creator={() =>
-                      ShowKboxUsers(this.friendRequest.bind(this))
-                    }
-                  />
-                </div>
-              );
-            })}
-            ;
+                return (
+                  <div className={classes.container} key={index}>
+                    <User_card
+                      className={classes.paper}
+                      name={user.username}
+                      id_user={user._id}
+                      fav={favoriteCount}
+                      image={this.state.background_image}
+                      type={"Request"}
+                      // onClick={() =>
+                      //   this.sendRequest(user.username, Meteor.userId())
+                      //                      }
+                    />
+                  </div>
+                );
+              })}
+              ;
+            </div>
           </Grid>
         </Grid>
       </div>
     );
   }
 }
+
+KboxUsers.propTypes = {
+  classes: PropTypes.object.isRequired
+};
 
 export default withStyles(useStyles)(KboxUsers);

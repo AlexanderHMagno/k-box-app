@@ -1,7 +1,7 @@
 import React from "react";
 import YouTube from "react-youtube";
 import Typography from "@material-ui/core/Typography";
-import { Links } from "../../../../api/links";
+import { Links, Rooms } from "../../../../api/links";
 
 class Youtube extends React.Component {
   constructor(props) {
@@ -13,9 +13,6 @@ class Youtube extends React.Component {
     };
   }
 
-  componentWillReceiveProps() {
-    console.log(this.props.songs.songs);
-  }
   componentWillMount() {
     if (this.props.favorite_room === "yes") {
       this.setState({
@@ -28,18 +25,37 @@ class Youtube extends React.Component {
     }
   }
 
+  update_playlist() {
+    if (this.props.favorite_room === "yes") {
+      this.setState({
+        songs: Links.find({ _id: Meteor.userId() }, { favorites: 1, _id: 0 })
+          .fetch()[0]
+          .favorites.map(x => `${x.title}  ${x.artist}`)
+      });
+    } else {
+      this.setState({
+        songs: Rooms.find({ _id: this.props.room_id }, { tracks: 1, _id: 0 })
+          .fetch()[0]
+          .tracks.map(x => `${x.title}  ${x.artist}`)
+      });
+    }
+    console.log(this.state.songs);
+  }
+
   videoOnReady(event) {
     // access to player in all event handlers via event.target
     const player = event.target;
     player.pauseVideo();
   }
   nextSong(event) {
+    this.update_playlist();
     // access to player in all event handlers via event.target
     const player = event.target;
     player.loadPlaylist({
       list: `${this.state.songs[this.state.position]} karaoke`,
       listType: "search"
     });
+
     if (this.state.songs.length - 1 !== this.state.position) {
       this.setState({
         position: this.state.position + 1,
@@ -48,6 +64,7 @@ class Youtube extends React.Component {
     }
   }
   handleError(event) {
+    this.update_playlist();
     const player = event.target;
 
     //@

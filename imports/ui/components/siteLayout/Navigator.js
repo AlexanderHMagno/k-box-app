@@ -81,7 +81,7 @@ const styles = theme => ({
   },
   itemCategory: {
     // backgroundColor: "#232f3e",
-    backgroundColor: "#0f0302",
+    backgroundColor: "#000000",
     boxShadow: "0 -1px 0 #404854 inset",
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2)

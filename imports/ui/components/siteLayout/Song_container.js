@@ -155,7 +155,9 @@ class Song_container extends React.Component {
     this.setState({
       visible: !this.state.visible
     });
-    updating_room_state();
+    if (updating_room_state != undefined) {
+      updating_room_state();
+    }
   }
 
   /*Removing song from specific holder (could be favorites or it could be a specific room)
@@ -199,7 +201,9 @@ class Song_container extends React.Component {
       type: "error",
       confirmButtonColor: "red"
     });
-    updating_room_state();
+    if (updating_room_state != undefined) {
+      updating_room_state();
+    }
   }
 
   render() {

@@ -40,13 +40,12 @@ class ListOfSongs extends React.Component {
 
   adding_removing_song() {
     const { room_id } = this.props;
-
     if (this.props.favorite_room === "yes") {
       this.setState({
         songs: Links.find(
           { _id: Meteor.userId() },
           { favorites: 1, _id: 0 }
-        ).fetch()
+        ).fetch()[0].favorites
       });
     } else {
       this.setState({
@@ -75,7 +74,7 @@ class ListOfSongs extends React.Component {
               <TableCell>Title</TableCell>
               <TableCell>Artist</TableCell>
               <TableCell>Singer </TableCell>
-              <TableCell align="right">Duration</TableCell>
+              <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -84,7 +83,13 @@ class ListOfSongs extends React.Component {
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{row.title}</TableCell>
                 <TableCell>{row.artist}</TableCell>
-                <TableCell>{"Any"}</TableCell>
+                {row.singer !== undefined && (
+                  <TableCell>{row.singer}</TableCell>
+                )}
+                {row.singer === undefined && (
+                  <TableCell>{Meteor.user().username}</TableCell>
+                )}
+
                 <TableCell align="right">{"todo"}</TableCell>
               </TableRow>
             ))}

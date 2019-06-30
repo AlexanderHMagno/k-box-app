@@ -49,7 +49,7 @@ class Dashboard extends React.Component {
 
   render() {
     const { structure, classes } = this.props;
-    console.log(structure);
+
     if (structure.favorite_room === "yes") {
       var get_list = Links.find(
         { _id: Meteor.userId() },
@@ -105,6 +105,7 @@ class Dashboard extends React.Component {
                     songs={get_list}
                     style={{ display: "flex", justifyContent: "center" }}
                     favorite_room={structure.favorite_room}
+                    room_id={structure.id}
                   />
                 </Paper>
               </Grid>

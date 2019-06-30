@@ -25,7 +25,7 @@ class AccountForm extends Component {
 
   render() {
     const { classes } = this.props;
-    // console.log(`current meteor user is ${Meteor.user()}`);
+
     return (
       <Form
         onSubmit={values => {
@@ -48,15 +48,14 @@ class AccountForm extends Component {
                   });
                   return;
                 }
-                //Creates de user account
+
                 Links.insert({
                   _id: Meteor.userId(),
                   username: values.username,
                   email: values.email,
                   favorites: [],
                   friends: [],
-                  addFriends: [],
-                  friendRequests: [],
+
                   rooms: []
                 });
                 resolve();

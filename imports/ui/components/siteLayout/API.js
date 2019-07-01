@@ -12,15 +12,10 @@ class LastFM extends React.Component {
     };
   }
 
-  // componentDidUpdate() {
-  //   this.update_component();
-  // }
   componentWillMount() {
-    // this.setState({
-    //   artist: this.props.item_search
-    // });
     this.update_component(this.props.item_search);
   }
+
   componentWillReceiveProps(data) {
     this.update_component(data.item_search);
   }

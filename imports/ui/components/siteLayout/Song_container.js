@@ -63,7 +63,8 @@ class Song_container extends React.Component {
     super(props);
     this.state = {
       visible: true,
-      id: ""
+      id: "",
+      song: ""
     };
   }
   /*@ this will verify if the information is coming from the data base or not.
@@ -86,17 +87,17 @@ class Song_container extends React.Component {
           { _id: owner },
           { favorites: { $elemMatch: { title: title, artist: artist } } }
         ]
-      }).count();
+      });
     } else {
       var data_in_db = Rooms.find({
         $and: [
           { _id: room_id },
           { tracks: { $elemMatch: { title: title, artist: artist } } }
         ]
-      }).count();
+      });
     }
 
-    if (data_in_db > 0) {
+    if (data_in_db.count() > 0) {
       this.setState({
         visible: false
       });
@@ -183,24 +184,51 @@ class Song_container extends React.Component {
 
     if (verify_source) {
       Links.update({ _id: owner }, { $pull: { favorites: { title, artist } } });
+      MySwal.fire({
+        html: `<span>${title} of ${artist} <br>has been <b>Removed</b> from your ${name_of_source}</span>`,
+        type: "error",
+        confirmButtonColor: "red"
+      });
+      this.setState({
+        visible: !this.state.visible
+      });
     } else if (source_of_request === "room") {
-      Rooms.update(
-        { _id: room_id },
-        {
-          $pull: {
-            tracks: { title, artist, singer: Meteor.user().username }
+      const protector = Rooms.find({
+        $and: [
+          { _id: room_id },
+          {
+            tracks: {
+              $elemMatch: { title, artist, singer: Meteor.user().username }
+            }
           }
-        }
-      );
+        ]
+      });
+
+      if (protector.count() > 0) {
+        Rooms.update(
+          { _id: room_id },
+          {
+            $pull: {
+              tracks: { title, artist, singer: Meteor.user().username }
+            }
+          }
+        );
+        this.setState({
+          visible: !this.state.visible
+        });
+        MySwal.fire({
+          html: `<span>${title} of ${artist} <br>has been <b>Removed</b> from your ${name_of_source}</span>`,
+          type: "error",
+          confirmButtonColor: "red"
+        });
+      } else {
+        MySwal.fire({
+          html: `<span>${title} of ${artist} <br>can't be <b>Removed</b> from your ${name_of_source} due to this belongs to another singer</span>`,
+          type: "error",
+          confirmButtonColor: "red"
+        });
+      }
     }
-    this.setState({
-      visible: !this.state.visible
-    });
-    MySwal.fire({
-      html: `<span>${title} of ${artist} <br>has been <b>Removed</b> from your ${name_of_source}</span>`,
-      type: "error",
-      confirmButtonColor: "red"
-    });
     if (updating_room_state != undefined) {
       updating_room_state();
     }

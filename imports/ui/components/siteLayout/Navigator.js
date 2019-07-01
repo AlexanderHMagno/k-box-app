@@ -105,15 +105,13 @@ const styles = theme => ({
   }
 });
 
-
-class Navigator extends Component {
+class Navigator extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoggedin: true
     };
   }
-
   render() {
     const { classes, ...other } = this.props;
     return (
@@ -139,10 +137,10 @@ class Navigator extends Component {
             <Link className={classes.navLinks} to="/karoke">
               <ListItemText
                 classes={{
-                  primary: classes.categoryHeaderPrimary
+                  // primary: classes.itemPrimary
+                  primary: classes.item
                 }}
               >
-
                 <Grid item>
                   <IconButton
                     color="inherit"
@@ -150,39 +148,54 @@ class Navigator extends Component {
                   />
                   {Meteor.user().username}
                 </Grid>
-
               </ListItemText>
-            </ListItem>
-            {children.map(({ id: childId, icon, route }) => (
-              <Link to={route} className={classes.navLinks} key={childId}>
-                <ListItem
-                  // key={id}
-                  button
-                  className={clsx(classes.item)}
+              {/* <Typography>4 Favorite Songs</Typography> */}
+            </Link>
+          </ListItem>
+          {categories.map(({ id, children }) => (
+            <React.Fragment key={id}>
+              <ListItem className={classes.categoryHeader}>
+                <ListItemText
+                  classes={{
+                    primary: classes.categoryHeaderPrimary
+                  }}
                 >
-                  <ListItemIcon className={classes.itemIcon}>
-                    {icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    classes={{
-                      primary: classes.itemPrimary
-                    }}
+                  {id}
+                </ListItemText>
+              </ListItem>
+              {children.map(({ id: childId, icon, route }) => (
+                <Link to={route} className={classes.navLinks} key={childId}>
+                  <ListItem
+                    // key={childId}
+                    // key={id}
+                    button
+                    className={clsx(
+                      classes.item
+                      // active && classes.itemActiveItem
+                    )}
                   >
-                    {childId}
-                  </ListItemText>
-                </ListItem>
-              </Link>
-            ))}
-            <Divider className={classes.divider} />
-          </React.Fragment>
-        ))}
-      </List>
-    </Drawer>
-  );
+                    <ListItemIcon className={classes.itemIcon}>
+                      {icon}
+                    </ListItemIcon>
+                    <ListItemText
+                      classes={{
+                        primary: classes.itemPrimary
+                      }}
+                    >
+                      {childId}
+                    </ListItemText>
+                  </ListItem>
+                </Link>
+              ))}
+              <Divider className={classes.divider} />
+            </React.Fragment>
+          ))}
+        </List>
+      </Drawer>
+    );
+  }
 }
-
 Navigator.propTypes = {
   classes: PropTypes.object.isRequired
 };
-
 export default withStyles(styles)(Navigator);

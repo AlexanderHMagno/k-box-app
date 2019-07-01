@@ -72,7 +72,7 @@ class FavoriteContent extends React.Component {
     ) {
       hasFavorites = true;
     }
-    console.log(this.state.favorites, "favvy");
+
     const { classes } = this.props;
     return (
       <Paper className={classes.root}>

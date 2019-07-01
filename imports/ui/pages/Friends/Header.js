@@ -48,8 +48,8 @@ function SimpleTabs() {
         <Tabs value={value} onChange={handleChange} textColor="inherit">
           <Tab textColor="inherit" label="Friends List" />
           <Tab textColor="inherit" label="K-BOX USERS" />
-          <Tab textColor="primary" label="Pending Requests From K-BOX Users" />
-          <Tab textColor="primary" label="Pending Invitations to K-BOX Users" />
+          <Tab textColor="primary" label="Pending Requests" />
+          <Tab textColor="primary" label="Pending Invitations" />
         </Tabs>
       </AppBar>
       {value === 0 && (

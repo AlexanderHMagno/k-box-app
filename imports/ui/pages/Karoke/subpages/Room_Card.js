@@ -20,17 +20,19 @@ const useStyles = makeStyles({
   }
 });
 
-const confirm_room = room => {
-  MySwal.fire({
-    html: `<span> Access Granted to <h1>${room}</h1></span>`,
-    type: "success",
-    confirmButtonColor: "green"
-  });
-};
-
 export default function MediaCard(props) {
   const classes = useStyles();
-  const { name, image, bio, creator, f_creator, room_creator } = props;
+  const {
+    name,
+    image,
+    bio,
+    creator,
+    f_creator,
+    room_creator,
+    id,
+    password,
+    admin
+  } = props;
 
   const show_creator_button = creator === "Create";
   const show_join_button = creator === "Join";
@@ -72,7 +74,11 @@ export default function MediaCard(props) {
         )}
         {/* Show JOIN TAB BUTTONS */}
         {show_join_button && (
-          <Button size="small" color="primary" onClick={() => f_creator()}>
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => f_creator(password, id)}
+          >
             Join
           </Button>
         )}

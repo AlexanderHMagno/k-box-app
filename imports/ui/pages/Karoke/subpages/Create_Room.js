@@ -110,8 +110,9 @@ class CenteredGrid extends React.Component {
       name: data_room[0],
       image: this.state.background_image,
       bio: data_room[1],
-      users: [],
+      users: [{ user: Meteor.userId() }],
       tracks: [],
+      administrator: { _id: Meteor.userId(), username: Meteor.user().username },
       password: data_room[2]
     });
   }

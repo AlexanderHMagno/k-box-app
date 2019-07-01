@@ -12,13 +12,35 @@ const useStyles = makeStyles({
 
 export default function Deposits(props) {
   const classes = useStyles();
+  console.log(props);
   return (
     <React.Fragment>
       <Title>Description</Title>
-      <Typography component="p" variant="subtitle2">
+      <Typography component="p" variant="subtitle2" style={{ height: "50%" }}>
         {props.bio}
       </Typography>
-      <Typography color="textSecondary" className={classes.depositContext} />
+      {/* If user is the same as the admin */}
+      {Meteor.userId() === props.admin._id && (
+        <div>
+          <Typography color="textSecondary" className={classes.depositContext}>
+            Password:{props.password}
+          </Typography>
+          <Typography color="secondary" className={classes.depositContext}>
+            You are the Admin
+          </Typography>
+        </div>
+      )}
+      {/* If user is diffent than the admin */}
+      {Meteor.userId() !== props.admin._id && (
+        <div>
+          <Typography color="textSecondary" className={classes.depositContext}>
+            Password: Contact the Admin.
+          </Typography>
+          <Typography color="secondary" className={classes.depositContext}>
+            Admin : {props.admin.username}
+          </Typography>
+        </div>
+      )}
       <div>
         <Link color="primary" href="javascript:;">
           View Participants

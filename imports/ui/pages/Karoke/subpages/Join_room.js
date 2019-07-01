@@ -21,9 +21,9 @@ import withReactContent from "sweetalert2-react-content";
 
 const MySwal = withReactContent(Swal);
 
-// Confirm PASSWORD AND SUSCRPITION
+// Confirm PASSWORD AND SUSCRPITION to the room//
 
-const confirm_password = password => {
+const confirm_password = (password, id) => {
   Swal.fire({
     title: "Please Add Room's Password",
     input: "text",
@@ -35,6 +35,13 @@ const confirm_password = password => {
   }).then(result => {
     if (result.dismiss !== "cancel") {
       if (result.value === password) {
+        //Subscribe the user into the room
+        Rooms.update(
+          { _id: id },
+          { $push: { users: { user: Meteor.userId() } } }
+        );
+        //update rooms availables....
+
         Swal.fire({
           title: `${result.value}`,
           html: `Welcome! Now You can start adding new songs`,
@@ -49,6 +56,7 @@ const confirm_password = password => {
         });
       }
     }
+    return "done";
   });
 };
 
@@ -73,22 +81,16 @@ class CenteredGrid extends React.Component {
       rooms: []
     };
   }
+  async catch_password(password, id) {
+    await confirm_password(password, id).done(console.log("alex"));
+    this.setState({
+      rooms: Rooms.find({ users: { $ne: { user: Meteor.userId() } } }).fetch()
+    });
+  }
 
   componentWillMount() {
-    //How to insert a room
-    // Rooms.insert({
-    //   name: "General",
-    //   image:
-    //     "https://cdn.pixabay.com/photo/2017/11/12/08/43/audio-2941753_1280.jpg",
-    //   bio:
-    //     "This room is dedicaded to any kind of music, Rock, Pop, And other artist.",
-    //   users:[],
-    //   tracks:[{owner,title,track}]
-    //   password:''
-    // });
-
     this.setState({
-      rooms: Rooms.find({}).fetch()
+      rooms: Rooms.find({ users: { $ne: { user: Meteor.userId() } } }).fetch()
     });
   }
 
@@ -107,8 +109,9 @@ class CenteredGrid extends React.Component {
                   image={room.image}
                   bio={room.bio}
                   creator={"Join"}
-                  password={"alex"}
-                  f_creator={() => confirm_password("alex")}
+                  password={room.password}
+                  id={room._id}
+                  f_creator={this.catch_password.bind(this)}
                 />
               </Grid>
             );

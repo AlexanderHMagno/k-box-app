@@ -58,21 +58,21 @@ class AccountForm extends Component {
                   rooms: []
                 });
 
-                 //Creates Favorites Room...
-                 Rooms.insert({
-                    name: "Favorites",
-                    image:
-                      "https://cdn.pixabay.com/photo/2016/02/05/19/51/stained-glass-1181864_1280.jpg",
-                    bio: "My favorite songs",
-                    users: [{ user: user_id }],
-                    tracks: [],
-                    administrator: {
-                      _id: user_id,
-                      username: Meteor.user().username
-                    },
-                    password: user_id,
-                    public: "no",
-                    favorite_room: "yes"
+                //Creates Favorites Room...
+                Rooms.insert({
+                  name: "Favorites",
+                  image:
+                    "https://cdn.pixabay.com/photo/2016/02/05/19/51/stained-glass-1181864_1280.jpg",
+                  bio: "My favorite songs",
+                  users: [{ user: user_id }],
+                  tracks: [],
+                  administrator: {
+                    _id: user_id,
+                    username: Meteor.user().username
+                  },
+                  password: user_id,
+                  public: "no",
+                  favorite_room: "yes"
                 });
                 resolve();
                 return;
@@ -87,8 +87,7 @@ class AccountForm extends Component {
           invalid,
           form,
           submitting,
-          submitError,
-          hasSubmitErrors
+          submitError
         }) => {
           return (
             <form onSubmit={handleSubmit}>
@@ -206,8 +205,7 @@ class AccountForm extends Component {
 }
 
 AccountForm.propType = {
-  classes: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(withRouter(AccountForm));

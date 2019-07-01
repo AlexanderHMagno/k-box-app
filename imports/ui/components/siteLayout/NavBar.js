@@ -89,11 +89,7 @@ class NavBar extends Component {
               </Grid>
             </Hidden>
             <Grid item xs />
-            <Grid item>
-              {/* <Typography className={classes.link} component="a" href="#">
-                Go to docs
-              </Typography> */}
-            </Grid>
+            <Grid item />
             <Grid item>
               <Tooltip title="Alerts • No alters">
                 <IconButton color="inherit">

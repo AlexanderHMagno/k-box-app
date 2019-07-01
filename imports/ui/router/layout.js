@@ -31,7 +31,6 @@ class Router extends Component {
       </Fragment>
     );
 
-    // console.log("IN THE ROUTING COMPONENT");
     if (Meteor.user()) {
       return userRoutes;
     } else {

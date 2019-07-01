@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import { Links } from "../../../../api/links";
-import { makeStyles } from "@material-ui/core/styles";
 import User_card from "./User_Card";
 
 const useStyles = theme => ({
@@ -38,15 +37,8 @@ class FriendList extends React.Component {
     return (
       <div className={classes.root}>
         <Grid container spacing={3}>
-          {/* {console.log(Links.find({}).fetch(), "links")}
-          {console.log(this.state.friends, "this is a friend")} */}
-          {/* {console.log(Rooms.find({}).fetch(), "rooms")} */}
-          {/* <Grid item xs={12} sm={6} md={4}> */}
-          {/* {console.log(this.state.friends[0].friends, "cake")} */}
           {this.state.friends[0].friends.map((friend, index) => {
-            // console.log(friend, "friendsss");
             if (friend.status === "friends") {
-              // console.log(friend, "this is what you render yen");
               return (
                 <Grid item xs={12} sm={6} md={4} key={index}>
                   <div className={classes.container}>

@@ -10,8 +10,8 @@ import { Form, Field } from "react-final-form";
 import PropTypes from "prop-types";
 import styles from "../styles";
 import { Meteor } from "meteor/meteor";
-import { Links } from "../../../api/links";
 import validate from "../helpers/validation";
+import { Links, Rooms } from "../../../api/links";
 import { withRouter } from "react-router-dom";
 import { FORM_ERROR } from "final-form";
 
@@ -48,15 +48,31 @@ class AccountForm extends Component {
                   });
                   return;
                 }
-
+                const user_id = Meteor.userId();
                 Links.insert({
-                  _id: Meteor.userId(),
+                  _id: user_id,
                   username: values.username,
                   email: values.email,
                   favorites: [],
                   friends: [],
-
                   rooms: []
+                });
+
+                 //Creates Favorites Room...
+                 Rooms.insert({
+                    name: "Favorites",
+                    image:
+                      "https://cdn.pixabay.com/photo/2016/02/05/19/51/stained-glass-1181864_1280.jpg",
+                    bio: "My favorite songs",
+                    users: [{ user: user_id }],
+                    tracks: [],
+                    administrator: {
+                      _id: user_id,
+                      username: Meteor.user().username
+                    },
+                    password: user_id,
+                    public: "no",
+                    favorite_room: "yes"
                 });
                 resolve();
                 return;

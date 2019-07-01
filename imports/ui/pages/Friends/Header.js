@@ -29,7 +29,7 @@ TabContainer.propTypes = {
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
-    backgroundColor: "#0f0302"
+    backgroundColor: "#000000"
     // theme.palette.background.paper
   }
 }));

@@ -82,15 +82,17 @@ class CenteredGrid extends React.Component {
     };
   }
   async catch_password(password, id) {
-    await confirm_password(password, id).done(console.log("alex"));
-    this.setState({
-      rooms: Rooms.find({ users: { $ne: { user: Meteor.userId() } } }).fetch()
-    });
+    await confirm_password(password, id);
+    // this.setState({
+    //   rooms: Rooms.find({ users: { $ne: { user: Meteor.userId() } } }).fetch()
+    // });
   }
 
   componentWillMount() {
     this.setState({
-      rooms: Rooms.find({ users: { $ne: { user: Meteor.userId() } } }).fetch()
+      rooms: Rooms.find({
+        $and: [{ users: { $ne: { user: Meteor.userId() } } }, { public: "yes" }]
+      }).fetch()
     });
   }
 

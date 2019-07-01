@@ -73,6 +73,7 @@ class CenteredGrid extends React.Component {
                     users={room.users}
                     tracks={room.tracks}
                     room_creator={this.create_room_environment.bind(this)}
+                    favorite_room={room.favorite_room}
                   />
                 </Grid>
               );

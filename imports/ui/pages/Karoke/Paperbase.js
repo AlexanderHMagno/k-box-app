@@ -18,11 +18,11 @@ let theme = createMuiTheme({
   palette: {
     primary: {
       //grey  #0f0302
-      light: "#0f0302",
+      light: "#000000",
       //   main: "#009be5",
-      main: "#0f0302",
+      main: "#000000",
       //#006db3
-      dark: "#0f0302"
+      dark: "#000000"
     },
     secundary: {
       //red  #e74c3c
@@ -41,7 +41,7 @@ theme = {
   overrides: {
     MuiDrawer: {
       paper: {
-        backgroundColor: "#0f0302"
+        backgroundColor: "#000000"
       }
     },
     MuiButton: {
@@ -149,7 +149,7 @@ const styles = {
     flex: 1,
     padding: "48px 36px 0",
     // background: "#eaeff1",
-    background: "#0f0302"
+    background: "#000000"
   }
 };
 

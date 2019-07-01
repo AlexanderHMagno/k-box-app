@@ -12,7 +12,7 @@ const useStyles = makeStyles({
 
 export default function Deposits(props) {
   const classes = useStyles();
-  console.log(props);
+
   return (
     <React.Fragment>
       <Title>Description</Title>

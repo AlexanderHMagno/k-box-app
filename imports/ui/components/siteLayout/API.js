@@ -12,15 +12,10 @@ class LastFM extends React.Component {
     };
   }
 
-  // componentDidUpdate() {
-  //   this.update_component();
-  // }
   componentWillMount() {
-    // this.setState({
-    //   artist: this.props.item_search
-    // });
     this.update_component(this.props.item_search);
   }
+
   componentWillReceiveProps(data) {
     this.update_component(data.item_search);
   }
@@ -56,6 +51,12 @@ class LastFM extends React.Component {
 
   render() {
     const { error, isLoaded, items } = this.state;
+    const {
+      source_of_request,
+      room_id,
+      favorite_room,
+      updating_room_state
+    } = this.props;
     const user_id = Meteor.userId();
     if (error) {
       console.log("we have a problem:  ", error.message);
@@ -72,6 +73,10 @@ class LastFM extends React.Component {
                   artist={item.artist.name}
                   title={item.name}
                   owner={user_id}
+                  source_of_request={source_of_request}
+                  room_id={room_id}
+                  favorite_room={favorite_room}
+                  updating_room_state={updating_room_state}
                 />
               </div>
             </li>

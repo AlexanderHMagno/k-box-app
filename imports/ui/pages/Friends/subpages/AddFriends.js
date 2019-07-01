@@ -2,14 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
-
-import { makeStyles } from "@material-ui/core/styles";
 import User_card from "./User_Card";
-import Swal from "sweetalert2";
 import { Links } from "../../../../api/links";
-import withReactContent from "sweetalert2-react-content";
-
-const MySwal = withReactContent(Swal);
 
 const useStyles = theme => ({
   root: {

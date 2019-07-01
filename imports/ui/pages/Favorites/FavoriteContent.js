@@ -7,9 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import { render } from "react-dom";
 import PropTypes from "prop-types";
-import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Links } from "../../../api/links";
@@ -72,7 +70,7 @@ class FavoriteContent extends React.Component {
     ) {
       hasFavorites = true;
     }
-    console.log(this.state.favorites, "favvy");
+
     const { classes } = this.props;
     return (
       <Paper className={classes.root}>

@@ -1,5 +1,4 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
@@ -16,14 +15,6 @@ import { Meteor } from "meteor/meteor";
 import { withStyles } from "@material-ui/core/styles";
 
 const MySwal = withReactContent(Swal);
-// const useStyles = makeStyles({
-//   card: {
-//     maxWidth: 345
-//   },
-//   media: {
-//     height: 140
-//   }
-// });
 
 const FavoriteCount = ({ fav }) => {
   if (!fav) {

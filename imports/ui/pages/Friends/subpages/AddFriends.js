@@ -2,9 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
-import { Links } from "../../../../api/links";
+
 import { makeStyles } from "@material-ui/core/styles";
 import User_card from "./User_Card";
+import Swal from "sweetalert2";
+import { Links } from "../../../../api/links";
+import withReactContent from "sweetalert2-react-content";
+
+const MySwal = withReactContent(Swal);
 
 const useStyles = theme => ({
   root: {
@@ -20,13 +25,13 @@ const useStyles = theme => ({
   }
 });
 
-class FriendList extends React.Component {
+class AddFriends extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       friends: Links.find(
         { _id: Meteor.userId() },
-        { friends: 1, _id: 0, status: "friends" }
+        { _id: 0, status: "invitefriend" }
       ).fetch(),
       background_image:
         "https://upload.wikimedia.org/wikipedia/commons/0/0c/Shure_mikrofon_55S.jpg"
@@ -38,15 +43,8 @@ class FriendList extends React.Component {
     return (
       <div className={classes.root}>
         <Grid container spacing={3}>
-          {/* {console.log(Links.find({}).fetch(), "links")}
-          {console.log(this.state.friends, "this is a friend")} */}
-          {/* {console.log(Rooms.find({}).fetch(), "rooms")} */}
-          {/* <Grid item xs={12} sm={6} md={4}> */}
-          {/* {console.log(this.state.friends[0].friends, "cake")} */}
           {this.state.friends[0].friends.map((friend, index) => {
-            // console.log(friend, "friendsss");
-            if (friend.status === "friends") {
-              // console.log(friend, "this is what you render yen");
+            if (friend.status === "invitefriend") {
               return (
                 <Grid item xs={12} sm={6} md={4} key={index}>
                   <div className={classes.container}>
@@ -55,12 +53,14 @@ class FriendList extends React.Component {
                       name={friend.username}
                       image={this.state.background_image}
                       friendStatus={friend.status}
+                      full_information={friend}
                       id_user={friend._id}
+                      status={friend.status}
                       onFriendChange={() => {
                         this.setState({
                           friends: Links.find(
                             { _id: Meteor.userId() },
-                            { friends: 1, _id: 0, status: "friends" }
+                            { _id: 0, status: "invitefriend" }
                           ).fetch()
                         });
                       }}
@@ -76,8 +76,7 @@ class FriendList extends React.Component {
   }
 }
 
-FriendList.propTypes = {
+AddFriends.propTypes = {
   classes: PropTypes.object.isRequired
 };
-
-export default withStyles(useStyles)(FriendList);
+export default withStyles(useStyles)(AddFriends);

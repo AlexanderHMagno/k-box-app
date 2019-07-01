@@ -1,7 +1,8 @@
 const styles = theme => ({
   formControl: {
+    display: "flex",
     marginBottom: theme.spacing(2),
-    width: "100%"
+    width: "50%"
   },
   formButton: {
     marginTop: theme.spacing(2)

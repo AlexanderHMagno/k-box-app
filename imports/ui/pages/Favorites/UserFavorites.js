@@ -154,7 +154,7 @@ const styles = {
   }
 };
 
-class UserPage extends React.Component {
+class UserFavorites extends React.Component {
   state = {
     mobileOpen: false
   };
@@ -195,8 +195,8 @@ class UserPage extends React.Component {
   }
 }
 
-UserPage.propTypes = {
+UserFavorites.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(UserPage);
+export default withStyles(styles)(UserFavorites);

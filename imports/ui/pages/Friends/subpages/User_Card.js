@@ -10,11 +10,36 @@ import Typography from "@material-ui/core/Typography";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import Check from "@material-ui/icons/Check";
+import PropTypes from "prop-types";
 import { Links } from "../../../../api/links";
 import { Meteor } from "meteor/meteor";
+import { withStyles } from "@material-ui/core/styles";
 
 const MySwal = withReactContent(Swal);
-const useStyles = makeStyles({
+// const useStyles = makeStyles({
+//   card: {
+//     maxWidth: 345
+//   },
+//   media: {
+//     height: 140
+//   }
+// });
+
+const FavoriteCount = ({ fav }) => {
+  if (!fav) {
+    return "no favorite songs";
+  }
+  if (fav === 1) {
+    return `${fav} favorite song`;
+  }
+  return `${fav} favorite songs`;
+};
+
+FavoriteCount.propTypes = {
+  fav: PropTypes.number
+};
+
+const useStyles = theme => ({
   card: {
     maxWidth: 345
   },
@@ -23,92 +48,296 @@ const useStyles = makeStyles({
   }
 });
 
-const delete_friend = room => {
-  MySwal.fire({
-    html: `<span> Friend removed from Friends List </span>`,
-    type: "success",
-    confirmButtonColor: "green"
-  });
-};
+class User_Card extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: true,
+      friends: Links.find({ _id: Meteor.userId() }).fetch(),
+      links: Links.find({}).fetch()
+    };
+  }
 
-// deleteFriend(data_room) {
-//   Links.update({
-//     friend: data_friend[0],
-//   });
-// }
+  sendInvite(_id, username) {
+    let owner = Meteor.userId();
 
-const AcceptFriend = create =>
-  Swal.mixin({
-    input: "text",
-    confirmButtonText: "Next &rarr;",
-    showCancelButton: true
-  })
-    .queue([])
-    .then(result => {
-      if (result.value) {
-        Swal.fire({
-          html: `Friend List has been updated`,
-          type: "success",
-          confirmButtonColor: "green"
-        });
-        create(result.value);
+    Links.update(
+      { _id: owner },
+      {
+        $push: {
+          friends: {
+            _id: _id,
+            username: username,
+            status: "invitefriend"
+          }
+        }
       }
-    });
-
-const RejectFriend = create =>
-  Swal.mixin({
-    input: "text",
-    confirmButtonText: "Next &rarr;",
-    showCancelButton: true
-  })
-    .queue([])
-    .then(result => {
-      if (result.value) {
-        Swal.fire({
-          html: `Friend Request has been removed`,
-          type: "success",
-          confirmButtonColor: "green"
-        });
-        create(result.value);
+    );
+    Links.update(
+      { _id: _id },
+      {
+        $push: {
+          friends: {
+            _id: owner,
+            username: Meteor.user().username,
+            status: "friendrequest"
+          }
+        }
       }
+    );
+
+    MySwal.fire({
+      html: `<span>  Invitation sent to ${username}  </span>`,
+      type: "success",
+      confirmButtonColor: "Green"
     });
+    if (this.props.onFriendChange) {
+      this.props.onFriendChange();
+    }
+  }
 
-export default function MediaCard(props) {
-  const classes = useStyles();
-  const { name, image, fav, creator, f_creator } = props;
-  const send_friend_request = creator === "Request";
-  const accept_friend_request = creator === "Accept";
-  // const links = Links.find({
-  //   email: user.emails && user.emails[0].address
-  // }).fetch();
-  // let favoriteCount = links[0].favorites.length;
+  AcceptFriend(_id, username) {
+    let owner = Meteor.userId();
 
-  return (
-    <Card className={classes.card}>
-      <CardActionArea>
-        <CardMedia className={classes.media} image={image} title={name} />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {name}
+    const ownerObject = Links.findOne({ _id: owner });
+    const friendObject = Links.findOne({ _id: _id });
 
-            {/* Meteor Username */}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {/* has {fav} favourite songs */}
-            {/* favorited {favoriteCount.length > 2 ? "songs" : "song"} */}
-            favorited {fav <= 0 ? "no" : fav} {fav >= 1 ? " songs " : "song"}
-            {/* Number of Favorite SOngs */}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      <CardActions>
-        {/* Show Current TAB BUTTONS */}
-        {!send_friend_request && !accept_friend_request && (
+    ownerObject.friends = ownerObject.friends.map(friend => {
+      if (friend._id == _id) {
+        return {
+          _id: _id,
+          username: username,
+          status: "friends"
+        };
+      }
+      return friend;
+    });
+    Links.update(
+      { _id: owner },
+      {
+        $set: {
+          friends: ownerObject.friends
+        }
+      }
+    );
+
+    friendObject.friends = friendObject.friends.map(friend => {
+      if (friend._id == owner) {
+        return {
+          _id: owner,
+          username: Meteor.user().username,
+          status: "friends"
+        };
+      }
+      return friend;
+    });
+    Links.update(
+      { _id: friendObject._id },
+      {
+        $set: {
+          friends: friendObject.friends
+        }
+      }
+    );
+
+    MySwal.fire({
+      html: `<span>  ${username} is now on your friend list </span>`,
+      type: "success",
+      confirmButtonColor: "Green"
+    });
+    if (this.props.onFriendChange) {
+      this.props.onFriendChange();
+    }
+  }
+
+  RejectFriend(_id, username) {
+    let owner = Meteor.userId();
+    const ownerObject = Links.findOne({ _id: owner });
+    const friendObject = Links.findOne({ _id: _id });
+
+    ownerObject.friends = ownerObject.friends.filter(friend => {
+      if (friend._id === _id) {
+        return false;
+      }
+      return true;
+    });
+    Links.update(
+      { _id: owner },
+      {
+        $set: {
+          friends: ownerObject.friends
+        }
+      }
+    );
+
+    friendObject.friends = friendObject.friends.filter(friend => {
+      if (friend._id == owner) {
+        return false;
+      }
+      return true;
+    });
+    Links.update(
+      { _id: friendObject._id },
+      {
+        $set: {
+          friends: friendObject.friends
+        }
+      }
+    );
+
+    MySwal.fire({
+      html: ` Friend Request from  ${username} has been removed`,
+      type: "success",
+      confirmButtonColor: "green"
+    });
+    if (this.props.onFriendChange) {
+      this.props.onFriendChange();
+    }
+  }
+
+  DeleteInvite(_id, username) {
+    let owner = Meteor.userId();
+    const ownerObject = Links.findOne({ _id: owner });
+    const friendObject = Links.findOne({ _id: _id });
+
+    ownerObject.friends = ownerObject.friends.filter(friend => {
+      if (friend._id === _id) {
+        return false;
+      }
+      return true;
+    });
+    Links.update(
+      { _id: owner },
+      {
+        $set: {
+          friends: ownerObject.friends
+        }
+      }
+    );
+
+    friendObject.friends = friendObject.friends.filter(friend => {
+      if (friend._id == owner) {
+        return false;
+      }
+      return true;
+    });
+    Links.update(
+      { _id: friendObject._id },
+      {
+        $set: {
+          friends: friendObject.friends
+        }
+      }
+    );
+
+    MySwal.fire({
+      html: ` Friend Invite to ${username} has been deleted`,
+      type: "success",
+      confirmButtonColor: "green"
+    });
+    if (this.props.onFriendChange) {
+      this.props.onFriendChange();
+    }
+  }
+
+  DeleteFriend(_id, username) {
+    let owner = Meteor.userId();
+    const ownerObject = Links.findOne({ _id: owner });
+    const friendObject = Links.findOne({ _id: _id });
+
+    ownerObject.friends = ownerObject.friends.filter(friend => {
+      if (friend._id === _id) {
+        return false;
+      }
+      return true;
+    });
+    Links.update(
+      { _id: owner },
+      {
+        $set: {
+          friends: ownerObject.friends
+        }
+      }
+    );
+
+    friendObject.friends = friendObject.friends.filter(friend => {
+      if (friend._id == owner) {
+        return false;
+      }
+      return true;
+    });
+    Links.update(
+      { _id: friendObject._id },
+      {
+        $set: {
+          friends: friendObject.friends
+        }
+      }
+    );
+
+    MySwal.fire({
+      html: `${username} has been removed from Friend List`,
+      type: "success",
+      confirmButtonColor: "green"
+    });
+    if (this.props.onFriendChange) {
+      this.props.onFriendChange();
+    }
+  }
+
+  render() {
+    const { name, classes, image, fav, friendStatus, id_user } = this.props;
+
+    let actions = null;
+    if (id_user === Meteor.userId()) {
+      actions = <h3>Personal Card</h3>;
+    } else if (!friendStatus) {
+      actions = (
+        <Button
+          size="small"
+          color="primary"
+          onClick={() => this.sendInvite(id_user, name)}
+        >
+          Send Friend Request
+        </Button>
+      );
+    } else if (friendStatus == "friendrequest") {
+      actions = (
+        <div>
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => this.AcceptFriend(id_user, name)}
+          >
+            Accept Friend Request
+          </Button>
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => this.RejectFriend(id_user, name)}
+          >
+            Reject Friend Request
+          </Button>
+        </div>
+      );
+    } else if (friendStatus == "invitefriend") {
+      actions = (
+        <Button
+          size="small"
+          color="primary"
+          onClick={() => this.DeleteInvite(id_user, name)}
+        >
+          Delete Friend Request
+        </Button>
+      );
+    } else if (friendStatus == "friends") {
+      actions = (
+        <>
           <div>
             <Button
               size="small"
               color="primary"
-              onClick={() => delete_friend()}
+              onClick={() => this.DeleteFriend(id_user, name)}
             >
               Delete Friend
             </Button>
@@ -117,25 +346,30 @@ export default function MediaCard(props) {
               <Check />
             </Button>
           </div>
-        )}
-        {/* Show Create TAB BUTTONS */}
-        {send_friend_request && (
-          <Button size="small" color="primary" onClick={() => f_creator()}>
-            Send Friend Request
-          </Button>
-        )}
-        {/* Show JOIN TAB BUTTONS */}
-        {accept_friend_request && (
-          <div>
-            <Button size="small" color="primary" onClick={() => AcceptFriend()}>
-              Accept Friend Request
-            </Button>
-            <Button size="small" color="primary" onClick={() => RejectFriend()}>
-              Reject Friend Request
-            </Button>
-          </div>
-        )}
-      </CardActions>
-    </Card>
-  );
+        </>
+      );
+    }
+
+    return (
+      <Card className={classes.card}>
+        <CardActionArea>
+          <CardMedia className={classes.media} image={image} title={name} />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+              {name}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              <FavoriteCount fav={fav} />
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+        <CardActions>{actions}</CardActions>
+      </Card>
+    );
+  }
 }
+
+User_Card.propTypes = {
+  classes: PropTypes.object.isRequired
+};
+export default withStyles(useStyles)(User_Card);

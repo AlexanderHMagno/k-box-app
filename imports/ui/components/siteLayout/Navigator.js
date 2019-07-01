@@ -10,35 +10,33 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import HomeIcon from "@material-ui/icons/Home";
 import PeopleIcon from "@material-ui/icons/People";
-import DnsRoundedIcon from "@material-ui/icons/DnsRounded";
-import PermMediaOutlinedIcon from "@material-ui/icons/PhotoSizeSelectActual";
-import PublicIcon from "@material-ui/icons/Public";
-import SettingsInputComponentIcon from "@material-ui/icons/SettingsInputComponent";
-import TimerIcon from "@material-ui/icons/Timer";
-import SettingsIcon from "@material-ui/icons/Settings";
-import PhonelinkSetupIcon from "@material-ui/icons/PhonelinkSetup";
+import SearchIcon from "@material-ui/icons/Search";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import VoiceIcon from "@material-ui/icons/DiscFull";
 import { Link } from "react-router-dom";
-import Avatar from "@material-ui/core/Avatar";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
-import { Typography } from "@material-ui/core";
-import SettingsPowerIcon from "@material-ui/icons/SettingsPower";
 import { Meteor } from "meteor/meteor";
-import Home from "../../pages/Home/Home";
 
 const categories = [
   {
     id: "Your K-Zone",
     children: [
       {
+        id: "Search",
+        icon: <SearchIcon />,
+        route: "/profile"
+        // active: false
+      },
+      {
         id: "Favorites",
-        icon: <PublicIcon />,
+        icon: <FavoriteIcon />,
         route: "/favorites"
         // active: false
       },
       {
         id: "Karaoke",
-        icon: <SettingsInputComponentIcon />,
+        icon: <VoiceIcon />,
         // active: false,
         route: "/karoke"
       },
@@ -109,7 +107,10 @@ const styles = theme => ({
     marginTop: theme.spacing(2)
   },
   logo: {
-    width: "100%"
+    width: "100%",
+    height: "100px",
+    padding: "20px",
+    marginTop: "10px"
   },
   profileImg: {
     borderRadius: "50%",
@@ -153,7 +154,7 @@ class Navigator extends Component {
             <ListItemIcon className={classes.itemIcon}>
               <HomeIcon />
             </ListItemIcon>
-            <Link className={classes.navLinks} to="/profile">
+            <Link className={classes.navLinks} to="/karoke">
               <ListItemText
                 classes={{
                   // primary: classes.itemPrimary
@@ -164,15 +165,7 @@ class Navigator extends Component {
                   <IconButton
                     color="inherit"
                     className={classes.iconButtonAvatar}
-                  >
-                    {/* <img
-                      src={
-                        "https://avatarfiles.alphacoders.com/128/thumb-128244.jpg"
-                      }
-                      alt="logo"
-                      className={clsx(classes.profileImg)}
-                    /> */}
-                  </IconButton>
+                  />
                   {Meteor.user().username}
                 </Grid>
               </ListItemText>

@@ -9,7 +9,8 @@ class Youtube extends React.Component {
     this.state = {
       songs: "",
       position: 0,
-      error_queue: 1
+      error_queue: 1,
+      video_loader: "epDoVwQ1ZLk"
     };
   }
 
@@ -25,46 +26,49 @@ class Youtube extends React.Component {
     }
   }
 
-  update_playlist() {
-    if (this.props.favorite_room === "yes") {
+  componentWillReceiveProps(props) {
+    if (props.favorite_room === "yes") {
       this.setState({
-        songs: Links.find({ _id: Meteor.userId() }, { favorites: 1, _id: 0 })
-          .fetch()[0]
-          .favorites.map(x => `${x.title}  ${x.artist}`)
+        songs: props.songs[0].favorites.map(x => `${x.title}  ${x.artist}`)
       });
     } else {
       this.setState({
-        songs: Rooms.find({ _id: this.props.room_id }, { tracks: 1, _id: 0 })
-          .fetch()[0]
-          .tracks.map(x => `${x.title}  ${x.artist}`)
+        songs: props.songs[0].tracks.map(x => `${x.title}  ${x.artist}`)
       });
     }
-    console.log(this.state.songs);
   }
 
   videoOnReady(event) {
     // access to player in all event handlers via event.target
     const player = event.target;
-    player.pauseVideo();
+    player.stopVideo();
   }
+
   nextSong(event) {
-    this.update_playlist();
     // access to player in all event handlers via event.target
     const player = event.target;
+    console.log(player);
     player.loadPlaylist({
       list: `${this.state.songs[this.state.position]} karaoke`,
       listType: "search"
     });
 
-    if (this.state.songs.length - 1 !== this.state.position) {
+    if (!(this.state.songs.length <= this.state.position)) {
       this.setState({
         position: this.state.position + 1,
         error_queue: 1
       });
+    } else {
+      player.loadVideoById(this.state.video_loader);
+      this.setState({
+        position: 0,
+        error_queue: 1
+      });
+      player.stopVideo();
     }
   }
+
   handleError(event) {
-    this.update_playlist();
     const player = event.target;
 
     //@
@@ -98,7 +102,7 @@ class Youtube extends React.Component {
       <div>
         {this.state.songs != 0 && (
           <YouTube
-            videoId="epDoVwQ1ZLk"
+            videoId={this.state.video_loader}
             // {this.state.songs[0]}
             opts={opts}
             onReady={this.videoOnReady}

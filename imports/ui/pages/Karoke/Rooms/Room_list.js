@@ -38,19 +38,14 @@ class ListOfSongs extends React.Component {
     }
   }
 
-  adding_removing_song() {
-    const { room_id } = this.props;
-    if (this.props.favorite_room === "yes") {
+  componentWillReceiveProps(props) {
+    if (props.favorite_room == "yes") {
       this.setState({
-        songs: Links.find(
-          { _id: Meteor.userId() },
-          { favorites: 1, _id: 0 }
-        ).fetch()[0].favorites
+        songs: props.songs[0].favorites
       });
     } else {
       this.setState({
-        songs: Rooms.find({ _id: room_id }, { tracks: 1, _id: 0 }).fetch()[0]
-          .tracks
+        songs: props.songs[0].tracks
       });
     }
   }
@@ -62,7 +57,7 @@ class ListOfSongs extends React.Component {
   }
 
   render() {
-    const { classes, room_id, favorite_room } = this.props;
+    const { classes, room_id, favorite_room, updating_room_state } = this.props;
 
     return (
       <React.Fragment>
@@ -111,7 +106,8 @@ class ListOfSongs extends React.Component {
                 source_of_request="room"
                 room_id={room_id}
                 favorite_room={favorite_room}
-                updating_room_state={this.adding_removing_song.bind(this)}
+                // updating_room_state={this.adding_removing_song.bind(this)}
+                updating_room_state={updating_room_state}
               />
             </div>
           )}

@@ -47,21 +47,49 @@ class Dashboard extends React.Component {
     });
   }
 
-  render() {
-    const { structure, classes } = this.props;
+  componentWillMount() {
+    const { structure } = this.props;
+    if (structure.favorite_room === "yes") {
+      this.setState({
+        list_to_play: Links.find(
+          { _id: Meteor.userId() },
+          { favorites: 1, _id: 0 }
+        ).fetch()
+      });
+    } else {
+      this.setState({
+        list_to_play: Rooms.find(
+          { _id: structure.id },
+          { tracks: 1, _id: 0 }
+        ).fetch()
+      });
+    }
+  }
+
+  //test_updating_ui from here
+
+  adding_removing_song() {
+    const { structure } = this.props;
 
     if (structure.favorite_room === "yes") {
-      var get_list = Links.find(
-        { _id: Meteor.userId() },
-        { favorites: 1, _id: 0 }
-      ).fetch();
+      this.setState({
+        list_to_play: Links.find(
+          { _id: Meteor.userId() },
+          { favorites: 1, _id: 0 }
+        ).fetch()
+      });
     } else {
-      var get_list = Rooms.find(
-        { _id: structure.id },
-        { tracks: 1, _id: 0 }
-      ).fetch();
+      this.setState({
+        list_to_play: Rooms.find(
+          { _id: structure.id },
+          { tracks: 1, _id: 0 }
+        ).fetch()
+      });
     }
+  }
 
+  render() {
+    const { structure, classes } = this.props;
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     return (
@@ -102,7 +130,7 @@ class Dashboard extends React.Component {
               <Grid item xs={12}>
                 <Paper className={classes.paper_black}>
                   <Youtube
-                    songs={get_list}
+                    songs={this.state.list_to_play}
                     style={{ display: "flex", justifyContent: "center" }}
                     favorite_room={structure.favorite_room}
                     room_id={structure.id}
@@ -113,10 +141,11 @@ class Dashboard extends React.Component {
               <Grid item xs={12}>
                 <Paper className={classes.paper}>
                   <Room_list
-                    songs={get_list}
+                    songs={this.state.list_to_play}
                     selected={this.state.get_position}
                     room_id={structure.id}
                     favorite_room={structure.favorite_room}
+                    updating_room_state={this.adding_removing_song.bind(this)}
                   />
                 </Paper>
               </Grid>

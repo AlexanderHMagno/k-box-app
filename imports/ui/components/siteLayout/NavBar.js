@@ -12,6 +12,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 import SettingsPowerIcon from "@material-ui/icons/SettingsPower";
+import Gravatar from "react-gravatar";
 
 const lightColor = "rgba(255, 255, 255, 0.7)";
 
@@ -34,6 +35,9 @@ const styles = theme => ({
   },
   button: {
     borderColor: lightColor
+  },
+  Avater: {
+    borderRadius: "50%"
   }
 });
 
@@ -45,6 +49,15 @@ class NavBar extends Component {
     };
   }
 
+  render_name() {
+    let name = "";
+    try {
+      name = Meteor.user().username;
+    } catch (err) {
+      name = "voldemort";
+    }
+    return name;
+  }
   logout() {
     Meteor.logout(err => {
       if (err) {
@@ -57,6 +70,7 @@ class NavBar extends Component {
 
   render() {
     const { classes, onDrawerToggle } = this.props;
+    const image_avatar = Meteor.userId() + "?d=robohash";
 
     return (
       <AppBar color="primary" position="sticky" elevation={0}>
@@ -85,11 +99,14 @@ class NavBar extends Component {
             </Grid>
             <Grid item>
               <IconButton color="inherit" className={classes.iconButtonAvatar}>
-                <Avatar
-                  className={classes.avatar}
-                  src="/static/images/avatar/1.jpg"
-                  alt="My Avatar"
-                />
+                <Tooltip title={this.render_name()}>
+                  <Gravatar
+                    className={classes.avatar}
+                    email={image_avatar}
+                    size={20}
+                    alt="My Avatar"
+                  />
+                </Tooltip>
               </IconButton>
             </Grid>
             <Grid item>

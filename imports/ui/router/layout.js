@@ -16,6 +16,7 @@ class Router extends Component {
           <Route exact path="/profile/:userid" component={Profile} />
           <Route exact path="/favorites" component={Favorite} />
           <Route exact path="/friends" component={Friends} />
+
           <Redirect from="*" to="/karoke" />
         </Switch>
       </Fragment>

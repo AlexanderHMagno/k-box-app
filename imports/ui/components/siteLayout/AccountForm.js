@@ -169,7 +169,7 @@ class AccountForm extends Component {
                     variant="contained"
                     size="large"
                     color="secondary"
-                    disabled={submitting || pristine || invalid}
+                    disabled={pristine || invalid}
                   >
                     {this.state.formToggle ? "Enter" : "Create Account"}
                   </Button>

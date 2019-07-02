@@ -361,6 +361,11 @@ class User_Card extends React.Component {
 }
 
 User_Card.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  name: PropTypes.string,
+  image: PropTypes.string,
+  fav: PropTypes.number,
+  friendStatus: PropTypes.string,
+  id_user: PropTypes.string
 };
 export default withStyles(useStyles)(User_Card);

@@ -41,8 +41,8 @@ class PendingRequest extends React.Component {
           {this.state.friends[0].friends.map((friend, index) => {
             if (friend.status === "friendrequest") {
               return (
-                <Grid item xs={12} sm={6} md={4}>
-                  <div className={classes.container} key={index}>
+                <Grid item xs={12} sm={6} md={4} key={index}>
+                  <div className={classes.container}>
                     <User_card
                       className={classes.paper}
                       name={friend.username}

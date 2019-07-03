@@ -74,7 +74,6 @@ class Youtube extends React.Component {
   nextSong(event) {
     // access to player in all event handlers via event.target
     const player = event.target;
-    console.log(player);
     player.loadPlaylist({
       list: `${this.state.songs[this.state.position]} karaoke`,
       listType: "search"

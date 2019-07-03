@@ -26,7 +26,6 @@ const categories = [
         id: "Search",
         icon: <SearchIcon />,
         route: "/profile"
-        // active: false
       },
       {
         id: "Favorites",
@@ -61,7 +60,6 @@ const styles = theme => ({
     }
   },
   itemCategory: {
-    // backgroundColor: "#232f3e",
     backgroundColor: "#000000",
     boxShadow: "0 -1px 0 #404854 inset",
     paddingTop: theme.spacing(2),
@@ -71,10 +69,6 @@ const styles = theme => ({
     fontSize: 24,
     color: theme.palette.common.white
   },
-  // itemActiveItem: {
-  //   color: "#f50057",
-  //   textDecoration: "none"
-  // },
 
   navLinks: {
     textDecoration: "none"
@@ -137,7 +131,6 @@ class Navigator extends React.Component {
             <Link className={classes.navLinks} to="/karoke">
               <ListItemText
                 classes={{
-                  // primary: classes.itemPrimary
                   primary: classes.item
                 }}
               >
@@ -149,7 +142,6 @@ class Navigator extends React.Component {
                   {Meteor.user().username}
                 </Grid>
               </ListItemText>
-              {/* <Typography>4 Favorite Songs</Typography> */}
             </Link>
           </ListItem>
           {categories.map(({ id, children }) => (
@@ -165,15 +157,7 @@ class Navigator extends React.Component {
               </ListItem>
               {children.map(({ id: childId, icon, route }) => (
                 <Link to={route} className={classes.navLinks} key={childId}>
-                  <ListItem
-                    // key={childId}
-                    // key={id}
-                    button
-                    className={clsx(
-                      classes.item
-                      // active && classes.itemActiveItem
-                    )}
-                  >
+                  <ListItem button className={clsx(classes.item)}>
                     <ListItemIcon className={classes.itemIcon}>
                       {icon}
                     </ListItemIcon>

@@ -93,7 +93,9 @@ class AccountForm extends Component {
             <form onSubmit={handleSubmit}>
               {!this.state.formToggle && (
                 <FormControl fullWidth className={classes.formControl}>
-                  <InputLabel htmlFor="username">Username</InputLabel>
+                  <InputLabel className={classes.inputLabel} htmlFor="username">
+                    Username
+                  </InputLabel>
 
                   <Field
                     name="username"
@@ -103,6 +105,7 @@ class AccountForm extends Component {
                           {...input}
                           id="username"
                           type="text"
+                          className={classes.inputStyle}
                           inputProps={{
                             autoComplete: "off"
                           }}
@@ -117,7 +120,9 @@ class AccountForm extends Component {
                 </FormControl>
               )}
               <FormControl fullWidth className={classes.formControl}>
-                <InputLabel htmlFor="email">Email</InputLabel>
+                <InputLabel className={classes.inputLabel} htmlFor="email">
+                  Email
+                </InputLabel>
                 <Field
                   name="email"
                   render={({ input, meta }) => (
@@ -125,7 +130,8 @@ class AccountForm extends Component {
                       <Input
                         {...input}
                         id="email"
-                        type="text"
+                        input="text"
+                        className={classes.inputStyle}
                         inputProps={{
                           autoComplete: "off"
                         }}
@@ -137,7 +143,9 @@ class AccountForm extends Component {
                 />
               </FormControl>
               <FormControl fullWidth className={classes.formControl}>
-                <InputLabel htmlFor="password">Password</InputLabel>
+                <InputLabel className={classes.inputLabel} htmlFor="password">
+                  Password
+                </InputLabel>
                 <Field
                   type="password"
                   name="password"
@@ -145,6 +153,7 @@ class AccountForm extends Component {
                     <>
                       <Input
                         {...input}
+                        className={classes.inputStyle}
                         id="password"
                         inputProps={{
                           autoComplete: "off"

@@ -20,6 +20,12 @@ const useStyles = makeStyles({
   }
 });
 
+function enter_room(func, info) {
+  if (typeof func === "function") {
+    func(info);
+  }
+}
+
 export default function MediaCard(props) {
   const classes = useStyles();
   const {
@@ -40,7 +46,12 @@ export default function MediaCard(props) {
   return (
     <Card className={classes.card}>
       <CardActionArea>
-        <CardMedia className={classes.media} image={image} title={name} />
+        <CardMedia
+          className={classes.media}
+          image={image}
+          title={name}
+          onClick={() => enter_room(room_creator, props)}
+        />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
             {name}

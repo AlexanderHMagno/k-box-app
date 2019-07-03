@@ -71,4 +71,3 @@ Enjoy!
 # Colloborators 
   1. Alexander Hortua
   1. Yen Yin Hing @ https://github.com/yenyin262
-  1. K-BOX Logo Contribution by 

@@ -1,5 +1,4 @@
 import React from "react";
-import Title from "./Title";
 import Link from "@material-ui/core/Link";
 
 export default function Chart(props) {

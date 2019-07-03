@@ -5,6 +5,8 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import HomeIcon from "@material-ui/icons/PlaylistAddTwoTone";
+import Tooltip from "@material-ui/core/Tooltip";
 import Title from "./Title";
 import Search from "../../Profile/Content";
 import { withStyles } from "@material-ui/core/styles";
@@ -54,7 +56,13 @@ class ListOfSongs extends React.Component {
   }
 
   render() {
-    const { classes, room_id, favorite_room, updating_room_state } = this.props;
+    const {
+      classes,
+      room_id,
+      favorite_room,
+      updating_room_state,
+      change_state_queue
+    } = this.props;
 
     return (
       <React.Fragment>
@@ -82,7 +90,14 @@ class ListOfSongs extends React.Component {
                   <TableCell>{Meteor.user().username}</TableCell>
                 )}
 
-                <TableCell align="right">{"todo"}</TableCell>
+                <TableCell align="right">
+                  <Tooltip title="Play Next">
+                    <HomeIcon
+                      style={{ cursor: "pointer" }}
+                      onClick={() => change_state_queue(index)}
+                    />
+                  </Tooltip>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

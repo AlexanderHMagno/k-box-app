@@ -1,6 +1,7 @@
 import React from "react";
 import YouTube from "react-youtube";
 import Typography from "@material-ui/core/Typography";
+import Swal from "sweetalert2";
 import { Links, Rooms } from "../../../../api/links";
 
 class Youtube extends React.Component {
@@ -35,6 +36,32 @@ class Youtube extends React.Component {
       this.setState({
         songs: props.songs[0].tracks.map(x => `${x.title}  ${x.artist}`)
       });
+    }
+
+    //if the user update the queue it will trigger the change here
+    if (!(props.youtube_position_queue == -1)) {
+      if (props.admin._id != Meteor.userId()) {
+        Swal.fire({
+          position: "bottom-end",
+          type: "warning",
+          title: "Only the Admin can't reorganize",
+          showConfirmButton: false,
+          timer: 1000
+        });
+      } else {
+        this.setState({
+          position: props.youtube_position_queue
+        });
+        Swal.fire({
+          position: "bottom-end",
+          type: "success",
+          title: `Next to play ${
+            this.state.songs[props.youtube_position_queue]
+          }`,
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
     }
   }
 
@@ -73,8 +100,8 @@ class Youtube extends React.Component {
 
     //@
     //* This will verify that is the last song available.
-    const lastSong = this.state.songs.length - 1 !== this.state.position;
-    const play_next_available = !lastSong
+    const lastSong = !(this.state.songs.length <= this.state.position);
+    const play_next_available = lastSong
       ? this.state.songs[this.state.position]
       : this.state.songs[this.state.position - 1];
 
@@ -103,7 +130,6 @@ class Youtube extends React.Component {
         {this.state.songs != 0 && (
           <YouTube
             videoId={this.state.video_loader}
-            // {this.state.songs[0]}
             opts={opts}
             onReady={this.videoOnReady}
             onEnd={this.nextSong.bind(this)}

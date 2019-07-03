@@ -47,7 +47,6 @@ class AddFriends extends React.Component {
                       name={friend.username}
                       image={this.state.background_image}
                       friendStatus={friend.status}
-                      full_information={friend}
                       id_user={friend._id}
                       status={friend.status}
                       onFriendChange={() => {

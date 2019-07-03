@@ -19,7 +19,8 @@ class Dashboard extends React.Component {
       open_room: false,
       room_info: [],
       setOpen: "",
-      list_to_play: ""
+      list_to_play: "",
+      youtube_position_queue: 0
     };
   }
 
@@ -54,6 +55,12 @@ class Dashboard extends React.Component {
 
   //test_updating_ui from here
 
+  change_state_queue(position) {
+    this.setState({
+      youtube_position_queue: position
+    });
+  }
+
   adding_removing_song() {
     const { structure } = this.props;
 
@@ -62,14 +69,16 @@ class Dashboard extends React.Component {
         list_to_play: Links.find(
           { _id: Meteor.userId() },
           { favorites: 1, _id: 0 }
-        ).fetch()
+        ).fetch(),
+        youtube_position_queue: -1
       });
     } else {
       this.setState({
         list_to_play: Rooms.find(
           { _id: structure.id },
           { tracks: 1, _id: 0 }
-        ).fetch()
+        ).fetch(),
+        youtube_position_queue: -1
       });
     }
   }
@@ -120,6 +129,8 @@ class Dashboard extends React.Component {
                     style={{ display: "flex", justifyContent: "center" }}
                     favorite_room={structure.favorite_room}
                     room_id={structure.id}
+                    youtube_position_queue={this.state.youtube_position_queue}
+                    admin={structure.admin}
                   />
                 </Paper>
               </Grid>
@@ -132,6 +143,7 @@ class Dashboard extends React.Component {
                     room_id={structure.id}
                     favorite_room={structure.favorite_room}
                     updating_room_state={this.adding_removing_song.bind(this)}
+                    change_state_queue={this.change_state_queue.bind(this)}
                   />
                 </Paper>
               </Grid>

@@ -44,7 +44,7 @@ class Youtube extends React.Component {
         Swal.fire({
           position: "bottom-end",
           type: "warning",
-          title: "Only the Admin can't reorganize",
+          title: "Contact admin to change queue",
           showConfirmButton: false,
           timer: 1000
         });
@@ -55,9 +55,9 @@ class Youtube extends React.Component {
         Swal.fire({
           position: "bottom-end",
           type: "success",
-          title: `Next to play ${
+          title: `${
             this.state.songs[props.youtube_position_queue]
-          }`,
+          } add to queue`,
           showConfirmButton: false,
           timer: 1500
         });

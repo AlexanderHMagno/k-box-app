@@ -12,11 +12,9 @@ const App = () => {
    
       <MuiThemeProvider theme={theme}>
           <CssBaseline />
-          {/* <ViewerProvider> */}
             <BrowserRouter>
               <Layout />
             </BrowserRouter>
-          {/* </ViewerProvider> */}
       </MuiThemeProvider>
 
   );

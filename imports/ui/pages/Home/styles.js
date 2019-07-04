@@ -19,12 +19,16 @@ const styles = () => ({
 
   motto: {
     color: "white",
-    marginLeft: "30%"
+    marginLeft: "19%"
   },
 
   container: {
     display: "flex",
     padding: "95px"
+  },
+
+  logo: {
+    height: "100px"
   }
 });
 

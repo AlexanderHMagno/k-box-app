@@ -12,13 +12,14 @@ const Home = ({ classes }) => {
       alignItems="center"
       justify="center"
     >
-      <Grid item xs={12} sm={12} md={6} className={classes.container}>
+      <Grid className={classes.container}>
         <img
           src={"http://www.kbktv.com/kbktv/images/kbox_logo_new.png"}
           alt="logo"
+          className={classes.logo}
         />
       </Grid>
-      <Grid item xs={12} sm={12} md={6}>
+      <Grid>
         <Typography className={classes.motto} gutterBottom>
           Karaoke. Dance. Celebrate.
         </Typography>

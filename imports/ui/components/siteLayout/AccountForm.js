@@ -44,7 +44,7 @@ class AccountForm extends Component {
               Accounts.createUser(values, er => {
                 if (er) {
                   resolve({
-                    [FORM_ERROR]: "Existing Account already exists"
+                    [FORM_ERROR]: "Account already exists"
                   });
                   return;
                 }

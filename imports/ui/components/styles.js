@@ -1,9 +1,9 @@
 const styles = theme => ({
   formControl: {
-    display: "flex",
     marginBottom: theme.spacing(2),
-    width: "50%",
-    color: "firebrick"
+    width: "40%",
+    color: "firebrick",
+    marginLeft: "30%"
   },
 
   underline: {
@@ -11,12 +11,12 @@ const styles = theme => ({
   },
   formButton: {
     "&:disabled": {
-      backgroundColor: "firebrick",
+      backgroundColor: "grey",
       color: "white"
     },
     marginTop: theme.spacing(2),
-    color: "firebrick",
-    backgroundColor: "white",
+    color: "white",
+    backgroundColor: "firebrick",
     "&:hover": {
       backgroundColor: "firebrick",
       color: "white"

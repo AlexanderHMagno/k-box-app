@@ -52,29 +52,13 @@ class User_Card extends React.Component {
   sendInvite(_id, username) {
     let owner = Meteor.userId();
 
-    Links.update(
-      { _id: owner },
-      {
-        $push: {
-          friends: {
-            _id: _id,
-            username: username,
-            status: "invitefriend"
-          }
-        }
-      }
-    );
-    Links.update(
-      { _id: _id },
-      {
-        $push: {
-          friends: {
-            _id: owner,
-            username: Meteor.user().username,
-            status: "friendrequest"
-          }
-        }
-      }
+    Meteor.call("friends.solicitude", owner, _id, username, "invitefriend");
+    Meteor.call(
+      "friends.solicitude",
+      _id,
+      owner,
+      Meteor.user().username,
+      "friendrequest"
     );
 
     MySwal.fire({
@@ -103,14 +87,7 @@ class User_Card extends React.Component {
       }
       return friend;
     });
-    Links.update(
-      { _id: owner },
-      {
-        $set: {
-          friends: ownerObject.friends
-        }
-      }
-    );
+    Meteor.call("friends.interactWithRequest", owner, ownerObject.friends);
 
     friendObject.friends = friendObject.friends.map(friend => {
       if (friend._id == owner) {
@@ -122,13 +99,10 @@ class User_Card extends React.Component {
       }
       return friend;
     });
-    Links.update(
-      { _id: friendObject._id },
-      {
-        $set: {
-          friends: friendObject.friends
-        }
-      }
+    Meteor.call(
+      "friends.interactWithRequest",
+      friendObject._id,
+      friendObject.friends
     );
 
     MySwal.fire({
@@ -152,14 +126,7 @@ class User_Card extends React.Component {
       }
       return true;
     });
-    Links.update(
-      { _id: owner },
-      {
-        $set: {
-          friends: ownerObject.friends
-        }
-      }
-    );
+    Meteor.call("friends.interactWithRequest", owner, ownerObject.friends);
 
     friendObject.friends = friendObject.friends.filter(friend => {
       if (friend._id == owner) {
@@ -167,13 +134,10 @@ class User_Card extends React.Component {
       }
       return true;
     });
-    Links.update(
-      { _id: friendObject._id },
-      {
-        $set: {
-          friends: friendObject.friends
-        }
-      }
+    Meteor.call(
+      "friends.interactWithRequest",
+      friendObject._id,
+      friendObject.friends
     );
 
     MySwal.fire({
@@ -197,14 +161,8 @@ class User_Card extends React.Component {
       }
       return true;
     });
-    Links.update(
-      { _id: owner },
-      {
-        $set: {
-          friends: ownerObject.friends
-        }
-      }
-    );
+
+    Meteor.call("friends.interactWithRequest", owner, ownerObject.friends);
 
     friendObject.friends = friendObject.friends.filter(friend => {
       if (friend._id == owner) {
@@ -212,13 +170,11 @@ class User_Card extends React.Component {
       }
       return true;
     });
-    Links.update(
-      { _id: friendObject._id },
-      {
-        $set: {
-          friends: friendObject.friends
-        }
-      }
+
+    Meteor.call(
+      "friends.interactWithRequest",
+      friendObject._id,
+      friendObject.friends
     );
 
     MySwal.fire({
@@ -242,14 +198,8 @@ class User_Card extends React.Component {
       }
       return true;
     });
-    Links.update(
-      { _id: owner },
-      {
-        $set: {
-          friends: ownerObject.friends
-        }
-      }
-    );
+
+    Meteor.call("friends.interactWithRequest", fowner, ownerObject.friends);
 
     friendObject.friends = friendObject.friends.filter(friend => {
       if (friend._id == owner) {
@@ -257,13 +207,10 @@ class User_Card extends React.Component {
       }
       return true;
     });
-    Links.update(
-      { _id: friendObject._id },
-      {
-        $set: {
-          friends: friendObject.friends
-        }
-      }
+    Meteor.call(
+      "friends.interactWithRequest",
+      friendObject._id,
+      friendObject.friends
     );
 
     MySwal.fire({

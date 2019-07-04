@@ -20,7 +20,7 @@ class Dashboard extends React.Component {
       room_info: [],
       setOpen: "",
       list_to_play: "",
-      youtube_position_queue: 0
+      youtube_position_queue: -1
     };
   }
 

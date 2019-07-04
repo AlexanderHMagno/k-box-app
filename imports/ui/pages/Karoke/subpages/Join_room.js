@@ -37,11 +37,7 @@ class CenteredGrid extends React.Component {
       if (result.dismiss !== "cancel") {
         if (result.value === password) {
           //Subscribe the user into the room
-          Rooms.update(
-            { _id: id },
-            { $push: { users: { user: Meteor.userId() } } }
-          );
-          //update rooms availables....
+          Meteor.call("rooms.subscription", id);
 
           Swal.fire({
             html: `Welcome! Now You can start adding new songs`,

@@ -6,50 +6,6 @@ import Room_card from "./Room_Card";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
-const MySwal = withReactContent(Swal);
-
-// Confirm PASSWORD AND SUSCRPITION to the room//
-
-const confirm_password = (password, id) => {
-  Swal.fire({
-    title: "Please Add Room's Password",
-    input: "text",
-    inputAttributes: {
-      autocapitalize: "off"
-    },
-    showCancelButton: true,
-    confirmButtonText: "Join the group"
-  }).then(result => {
-    if (result.dismiss !== "cancel") {
-      if (result.value === password) {
-        //Subscribe the user into the room
-        Rooms.update(
-          { _id: id },
-          { $push: { users: { user: Meteor.userId() } } }
-        );
-        //update rooms availables....
-
-        Swal.fire({
-          title: `${result.value}`,
-          html: `Welcome! Now You can start adding new songs`,
-          type: "success",
-          confirmButtonColor: "green"
-        });
-      } else {
-        Swal.fire({
-          html: `Nah! That's not the password! `,
-          type: "error",
-          confirmButtonColor: "red"
-        });
-      }
-    }
-    return "done";
-  });
-};
-
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-const user = "d1d1";
-
 const useStyles = theme => ({
   root: {
     flexGrow: 1
@@ -69,10 +25,48 @@ class CenteredGrid extends React.Component {
     };
   }
   async catch_password(password, id) {
-    await confirm_password(password, id);
-    // this.setState({
-    //   rooms: Rooms.find({ users: { $ne: { user: Meteor.userId() } } }).fetch()
-    // });
+    Swal.fire({
+      title: "Please Add Room's Password",
+      input: "text",
+      inputAttributes: {
+        autocapitalize: "off"
+      },
+      showCancelButton: true,
+      confirmButtonText: "Join the group"
+    }).then(result => {
+      if (result.dismiss !== "cancel") {
+        if (result.value === password) {
+          //Subscribe the user into the room
+          Rooms.update(
+            { _id: id },
+            { $push: { users: { user: Meteor.userId() } } }
+          );
+          //update rooms availables....
+
+          Swal.fire({
+            html: `Welcome! Now You can start adding new songs`,
+            type: "success",
+            confirmButtonColor: "green"
+          });
+          // update present screen
+          this.setState({
+            rooms: Rooms.find({
+              $and: [
+                { users: { $ne: { user: Meteor.userId() } } },
+                { public: "yes" }
+              ]
+            }).fetch()
+          });
+        } else {
+          Swal.fire({
+            html: `Nah! That's not the password! `,
+            type: "error",
+            confirmButtonColor: "red"
+          });
+        }
+      }
+      return "done";
+    });
   }
 
   componentWillMount() {

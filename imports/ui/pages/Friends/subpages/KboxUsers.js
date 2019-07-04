@@ -66,7 +66,7 @@ class KboxUsers extends React.Component {
               friend => friend._id === user._id
             );
             return (
-              <Grid item xs={12} sm={6} md={4} key={index}>
+              <Grid item xs={12} sm={6} md={3} key={index}>
                 <div className={classes.container}>
                   <User_card
                     className={classes.paper}

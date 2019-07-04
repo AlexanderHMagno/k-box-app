@@ -17,13 +17,14 @@ const styles = () => ({
     color: "white"
   },
 
-  type: {
-    color: "white"
+  motto: {
+    color: "white",
+    marginLeft: "30%"
   },
 
-  logo: {
-    height: "500px",
-    width: "500px"
+  container: {
+    display: "flex",
+    padding: "95px"
   }
 });
 

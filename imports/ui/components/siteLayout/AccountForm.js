@@ -12,7 +12,6 @@ import styles from "../styles";
 import { Meteor } from "meteor/meteor";
 import validate from "../helpers/validation";
 import { Links, Rooms } from "../../../api/links";
-import { withRouter } from "react-router-dom";
 import { FORM_ERROR } from "final-form";
 
 class AccountForm extends Component {
@@ -44,7 +43,7 @@ class AccountForm extends Component {
               Accounts.createUser(values, er => {
                 if (er) {
                   resolve({
-                    [FORM_ERROR]: "Existing Account already exists"
+                    [FORM_ERROR]: "Account already exists"
                   });
                   return;
                 }
@@ -217,4 +216,4 @@ AccountForm.propType = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(withRouter(AccountForm));
+export default withStyles(styles)(AccountForm);

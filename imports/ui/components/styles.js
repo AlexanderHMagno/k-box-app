@@ -1,9 +1,9 @@
 const styles = theme => ({
   formControl: {
     marginBottom: theme.spacing(2),
-    width: "40%",
+    width: "60%",
     color: "firebrick",
-    marginLeft: "30%"
+    marginLeft: "19%"
   },
 
   underline: {

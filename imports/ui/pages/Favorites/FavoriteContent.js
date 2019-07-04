@@ -18,9 +18,10 @@ import withReactContent from "sweetalert2-react-content";
 const MySwal = withReactContent(Swal);
 const styles = theme => ({
   root: {
-    width: "100%",
+    width: "60%",
     marginTop: theme.spacing(3),
-    overflowX: "auto"
+    overflowX: "auto",
+    margin: "auto"
   },
   table: { flex: 1 },
   styletable: {

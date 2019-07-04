@@ -6,30 +6,113 @@ export const Links = new Mongo.Collection("links");
 export const Rooms = new Mongo.Collection("rooms");
 
 Meteor.methods({
-  "links.insert"(text) {
-    check(text, String);
-
-    // Make sure the user is logged in before inserting a task
-    if (!this.userId) {
-      throw new Meteor.Error("not-authorized");
-    }
-
+  "links.insertFirstAccount"(id, username, email) {
     Links.insert({
-      text,
-      createdAt: new Date(),
-      owner: this.userId,
-      username: Meteor.users.findOne(this.userId).username
+      _id: id,
+      username: username,
+      email: email,
+      favorites: [],
+      friends: [],
+      rooms: []
     });
   },
-  "links.remove"(taskId) {
-    check(taskId, String);
+  "links.addFavorites"(owner, title, artist) {
+    console.log("add to favorites");
+    Links.update(
+      { _id: owner },
+      { $push: { favorites: { title, artist, createdAt: new Date() } } }
+    );
+  },
 
-    Links.remove(taskId);
+  "links.removeFavorites"(owner, title, artist) {
+    console.log("removing favorite");
+    // check(taskId, String);
+    Links.update({ _id: owner }, { $pull: { favorites: { title, artist } } });
   },
   "links.setChecked"(taskId, setChecked) {
     check(taskId, String);
     check(setChecked, Boolean);
 
     Links.update(taskId, { $set: { checked: setChecked } });
+  },
+  "rooms.insertFirstRoom"(id) {
+    Rooms.insert({
+      name: "Favorites",
+      image:
+        "https://cdn.pixabay.com/photo/2016/02/05/19/51/stained-glass-1181864_1280.jpg",
+      bio: "My favorite songs",
+      users: [{ user: id }],
+      tracks: [],
+      administrator: {
+        _id: id,
+        username: Meteor.user().username
+      },
+      password: id,
+      public: "no",
+      favorite_room: "yes"
+    });
+  },
+  "rooms.createNewRoom"(data_room, image) {
+    Rooms.insert({
+      name: data_room[0],
+      image: image,
+      bio: data_room[1],
+      users: [{ user: Meteor.userId() }],
+      tracks: [],
+      administrator: { _id: Meteor.userId(), username: Meteor.user().username },
+      password: data_room[2],
+      public: "yes",
+      favorite_room: "no"
+    });
+  },
+
+  "rooms.addFavorites"(room_id, title, artist) {
+    console.log("add to favorites");
+    Rooms.update(
+      { _id: room_id },
+      {
+        $push: {
+          tracks: { title, artist, singer: Meteor.user().username }
+        }
+      }
+    );
+  },
+  "rooms.removeFavorites"(room_id, title, artist) {
+    console.log("remove favorites");
+    Rooms.update(
+      { _id: room_id },
+      {
+        $pull: {
+          tracks: { title, artist, singer: Meteor.user().username }
+        }
+      }
+    );
+  },
+  "rooms.subscription"(id) {
+    Rooms.update({ _id: id }, { $push: { users: { user: Meteor.userId() } } });
+  },
+  "friends.solicitude"(id_sender, id_receiver, username, status) {
+    Links.update(
+      { _id: id_sender },
+      {
+        $push: {
+          friends: {
+            _id: id_receiver,
+            username: username,
+            status: status
+          }
+        }
+      }
+    );
+  },
+  "friends.interactWithRequest"(id, friends) {
+    Links.update(
+      { _id: id },
+      {
+        $set: {
+          friends: friends
+        }
+      }
+    );
   }
 });

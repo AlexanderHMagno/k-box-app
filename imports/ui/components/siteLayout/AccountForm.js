@@ -48,31 +48,16 @@ class AccountForm extends Component {
                   return;
                 }
                 const user_id = Meteor.userId();
-                Links.insert({
-                  _id: user_id,
-                  username: values.username,
-                  email: values.email,
-                  favorites: [],
-                  friends: [],
-                  rooms: []
-                });
+                //Creates Link Room ....
+                Meteor.call(
+                  "links.insertFirstAccount",
+                  user_id,
+                  values.username,
+                  values.email
+                );
 
                 //Creates Favorites Room...
-                Rooms.insert({
-                  name: "Favorites",
-                  image:
-                    "https://cdn.pixabay.com/photo/2016/02/05/19/51/stained-glass-1181864_1280.jpg",
-                  bio: "My favorite songs",
-                  users: [{ user: user_id }],
-                  tracks: [],
-                  administrator: {
-                    _id: user_id,
-                    username: Meteor.user().username
-                  },
-                  password: user_id,
-                  public: "no",
-                  favorite_room: "yes"
-                });
+                Meteor.call("rooms.insertFirstRoom", user_id);
                 resolve();
                 return;
               });

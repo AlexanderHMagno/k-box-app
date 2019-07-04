@@ -45,10 +45,7 @@ class FavoriteContent extends React.Component {
   }
 
   removeFav(title, artist, owner) {
-    Links.update(
-      { _id: owner },
-      { $pull: { favorites: { title: title, artist: artist } } }
-    );
+    Meteor.call("links.removeFavorites", owner, title, artist);
     this.setState({
       visible: !this.state.visible,
       favorites: Links.find({ _id: Meteor.userId() }).fetch()

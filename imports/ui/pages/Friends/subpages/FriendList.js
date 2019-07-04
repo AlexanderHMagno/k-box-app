@@ -40,7 +40,7 @@ class FriendList extends React.Component {
           {this.state.friends[0].friends.map((friend, index) => {
             if (friend.status === "friends") {
               return (
-                <Grid item xs={12} sm={6} md={4} key={index}>
+                <Grid item xs={12} sm={6} md={3} key={index}>
                   <div className={classes.container}>
                     <User_card
                       className={classes.paper}

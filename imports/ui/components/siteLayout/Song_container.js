@@ -1,13 +1,8 @@
 import React from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
-import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import SkipNextIcon from "@material-ui/icons/SkipNext";
 import Tooltip from "@material-ui/core/Tooltip";
 import ADD_title from "@material-ui/icons/AddCircleSharp";
 import { withStyles } from "@material-ui/core/styles";
@@ -20,8 +15,8 @@ const styles = theme => ({
   card: {
     display: "flex",
     position: "relative",
-    minHeight: "200px",
-    maxHeight: "200px",
+    minHeight: "120px",
+    maxHeight: "120px",
     margin: "3%",
     Width: "100px"
   },
@@ -31,7 +26,8 @@ const styles = theme => ({
     width: "100%"
   },
   content: {
-    flex: "1 0 auto"
+    flex: "1 0 auto",
+    maxHeight: "50%"
   },
   cover: {
     width: 10,
@@ -44,7 +40,8 @@ const styles = theme => ({
     // alignItems: "flex-end",
     // paddingLeft: theme.spacing(1),
     // paddingBottom: theme.spacing(1)
-    textAlign: "right"
+    textAlign: "right",
+    maxHeight: "10%"
   },
   playIcon: {
     height: 38,

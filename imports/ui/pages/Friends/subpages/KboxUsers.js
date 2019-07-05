@@ -5,6 +5,7 @@ import { withStyles } from "@material-ui/core/styles";
 import User_card from "./User_Card";
 import { Links } from "../../../../api/links";
 import { Meteor } from "meteor/meteor";
+// import { withTracker } from "meteor/react-meteor-data";
 
 const useStyles = theme => ({
   root: {
@@ -98,3 +99,11 @@ KboxUsers.propTypes = {
 };
 
 export default withStyles(useStyles)(KboxUsers);
+
+// export default withTracker(() => {
+//   Meteor.subscribe("links");
+//   return {
+//   //     user: Meteor.user()
+//userId: Meteor.userId()
+//   };
+// })(withStyles(useStyles)(KboxUsers));

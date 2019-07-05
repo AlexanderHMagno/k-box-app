@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import { Links } from "../../../../api/links";
 import User_card from "./User_Card";
+// import { withTracker } from "meteor/react-meteor-data";
 
 const useStyles = theme => ({
   root: {
@@ -73,3 +74,11 @@ FriendList.propTypes = {
 };
 
 export default withStyles(useStyles)(FriendList);
+
+// export default withTracker(() => {
+//   Meteor.subscribe("links");
+//   return {
+//     //     user: Meteor.user()
+//userId: Meteor.userId()
+//   };
+// })(withStyles(useStyles)(FriendList));

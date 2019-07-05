@@ -5,6 +5,19 @@ import { check } from "meteor/check";
 export const Links = new Mongo.Collection("links");
 export const Rooms = new Mongo.Collection("rooms");
 
+if (Meteor.isServer) {
+  // This code only runs on the server
+  Meteor.publish("rooms", function roomsKbox() {
+    return Rooms.find();
+  });
+}
+
+if (Meteor.isServer) {
+  // This code only runs on the server
+  Meteor.publish("links", function linksKbox() {
+    return Links.find();
+  });
+}
 Meteor.methods({
   "links.insert"(text) {
     check(text, String);

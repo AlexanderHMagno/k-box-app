@@ -14,6 +14,7 @@ import { Links } from "../../../api/links";
 import { Meteor } from "meteor/meteor";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+// import { withTracker } from "meteor/react-meteor-data";
 
 const MySwal = withReactContent(Swal);
 const styles = theme => ({
@@ -123,7 +124,15 @@ class FavoriteContent extends React.Component {
   }
 }
 
+export default withStyles(styles)(FavoriteContent);
 FavoriteContent.propTypes = {
   classes: PropTypes.object.isRequired
 };
-export default withStyles(styles)(FavoriteContent);
+
+// export default withTracker(() => {
+//   Meteor.subscribe("links");
+//   return {
+//    //     user: Meteor.user()
+//userId: Meteor.userId()
+//   };
+// })(withStyles(styles)(FavoriteContent));

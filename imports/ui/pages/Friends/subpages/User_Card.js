@@ -13,6 +13,7 @@ import PropTypes from "prop-types";
 import { Links } from "../../../../api/links";
 import { Meteor } from "meteor/meteor";
 import { withStyles } from "@material-ui/core/styles";
+// import { withTracker } from "meteor/react-meteor-data";
 
 const MySwal = withReactContent(Swal);
 
@@ -369,3 +370,11 @@ User_Card.propTypes = {
   id_user: PropTypes.string
 };
 export default withStyles(useStyles)(User_Card);
+
+// export default withTracker(() => {
+//   Meteor.subscribe("links");
+//   return {
+//     user: Meteor.user()
+//userId: Meteor.userId()
+//   };
+// })(withStyles(useStyles)(User_Card);

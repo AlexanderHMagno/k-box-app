@@ -130,19 +130,9 @@ class Song_container extends React.Component {
     let name_of_source = verify_source ? "Favorites" : "Room";
 
     if (verify_source) {
-      Links.update(
-        { _id: owner },
-        { $push: { favorites: { title, artist, createdAt: new Date() } } }
-      );
+      Meteor.call("links.addFavorites", owner, title, artist);
     } else if (source_of_request === "room") {
-      Rooms.update(
-        { _id: room_id },
-        {
-          $push: {
-            tracks: { title, artist, singer: Meteor.user().username }
-          }
-        }
-      );
+      Meteor.call("rooms.addFavorites", room_id, title, artist);
     }
     MySwal.fire({
       html: `<span>${title} of ${artist} has been added to your ${name_of_source}</span>`,
@@ -180,7 +170,8 @@ class Song_container extends React.Component {
     let name_of_source = verify_source ? "Favorites" : "Room";
 
     if (verify_source) {
-      Links.update({ _id: owner }, { $pull: { favorites: { title, artist } } });
+      Meteor.call("links.removeFavorites", owner, title, artist);
+
       MySwal.fire({
         html: `<span>${title} of ${artist} <br>has been <b>Removed</b> from your ${name_of_source}</span>`,
         type: "error",
@@ -202,14 +193,7 @@ class Song_container extends React.Component {
       });
 
       if (protector.count() > 0) {
-        Rooms.update(
-          { _id: room_id },
-          {
-            $pull: {
-              tracks: { title, artist, singer: Meteor.user().username }
-            }
-          }
-        );
+        Meteor.call("rooms.removeFavorites", room_id, title, artist);
         this.setState({
           visible: !this.state.visible
         });

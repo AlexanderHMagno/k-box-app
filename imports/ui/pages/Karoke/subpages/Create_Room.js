@@ -8,6 +8,7 @@ import withReactContent from "sweetalert2-react-content";
 import Room_card from "./Room_Card";
 import { Rooms } from "../../../../api/links";
 import images from "./images/images";
+import { Meteor } from "meteor/meteor";
 
 ///++++++++++++++++ ROOM CREATOR +++++++++++++++++
 
@@ -90,17 +91,7 @@ class CenteredGrid extends React.Component {
   }
 
   Create_room(data_room) {
-    Rooms.insert({
-      name: data_room[0],
-      image: this.state.background_image,
-      bio: data_room[1],
-      users: [{ user: Meteor.userId() }],
-      tracks: [],
-      administrator: { _id: Meteor.userId(), username: Meteor.user().username },
-      password: data_room[2],
-      public: "yes",
-      favorite_room: "no"
-    });
+    Meteor.call("rooms.createNewRoom", data_room, this.state.background_image);
   }
 
   change_image(new_image) {

@@ -14,7 +14,7 @@ import { Links } from "../../../api/links";
 import { Meteor } from "meteor/meteor";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-// import { withTracker } from "meteor/react-meteor-data";
+import { withTracker } from "meteor/react-meteor-data";
 
 const MySwal = withReactContent(Swal);
 const styles = theme => ({
@@ -38,9 +38,7 @@ const styles = theme => ({
 class FavoriteContent extends React.Component {
   constructor(props) {
     super(props);
-    this.checkFavorites = React.createRef();
     this.state = {
-      favorites: Links.find({ _id: Meteor.userId() }).fetch(),
       visible: true
     };
   }
@@ -48,8 +46,7 @@ class FavoriteContent extends React.Component {
   removeFav(title, artist, owner) {
     Meteor.call("links.removeFavorites", owner, title, artist);
     this.setState({
-      visible: !this.state.visible,
-      favorites: Links.find({ _id: Meteor.userId() }).fetch()
+      visible: !this.state.visible
     });
     MySwal.fire({
       html: `<span>${title} of ${artist} <br>has been <b>Removed</b> from your favorites</span>`,
@@ -59,7 +56,8 @@ class FavoriteContent extends React.Component {
   }
 
   render() {
-    const { favorites } = this.state;
+    const { classes, userId, favorites, user } = this.props;
+    console.log(user, "fetch user");
     let hasFavorites = false;
     if (
       favorites &&
@@ -70,7 +68,6 @@ class FavoriteContent extends React.Component {
       hasFavorites = true;
     }
 
-    const { classes } = this.props;
     return (
       <Paper className={classes.root}>
         <Typography color="textSecondary" align="center">
@@ -98,11 +95,7 @@ class FavoriteContent extends React.Component {
                           <IconButton
                             aria-label="Delete"
                             onClick={() =>
-                              this.removeFav(
-                                data.title,
-                                data.artist,
-                                Meteor.userId()
-                              )
+                              this.removeFav(data.title, data.artist, userId)
                             }
                           >
                             <DeleteIcon />
@@ -121,15 +114,21 @@ class FavoriteContent extends React.Component {
   }
 }
 
-export default withStyles(styles)(FavoriteContent);
 FavoriteContent.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  favorites: PropTypes.array,
+  userId: PropTypes.string
 };
 
-// export default withTracker(() => {
-//   Meteor.subscribe("links");
-//   return {
-//    //     user: Meteor.user()
-//userId: Meteor.userId()
-//   };
-// })(withStyles(styles)(FavoriteContent));
+// do fetch in with tracker because withtracker is HOC - checks database and passes as prop - display it
+
+export default withTracker(() => {
+  Meteor.subscribe("links");
+  const userId = Meteor.userId();
+  const user = Meteor.user();
+  return {
+    favorites: Links.find({ _id: userId }).fetch(),
+    userId,
+    user
+  };
+})(withStyles(styles)(FavoriteContent));

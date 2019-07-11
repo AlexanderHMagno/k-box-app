@@ -5,6 +5,8 @@ import { check } from "meteor/check";
 export const Links = new Mongo.Collection("links");
 export const Rooms = new Mongo.Collection("rooms");
 
+// added publication for rooms and server to allow clients to use data ie. data to client
+
 if (Meteor.isServer) {
   // This code only runs on the server
   Meteor.publish("rooms", function roomsKbox() {
@@ -12,12 +14,26 @@ if (Meteor.isServer) {
   });
 }
 
+// if (Meteor.isClient) {
+//   Meteor.subscribe("rooms");
+// }
+
 if (Meteor.isServer) {
   // This code only runs on the server
   Meteor.publish("links", function linksKbox() {
     return Links.find();
   });
 }
+
+// if (Meteor.isClient) {
+//   Meteor.subscribe("links");
+// }
+
+// Meteor.setTimeout(function() {
+//   var myLog = Links.find().fetch();
+//   console.log(myLog);
+// }, 1000);
+
 Meteor.methods({
   "links.insertFirstAccount"(id, username, email) {
     Links.insert({

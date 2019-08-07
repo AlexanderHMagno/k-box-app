@@ -20,11 +20,8 @@ const useStyles = theme => ({
   }
 });
 
-const PendingRequest = ({ classes, user, userId, myLink }) => {
-  // myLink is the FULL Link record
-  // let's get all the friend requests from myLink
+const PendingRequest = ({ classes, myLink }) => {
   const friends = myLink.friends;
-
   return (
     <div className={classes.root}>
       {friends && (
@@ -40,7 +37,6 @@ const PendingRequest = ({ classes, user, userId, myLink }) => {
                       image="https://upload.wikimedia.org/wikipedia/commons/0/0c/Shure_mikrofon_55S.jpg"
                       friendStatus={friend.status}
                       id_user={friend._id}
-                      onFriendChange={friends}
                     />
                   </div>
                 </Grid>
@@ -54,23 +50,22 @@ const PendingRequest = ({ classes, user, userId, myLink }) => {
 };
 
 PendingRequest.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  myLink: PropTypes.object.isRequired
 };
-// export default withStyles(useStyles)(PendingRequest);
 
 export default withTracker(() => {
   Meteor.subscribe("links");
   const userId = Meteor.userId();
   const user = Meteor.user();
+
   return {
     myLink: Links.find(
-      // first args = condition
       {
         _id: userId
       },
-      // second args = fields to pick from the record
       { _id: 0, friends: 1 }
-    ).fetch()[0], // there should only be 1 Link record per user
+    ).fetch()[0],
     userId,
     user
   };

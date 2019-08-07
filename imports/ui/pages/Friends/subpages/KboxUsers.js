@@ -5,7 +5,7 @@ import { withStyles } from "@material-ui/core/styles";
 import User_card from "./User_Card";
 import { Links } from "../../../../api/links";
 import { Meteor } from "meteor/meteor";
-// import { withTracker } from "meteor/react-meteor-data";
+import { withTracker } from "meteor/react-meteor-data";
 
 const useStyles = theme => ({
   root: {
@@ -44,66 +44,50 @@ const useStyles = theme => ({
   }
 });
 
-class KboxUsers extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      users: Links.find({}).fetch(),
-      friends: Links.findOne({ _id: Meteor.userId() }).friends,
-      visible: true,
-      background_image:
-        "https://upload.wikimedia.org/wikipedia/commons/0/0c/Shure_mikrofon_55S.jpg"
-    };
-  }
-
-  render() {
-    const { classes } = this.props;
-
-    return (
-      <div className={classes.root}>
-        <Grid container spacing={3}>
-          {this.state.users.map((user, index) => {
-            const friend = this.state.friends.find(
-              friend => friend._id === user._id
-            );
-            return (
-              <Grid item xs={12} sm={6} md={3} key={index}>
-                <div className={classes.container}>
-                  <User_card
-                    className={classes.paper}
-                    name={user.username}
-                    id_user={user._id}
-                    fav={user.favorites && user.favorites.length}
-                    image={this.state.background_image}
-                    friendStatus={friend && friend.status}
-                    onFriendChange={() => {
-                      this.setState({
-                        users: Links.find({}).fetch(),
-                        friends: Links.findOne({ _id: Meteor.userId() }).friends
-                      });
-                    }}
-                  />
-                </div>
-              </Grid>
-            );
-          })}
-          ;
-        </Grid>
-      </div>
-    );
-  }
-}
-
-KboxUsers.propTypes = {
-  classes: PropTypes.object.isRequired
+const KboxUsers = ({ classes, users, friends }) => {
+  return (
+    <div className={classes.root}>
+      <Grid container spacing={3}>
+        {users.map((user, index) => {
+          const friend = friends.find(friend => friend._id === user._id);
+          return (
+            <Grid item xs={12} sm={6} md={3} key={index}>
+              <div className={classes.container}>
+                <User_card
+                  className={classes.paper}
+                  name={user.username}
+                  id_user={user._id}
+                  fav={user.favorites && user.favorites.length}
+                  image="https://upload.wikimedia.org/wikipedia/commons/0/0c/Shure_mikrofon_55S.jpg"
+                  friendStatus={friend && friend.status}
+                />
+              </div>
+            </Grid>
+          );
+        })}
+        ;
+      </Grid>
+    </div>
+  );
+  //  }
 };
 
-export default withStyles(useStyles)(KboxUsers);
+KboxUsers.propTypes = {
+  classes: PropTypes.object.isRequired,
+  users: PropTypes.array,
+  friends: PropTypes.array
+};
 
-// export default withTracker(() => {
-//   Meteor.subscribe("links");
-//   return {
-//   //     user: Meteor.user()
-//userId: Meteor.userId()
-//   };
-// })(withStyles(useStyles)(KboxUsers));
+export default withTracker(() => {
+  Meteor.subscribe("links");
+  const userId = Meteor.userId();
+  const userI = Meteor.user();
+  return {
+    userId,
+    userI,
+    users: Links.find({})
+      .fetch()
+      .filter(friend => friend._id !== userId),
+    friends: Links.findOne({ _id: Meteor.userId() }).friends
+  };
+})(withStyles(useStyles)(KboxUsers));

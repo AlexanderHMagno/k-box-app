@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
-import { Links } from "../../../../api/links";
 import User_card from "./User_Card";
-// import { withTracker } from "meteor/react-meteor-data";
+import { Links } from "../../../../api/links";
+import { withTracker } from "meteor/react-meteor-data";
 
 const useStyles = theme => ({
   root: {
@@ -20,25 +20,13 @@ const useStyles = theme => ({
   }
 });
 
-class FriendList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      friends: Links.find(
-        { _id: Meteor.userId() },
-        { friends: 1, _id: 0, status: "friends" }
-      ).fetch(),
-      background_image:
-        "https://upload.wikimedia.org/wikipedia/commons/0/0c/Shure_mikrofon_55S.jpg"
-    };
-  }
-
-  render() {
-    const { classes } = this.props;
-    return (
-      <div className={classes.root}>
+const FriendList = ({ classes, myLink }) => {
+  const friends = myLink ? myLink.friends : [];
+  return (
+    <div className={classes.root}>
+      {friends && (
         <Grid container spacing={3}>
-          {this.state.friends[0].friends.map((friend, index) => {
+          {friends.map((friend, index) => {
             if (friend.status === "friends") {
               return (
                 <Grid item xs={12} sm={6} md={3} key={index}>
@@ -46,17 +34,9 @@ class FriendList extends React.Component {
                     <User_card
                       className={classes.paper}
                       name={friend.username}
-                      image={this.state.background_image}
+                      image="https://upload.wikimedia.org/wikipedia/commons/0/0c/Shure_mikrofon_55S.jpg"
                       friendStatus={friend.status}
                       id_user={friend._id}
-                      onFriendChange={() => {
-                        this.setState({
-                          friends: Links.find(
-                            { _id: Meteor.userId() },
-                            { friends: 1, _id: 0, status: "friends" }
-                          ).fetch()
-                        });
-                      }}
                     />
                   </div>
                 </Grid>
@@ -64,21 +44,28 @@ class FriendList extends React.Component {
             }
           })}
         </Grid>
-      </div>
-    );
-  }
-}
-
-FriendList.propTypes = {
-  classes: PropTypes.object.isRequired
+      )}
+    </div>
+  );
 };
 
-export default withStyles(useStyles)(FriendList);
+FriendList.propTypes = {
+  classes: PropTypes.object.isRequired,
+  myLink: PropTypes.object
+};
 
-// export default withTracker(() => {
-//   Meteor.subscribe("links");
-//   return {
-//     //     user: Meteor.user()
-//userId: Meteor.userId()
-//   };
-// })(withStyles(useStyles)(FriendList));
+export default withTracker(() => {
+  Meteor.subscribe("links");
+  const userId = Meteor.userId();
+  const user = Meteor.user();
+  return {
+    myLink: Links.find(
+      {
+        _id: userId
+      },
+      { _id: 0, friends: 1 }
+    ).fetch()[0],
+    userId,
+    user
+  };
+})(withStyles(useStyles)(FriendList));

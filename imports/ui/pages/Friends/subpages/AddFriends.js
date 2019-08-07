@@ -20,7 +20,7 @@ const useStyles = theme => ({
   }
 });
 
-const AddFriends = ({ classes, user, userId, friends }) => {
+const AddFriends = ({ classes, friends }) => {
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
@@ -49,7 +49,8 @@ const AddFriends = ({ classes, user, userId, friends }) => {
 };
 
 AddFriends.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  friends: PropTypes.array
 };
 
 export default withTracker(() => {
@@ -65,15 +66,3 @@ export default withTracker(() => {
     user
   };
 })(withStyles(useStyles)(AddFriends));
-
-// export default withStyles(useStyles)(AddFriends);
-// export default withTracker(() => {
-//   Meteor.subscribe("links");
-//   const userId = Meteor.userId();
-//   const user = Meteor.user();
-//   return {
-//     favorites: Links.find({ _id: userId }).fetch(),
-//     userId,
-//     user
-//   };
-// })(withStyles(styles)(FavoriteContent));

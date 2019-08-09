@@ -4,6 +4,8 @@ import { withStyles } from "@material-ui/core/styles";
 import { Rooms } from "../../../../api/links";
 import Room_card from "./Room_Card";
 import Swal from "sweetalert2";
+import { Meteor } from "meteor/meteor";
+import { withTracker } from "meteor/react-meteor-data";
 import withReactContent from "sweetalert2-react-content";
 
 const useStyles = theme => ({
@@ -101,4 +103,12 @@ class CenteredGrid extends React.Component {
   }
 }
 
-export default withStyles(useStyles)(CenteredGrid);
+export default withTracker(() => {
+  Meteor.subscribe("rooms");
+  const userId = Meteor.userId();
+  const user = Meteor.user();
+  return {
+    userId,
+    user
+  };
+})(withStyles(useStyles)(CenteredGrid));

@@ -56,6 +56,7 @@ class FavoriteContent extends React.Component {
   }
 
   render() {
+    console.log(this.props);
     const { classes, userId, favorites, user } = this.props;
     console.log(user, "fetch user");
     let hasFavorites = false;

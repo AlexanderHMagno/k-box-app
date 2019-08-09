@@ -4,11 +4,10 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
 import Room_card from "./Room_Card";
-import { Rooms } from "../../../../api/links";
 import images from "./images/images";
 import { Meteor } from "meteor/meteor";
+import { withTracker } from "meteor/react-meteor-data";
 
 ///++++++++++++++++ ROOM CREATOR +++++++++++++++++
 
@@ -146,4 +145,12 @@ class CenteredGrid extends React.Component {
   }
 }
 
-export default withStyles(useStyles)(CenteredGrid);
+export default withTracker(() => {
+  Meteor.subscribe("rooms");
+  const userId = Meteor.userId();
+  const user = Meteor.user();
+  return {
+    userId,
+    user
+  };
+})(withStyles(useStyles)(CenteredGrid));

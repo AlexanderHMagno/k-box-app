@@ -10,6 +10,8 @@ import Youtube from "./Youtube";
 import { Links, Rooms } from "../../../../api/links";
 import { withStyles } from "@material-ui/core/styles";
 import { dashboard_styles } from "./styles.js";
+import { Meteor } from "meteor/meteor";
+import { withTracker } from "meteor/react-meteor-data";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -22,6 +24,7 @@ class Dashboard extends React.Component {
       list_to_play: "",
       youtube_position_queue: -1
     };
+    console.log(this.props);
   }
 
   /* When the user adds another song to the list this should update the list also
@@ -62,14 +65,11 @@ class Dashboard extends React.Component {
   }
 
   adding_removing_song() {
-    const { structure } = this.props;
+    const { structure, songs } = this.props;
 
     if (structure.favorite_room === "yes") {
       this.setState({
-        list_to_play: Links.find(
-          { _id: Meteor.userId() },
-          { favorites: 1, _id: 0 }
-        ).fetch(),
+        list_to_play: songs,
         youtube_position_queue: -1
       });
     } else {
@@ -84,8 +84,15 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { structure, classes } = this.props;
+    console.log(this.props);
+    const { structure, classes, songs } = this.props;
+
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+    const newSongs = this.state.list_to_play.length
+      ? this.state.list_to_play
+      : songs;
+    console.log(newSongs);
 
     return (
       <div className={classes.root}>
@@ -125,7 +132,7 @@ class Dashboard extends React.Component {
               <Grid item xs={12}>
                 <Paper className={classes.paper_black}>
                   <Youtube
-                    songs={this.state.list_to_play}
+                    songs={newSongs}
                     style={{ display: "flex", justifyContent: "center" }}
                     favorite_room={structure.favorite_room}
                     room_id={structure.id}
@@ -138,7 +145,7 @@ class Dashboard extends React.Component {
               <Grid item xs={12}>
                 <Paper className={classes.paper}>
                   <Room_list
-                    songs={this.state.list_to_play}
+                    songs={newSongs}
                     selected={this.state.get_position}
                     room_id={structure.id}
                     favorite_room={structure.favorite_room}
@@ -155,4 +162,14 @@ class Dashboard extends React.Component {
   }
 }
 
-export default withStyles(dashboard_styles)(Dashboard);
+export default withTracker(() => {
+  Meteor.subscribe("rooms");
+  Meteor.subscribe("links");
+  const userId = Meteor.userId();
+  const user = Meteor.user();
+  return {
+    userId,
+    user,
+    songs: Links.find({ _id: userId }).fetch()
+  };
+})(withStyles(dashboard_styles)(Dashboard));

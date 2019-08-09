@@ -4,8 +4,8 @@ import { withStyles } from "@material-ui/core/styles";
 import { Rooms } from "../../../../api/links";
 import Room_card from "./Room_Card";
 import Dashboard from "../Rooms/Dashboard";
-
-const user = "d1d1";
+import { Meteor } from "meteor/meteor";
+import { withTracker } from "meteor/react-meteor-data";
 
 const useStyles = theme => ({
   root: {
@@ -28,11 +28,6 @@ class CenteredGrid extends React.Component {
     };
   }
 
-  componentWillMount() {
-    this.setState({
-      rooms: Rooms.find({ users: { user: Meteor.userId() } }).fetch()
-    });
-  }
   create_room_environment(information) {
     this.setState({
       open_room: !this.state.open_room,
@@ -41,12 +36,12 @@ class CenteredGrid extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, rooms } = this.props;
     return (
       <div className={classes.root}>
         {!this.state.open_room && (
           <Grid container spacing={3}>
-            {this.state.rooms.map((room, index) => {
+            {rooms.map((room, index) => {
               return (
                 <Grid item xs={12} sm={6} md={4} key={room.name + index}>
                   <Room_card
@@ -73,4 +68,13 @@ class CenteredGrid extends React.Component {
   }
 }
 
-export default withStyles(useStyles)(CenteredGrid);
+export default withTracker(() => {
+  Meteor.subscribe("rooms");
+  const userId = Meteor.userId();
+  const user = Meteor.user();
+  return {
+    rooms: Rooms.find({ users: { user: Meteor.userId() } }).fetch(),
+    userId,
+    user
+  };
+})(withStyles(useStyles)(CenteredGrid));

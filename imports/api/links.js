@@ -25,15 +25,6 @@ if (Meteor.isServer) {
   });
 }
 
-// if (Meteor.isClient) {
-//   Meteor.subscribe("links");
-// }
-
-// Meteor.setTimeout(function() {
-//   var myLog = Links.find().fetch();
-//   console.log(myLog);
-// }, 1000);
-
 Meteor.methods({
   "links.insertFirstAccount"(id, username, email) {
     Links.insert({

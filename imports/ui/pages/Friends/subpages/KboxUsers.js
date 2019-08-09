@@ -69,7 +69,6 @@ const KboxUsers = ({ classes, users, friends }) => {
       </Grid>
     </div>
   );
-  //  }
 };
 
 KboxUsers.propTypes = {

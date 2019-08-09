@@ -13,6 +13,7 @@ import { Meteor } from "meteor/meteor";
 import validate from "../helpers/validation";
 import { Links, Rooms } from "../../../api/links";
 import { FORM_ERROR } from "final-form";
+import { withTracker } from "meteor/react-meteor-data";
 
 class AccountForm extends Component {
   constructor(props) {
@@ -201,4 +202,13 @@ AccountForm.propType = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(AccountForm);
+export default withTracker(() => {
+  Meteor.subscribe("rooms");
+  Meteor.subscribe("links");
+  const userId = Meteor.userId();
+  const user = Meteor.user();
+  return {
+    userId,
+    user
+  };
+})(withStyles(styles)(AccountForm));

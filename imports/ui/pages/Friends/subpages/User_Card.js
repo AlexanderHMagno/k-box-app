@@ -13,7 +13,7 @@ import PropTypes from "prop-types";
 import { Links } from "../../../../api/links";
 import { Meteor } from "meteor/meteor";
 import { withStyles } from "@material-ui/core/styles";
-// import { withTracker } from "meteor/react-meteor-data";
+import { withTracker } from "meteor/react-meteor-data";
 
 const MySwal = withReactContent(Swal);
 
@@ -43,11 +43,6 @@ const useStyles = theme => ({
 class User_Card extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      visible: true,
-      friends: Links.find({ _id: Meteor.userId() }).fetch(),
-      links: Links.find({}).fetch()
-    };
   }
 
   sendInvite(_id, username) {
@@ -67,9 +62,6 @@ class User_Card extends React.Component {
       type: "success",
       confirmButtonColor: "Green"
     });
-    if (this.props.onFriendChange) {
-      this.props.onFriendChange();
-    }
   }
 
   AcceptFriend(_id, username) {
@@ -111,9 +103,6 @@ class User_Card extends React.Component {
       type: "success",
       confirmButtonColor: "Green"
     });
-    if (this.props.onFriendChange) {
-      this.props.onFriendChange();
-    }
   }
 
   RejectFriend(_id, username) {
@@ -146,9 +135,6 @@ class User_Card extends React.Component {
       type: "success",
       confirmButtonColor: "green"
     });
-    if (this.props.onFriendChange) {
-      this.props.onFriendChange();
-    }
   }
 
   DeleteInvite(_id, username) {
@@ -183,9 +169,6 @@ class User_Card extends React.Component {
       type: "success",
       confirmButtonColor: "green"
     });
-    if (this.props.onFriendChange) {
-      this.props.onFriendChange();
-    }
   }
 
   DeleteFriend(_id, username) {
@@ -200,7 +183,7 @@ class User_Card extends React.Component {
       return true;
     });
 
-    Meteor.call("friends.interactWithRequest", fowner, ownerObject.friends);
+    Meteor.call("friends.interactWithRequest", owner, ownerObject.friends);
 
     friendObject.friends = friendObject.friends.filter(friend => {
       if (friend._id == owner) {
@@ -219,9 +202,6 @@ class User_Card extends React.Component {
       type: "success",
       confirmButtonColor: "green"
     });
-    if (this.props.onFriendChange) {
-      this.props.onFriendChange();
-    }
   }
 
   render() {
@@ -316,12 +296,15 @@ User_Card.propTypes = {
   friendStatus: PropTypes.string,
   id_user: PropTypes.string
 };
-export default withStyles(useStyles)(User_Card);
 
-// export default withTracker(() => {
-//   Meteor.subscribe("links");
-//   return {
-//     user: Meteor.user()
-//userId: Meteor.userId()
-//   };
-// })(withStyles(useStyles)(User_Card);
+export default withTracker(() => {
+  Meteor.subscribe("links");
+  const userId = Meteor.userId();
+  const user = Meteor.user();
+  return {
+    userId,
+    user,
+    friends: Links.find({ _id: Meteor.userId() }).fetch(),
+    links: Links.find({}).fetch()
+  };
+})(withStyles(useStyles)(User_Card));

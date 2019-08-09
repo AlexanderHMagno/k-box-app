@@ -21,15 +21,15 @@ class ListOfSongs extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      songs: "",
+      songs: [],
       search_drawer_open: false
     };
   }
   componentWillMount() {
     if (this.props.favorite_room == "yes") {
-      this.setState({
-        songs: this.props.songs[0].favorites
-      });
+      // this.setState({
+      //   songs: this.props.songs[0].favorites
+      // });
     } else {
       this.setState({
         songs: this.props.songs[0].tracks
@@ -39,9 +39,11 @@ class ListOfSongs extends React.Component {
 
   componentWillReceiveProps(props) {
     if (props.favorite_room == "yes") {
-      this.setState({
-        songs: props.songs[0].favorites
-      });
+      if (this.props.songs.length) {
+        this.setState({
+          songs: props.songs[0].favorites
+        });
+      }
     } else {
       this.setState({
         songs: props.songs[0].tracks
@@ -61,8 +63,11 @@ class ListOfSongs extends React.Component {
       room_id,
       favorite_room,
       updating_room_state,
-      change_state_queue
+      change_state_queue,
+      songs
     } = this.props;
+    console.log(songs.length);
+    const newSongs = songs.length ? songs[0].favorites : songs;
 
     return (
       <React.Fragment>
@@ -78,7 +83,7 @@ class ListOfSongs extends React.Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.state.songs.map((row, index) => (
+            {newSongs.map((row, index) => (
               <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{row.title}</TableCell>

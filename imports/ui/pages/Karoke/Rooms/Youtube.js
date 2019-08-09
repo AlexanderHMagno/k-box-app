@@ -8,7 +8,7 @@ class Youtube extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      songs: "",
+      songs: [],
       position: 0,
       error_queue: 1,
       video_loader: "epDoVwQ1ZLk"
@@ -16,10 +16,16 @@ class Youtube extends React.Component {
   }
 
   componentWillMount() {
+    console.log(this.props);
+
     if (this.props.favorite_room === "yes") {
-      this.setState({
-        songs: this.props.songs[0].favorites.map(x => `${x.title}  ${x.artist}`)
-      });
+      if (this.props.songs.length) {
+        this.setState({
+          songs: this.props.songs[0].favorites.map(
+            x => `${x.title}  ${x.artist}`
+          )
+        });
+      }
     } else {
       this.setState({
         songs: this.props.songs[0].tracks.map(x => `${x.title}  ${x.artist}`)
@@ -29,9 +35,11 @@ class Youtube extends React.Component {
 
   componentWillReceiveProps(props) {
     if (props.favorite_room === "yes") {
-      this.setState({
-        songs: props.songs[0].favorites.map(x => `${x.title}  ${x.artist}`)
-      });
+      if (this.props.songs.length) {
+        this.setState({
+          songs: props.songs[0].favorites.map(x => `${x.title}  ${x.artist}`)
+        });
+      }
     } else {
       this.setState({
         songs: props.songs[0].tracks.map(x => `${x.title}  ${x.artist}`)
@@ -115,6 +123,7 @@ class Youtube extends React.Component {
   }
 
   render() {
+    console.log(this.props);
     const opts = {
       height: "390",
       width: "90%",
@@ -126,7 +135,7 @@ class Youtube extends React.Component {
 
     return (
       <div>
-        {this.state.songs != 0 && (
+        {this.props.songs != 0 && (
           <YouTube
             videoId={this.state.video_loader}
             opts={opts}
@@ -136,7 +145,7 @@ class Youtube extends React.Component {
           />
         )}
 
-        {this.state.songs == 0 && (
+        {this.props.songs == 0 && (
           <Typography variant="h6" color="secondary">
             "Please Add more songs to this room"
           </Typography>

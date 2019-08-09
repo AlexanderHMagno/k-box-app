@@ -88,10 +88,10 @@ class Dashboard extends React.Component {
     const { structure, classes, songs } = this.props;
 
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
+    console.log(this.state.list_to_play, { songs });
     const newSongs = this.state.list_to_play.length
-      ? this.state.list_to_play
-      : songs;
+      ? this.state.list_to_play[0].tracks
+      : songs[0].favorites;
     console.log(newSongs);
 
     return (

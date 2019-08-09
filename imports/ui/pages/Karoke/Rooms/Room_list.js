@@ -66,9 +66,13 @@ class ListOfSongs extends React.Component {
       change_state_queue,
       songs
     } = this.props;
-    // console.log(songs);
-    const newSongs = songs.length ? songs : [];
-
+    console.log(songs);
+    const newSongs = songs.length
+      ? songs[0].favorites
+        ? songs[0].favorites
+        : songs
+      : [];
+    console.log(newSongs);
     return (
       <React.Fragment>
         <Title>Coming Soon</Title>
@@ -83,7 +87,7 @@ class ListOfSongs extends React.Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {songs.map((row, index) => (
+            {newSongs.map((row, index) => (
               <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{row.title}</TableCell>

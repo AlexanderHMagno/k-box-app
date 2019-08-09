@@ -84,15 +84,11 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     const { structure, classes, songs } = this.props;
-
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-    console.log(this.state.list_to_play, { songs });
     const newSongs = this.state.list_to_play.length
       ? this.state.list_to_play[0].tracks
-      : songs[0].favorites;
-    console.log(newSongs);
+      : songs;
 
     return (
       <div className={classes.root}>

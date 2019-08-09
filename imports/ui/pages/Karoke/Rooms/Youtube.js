@@ -16,7 +16,7 @@ class Youtube extends React.Component {
   }
 
   componentWillMount() {
-    console.log(this.props);
+    // console.log(this.props);
 
     if (this.props.favorite_room === "yes") {
       if (this.props.songs.length) {
@@ -28,7 +28,7 @@ class Youtube extends React.Component {
       }
     } else {
       this.setState({
-        songs: this.props.songs[0].tracks.map(x => `${x.title}  ${x.artist}`)
+        songs: this.props.songs.map(x => `${x.title}  ${x.artist}`)
       });
     }
   }
@@ -42,7 +42,7 @@ class Youtube extends React.Component {
       }
     } else {
       this.setState({
-        songs: props.songs[0].tracks.map(x => `${x.title}  ${x.artist}`)
+        songs: props.songs.map(x => `${x.title}  ${x.artist}`)
       });
     }
 
@@ -123,7 +123,7 @@ class Youtube extends React.Component {
   }
 
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     const opts = {
       height: "390",
       width: "90%",

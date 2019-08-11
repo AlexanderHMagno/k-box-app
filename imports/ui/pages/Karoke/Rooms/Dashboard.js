@@ -24,36 +24,6 @@ class Dashboard extends React.Component {
       list_to_play: "",
       youtube_position_queue: -1
     };
-    console.log(this.props);
-  }
-
-  /* When the user adds another song to the list this should update the list also
-   * in the youtube query
-   * new_list {array} contains the new list.
-   */
-  update_list_to_play(new_list) {
-    this.setstate({
-      list_to_play: new_list
-    });
-  }
-
-  componentWillMount() {
-    const { structure } = this.props;
-    if (structure.favorite_room === "yes") {
-      this.setState({
-        list_to_play: Links.find(
-          { _id: Meteor.userId() },
-          { favorites: 1, _id: 0 }
-        ).fetch()
-      });
-    } else {
-      this.setState({
-        list_to_play: Rooms.find(
-          { _id: structure.id },
-          { tracks: 1, _id: 0 }
-        ).fetch()
-      });
-    }
   }
 
   //test_updating_ui from here
@@ -82,14 +52,14 @@ class Dashboard extends React.Component {
       });
     }
   }
-
   render() {
-    const { structure, classes, songs } = this.props;
+    const { structure, classes, rooms, favoriteRoom } = this.props;
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-    const newSongs = this.state.list_to_play.length
-      ? this.state.list_to_play[0].tracks
-      : songs;
-
+    const thisRoom = rooms.filter(room => room._id === this.props.structure.id);
+    const finalSong =
+      thisRoom[0].favorite_room == "yes"
+        ? favoriteRoom[0].favorites
+        : thisRoom[0].tracks;
     return (
       <div className={classes.root}>
         <main className={classes.content}>
@@ -128,7 +98,7 @@ class Dashboard extends React.Component {
               <Grid item xs={12}>
                 <Paper className={classes.paper_black}>
                   <Youtube
-                    songs={newSongs}
+                    songs={finalSong}
                     style={{ display: "flex", justifyContent: "center" }}
                     favorite_room={structure.favorite_room}
                     room_id={structure.id}
@@ -141,7 +111,7 @@ class Dashboard extends React.Component {
               <Grid item xs={12}>
                 <Paper className={classes.paper}>
                   <Room_list
-                    songs={newSongs}
+                    songs={finalSong}
                     selected={this.state.get_position}
                     room_id={structure.id}
                     favorite_room={structure.favorite_room}
@@ -166,6 +136,7 @@ export default withTracker(() => {
   return {
     userId,
     user,
-    songs: Links.find({ _id: userId }).fetch()
+    rooms: Rooms.find({ users: { user: Meteor.userId() } }).fetch(),
+    favoriteRoom: Links.find({ _id: userId }).fetch()
   };
 })(withStyles(dashboard_styles)(Dashboard));

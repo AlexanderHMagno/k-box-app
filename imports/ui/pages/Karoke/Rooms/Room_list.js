@@ -26,29 +26,17 @@ class ListOfSongs extends React.Component {
     };
   }
   componentWillMount() {
-    if (this.props.favorite_room == "yes") {
-      // this.setState({
-      //   songs: this.props.songs[0].favorites
-      // });
-    } else {
-      this.setState({
-        songs: this.props.songs[0].tracks
-      });
-    }
+    this.setState({
+      songs: this.props.songs
+    });
   }
 
   componentWillReceiveProps(props) {
-    if (props.favorite_room == "yes") {
-      if (this.props.songs.length) {
-        this.setState({
-          songs: props.songs[0].favorites
-        });
-      }
-    } else {
-      this.setState({
-        songs: props.songs[0].tracks
-      });
-    }
+    // console.log(props);
+    // console.log(this.props);
+    this.setState({
+      songs: props.songs
+    });
   }
 
   toggle_search_drawer() {
@@ -66,13 +54,6 @@ class ListOfSongs extends React.Component {
       change_state_queue,
       songs
     } = this.props;
-    console.log(songs);
-    const newSongs = songs.length
-      ? songs[0].favorites
-        ? songs[0].favorites
-        : songs
-      : [];
-    console.log(newSongs);
     return (
       <React.Fragment>
         <Title>Coming Soon</Title>
@@ -87,7 +68,7 @@ class ListOfSongs extends React.Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {newSongs.map((row, index) => (
+            {this.state.songs.map((row, index) => (
               <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{row.title}</TableCell>

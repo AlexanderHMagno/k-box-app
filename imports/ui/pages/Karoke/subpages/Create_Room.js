@@ -133,6 +133,10 @@ class CenteredGrid extends React.Component {
             <Room_card
               className={classes.paper}
               name={"Room's name"}
+              // roomInfo={{
+              //   image: this.state.background_image,
+              //   bio: "Please add a Complete Description"
+              // }}
               image={this.state.background_image}
               bio={"Please add a Complete Description"}
               creator={"Create"}

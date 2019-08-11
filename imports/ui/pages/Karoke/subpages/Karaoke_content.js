@@ -1,7 +1,7 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
-import { Rooms } from "../../../../api/links";
+import { Rooms, Links } from "../../../../api/links";
 import Room_card from "./Room_Card";
 import Dashboard from "../Rooms/Dashboard";
 import { Meteor } from "meteor/meteor";
@@ -27,7 +27,6 @@ class CenteredGrid extends React.Component {
       room_info: []
     };
   }
-
   create_room_environment(information) {
     this.setState({
       open_room: !this.state.open_room,
@@ -36,24 +35,31 @@ class CenteredGrid extends React.Component {
   }
 
   render() {
-    const { classes, rooms } = this.props;
+    // console.log(this.props.rooms);
+    const { classes, rooms, favoriteRoom } = this.props;
+
     return (
       <div className={classes.root}>
         {!this.state.open_room && (
           <Grid container spacing={3}>
             {rooms.map((room, index) => {
+              const tracks =
+                room.favorite_room === "yes"
+                  ? favoriteRoom[0].favorites
+                  : room.tracks;
               return (
                 <Grid item xs={12} sm={6} md={4} key={room.name + index}>
                   <Room_card
                     className={classes.paper}
                     name={`Room ${index + 1} - ${room.name}`}
+                    roomInfo={room}
                     id={room._id}
                     image={room.image}
                     bio={room.bio}
                     password={room.password}
+                    tracks={room.tracks}
                     admin={room.administrator}
                     users={room.users}
-                    tracks={room.tracks}
                     room_creator={this.create_room_environment.bind(this)}
                     favorite_room={room.favorite_room}
                   />
@@ -70,10 +76,12 @@ class CenteredGrid extends React.Component {
 
 export default withTracker(() => {
   Meteor.subscribe("rooms");
+  Meteor.subscribe("links");
   const userId = Meteor.userId();
   const user = Meteor.user();
   return {
     rooms: Rooms.find({ users: { user: Meteor.userId() } }).fetch(),
+    favoriteRoom: Links.find({ _id: userId }).fetch(),
     userId,
     user
   };

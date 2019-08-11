@@ -2,7 +2,6 @@ import React from "react";
 import YouTube from "react-youtube";
 import Typography from "@material-ui/core/Typography";
 import Swal from "sweetalert2";
-import { Links, Rooms } from "../../../../api/links";
 
 class Youtube extends React.Component {
   constructor(props) {
@@ -16,36 +15,16 @@ class Youtube extends React.Component {
   }
 
   componentWillMount() {
-    // console.log(this.props);
-
-    if (this.props.favorite_room === "yes") {
-      if (this.props.songs.length) {
-        this.setState({
-          songs: this.props.songs[0].favorites.map(
-            x => `${x.title}  ${x.artist}`
-          )
-        });
-      }
-    } else {
-      this.setState({
-        songs: this.props.songs.map(x => `${x.title}  ${x.artist}`)
-      });
-    }
+    // console.log(this.props.songs);
+    this.setState({
+      songs: this.props.songs.map(x => `${x.title}  ${x.artist}`)
+    });
   }
 
   componentWillReceiveProps(props) {
-    if (props.favorite_room === "yes") {
-      if (this.props.songs.length) {
-        this.setState({
-          songs: props.songs[0].favorites.map(x => `${x.title}  ${x.artist}`)
-        });
-      }
-    } else {
-      this.setState({
-        songs: props.songs.map(x => `${x.title}  ${x.artist}`)
-      });
-    }
-
+    this.setState({
+      songs: props.songs.map(x => `${x.title}  ${x.artist}`)
+    });
     //if the user update the queue it will trigger the change here
     if (!(props.youtube_position_queue == -1)) {
       if (props.admin._id != Meteor.userId()) {
@@ -80,6 +59,9 @@ class Youtube extends React.Component {
   }
 
   nextSong(event) {
+    console.log(this.state.position, this.state.songs[this.state.position]);
+    console.log(this.state.songs);
+
     // access to player in all event handlers via event.target
     const player = event.target;
     player.loadPlaylist({
@@ -105,13 +87,15 @@ class Youtube extends React.Component {
   handleError(event) {
     const player = event.target;
 
+    console.log(this.state.position);
+
     //@
     //* This will verify that is the last song available.
     const lastSong = !(this.state.songs.length <= this.state.position);
-    const play_next_available = lastSong
-      ? this.state.songs[this.state.position]
-      : this.state.songs[this.state.position - 1];
-
+    // const play_next_available = lastSong
+    //   ? this.state.songs[this.state.position]
+    //   : this.state.songs[this.state.position - 1];
+    const play_next_available = this.state.songs[this.state.position - 1];
     player.loadPlaylist({
       list: `${play_next_available} karaoke`,
       listType: "search",

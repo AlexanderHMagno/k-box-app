@@ -11,7 +11,6 @@ import PropTypes from "prop-types";
 import styles from "../styles";
 import { Meteor } from "meteor/meteor";
 import validate from "../helpers/validation";
-import { Links, Rooms } from "../../../api/links";
 import { FORM_ERROR } from "final-form";
 import { withTracker } from "meteor/react-meteor-data";
 
@@ -72,7 +71,10 @@ class AccountForm extends Component {
           invalid,
           form,
           submitting,
-          submitError
+          submitError,
+          hasValidationErrors,
+          hasSubmitErrors,
+          dirtySinceLastSubmit
         }) => {
           return (
             <form onSubmit={handleSubmit}>
@@ -163,7 +165,10 @@ class AccountForm extends Component {
                     variant="contained"
                     size="large"
                     color="secondary"
-                    disabled={pristine || invalid}
+                    disabled={
+                      hasValidationErrors ||
+                      (hasSubmitErrors && !dirtySinceLastSubmit)
+                    }
                   >
                     {this.state.formToggle ? "Enter" : "Create Account"}
                   </Button>

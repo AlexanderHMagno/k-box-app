@@ -34,13 +34,12 @@ class CenteredGrid extends React.Component {
         autocapitalize: "off"
       },
       showCancelButton: true,
-      confirmButtonText: "Join the group"
+      confirmButtonText: "Join group"
     }).then(result => {
       if (result.dismiss !== "cancel") {
         if (result.value === password) {
           //Subscribe the user into the room
           Meteor.call("rooms.subscription", id);
-
           Swal.fire({
             html: `Welcome! Now You can start adding new songs`,
             type: "success",
@@ -92,7 +91,8 @@ class CenteredGrid extends React.Component {
                   creator={"Join"}
                   password={room.password}
                   id={room._id}
-                  f_creator={this.catch_password.bind(this)}
+                  // f_creator={this.catch_password.bind(this)}
+                  f_creator={() => this.catch_password(room.password, room._id)}
                 />
               </Grid>
             );

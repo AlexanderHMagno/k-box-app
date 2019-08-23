@@ -15,7 +15,6 @@ class Youtube extends React.Component {
   }
 
   componentWillMount() {
-    // console.log(this.props.songs);
     this.setState({
       songs: this.props.songs.map(x => `${x.title}  ${x.artist}`)
     });
@@ -59,10 +58,6 @@ class Youtube extends React.Component {
   }
 
   nextSong(event) {
-    console.log(this.state.position, this.state.songs[this.state.position]);
-    console.log(this.state.songs);
-
-    // access to player in all event handlers via event.target
     const player = event.target;
     player.loadPlaylist({
       list: `${this.state.songs[this.state.position]} karaoke`,
@@ -86,15 +81,6 @@ class Youtube extends React.Component {
 
   handleError(event) {
     const player = event.target;
-
-    console.log(this.state.position);
-
-    //@
-    //* This will verify that is the last song available.
-    const lastSong = !(this.state.songs.length <= this.state.position);
-    // const play_next_available = lastSong
-    //   ? this.state.songs[this.state.position]
-    //   : this.state.songs[this.state.position - 1];
     const play_next_available = this.state.songs[this.state.position - 1];
     player.loadPlaylist({
       list: `${play_next_available} karaoke`,
@@ -107,7 +93,6 @@ class Youtube extends React.Component {
   }
 
   render() {
-    // console.log(this.props);
     const opts = {
       height: "390",
       width: "90%",

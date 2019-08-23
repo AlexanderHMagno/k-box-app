@@ -33,9 +33,7 @@ class CenteredGrid extends React.Component {
       room_info: information
     });
   }
-
   render() {
-    // console.log(this.props.rooms);
     const { classes, rooms, favoriteRoom } = this.props;
 
     return (
@@ -43,10 +41,6 @@ class CenteredGrid extends React.Component {
         {!this.state.open_room && (
           <Grid container spacing={3}>
             {rooms.map((room, index) => {
-              const tracks =
-                room.favorite_room === "yes"
-                  ? favoriteRoom[0].favorites
-                  : room.tracks;
               return (
                 <Grid item xs={12} sm={6} md={4} key={room.name + index}>
                   <Room_card

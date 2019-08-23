@@ -59,13 +59,7 @@ class NavBar extends Component {
     return name;
   }
   logout() {
-    Meteor.logout(err => {
-      if (err) {
-        console.log("error");
-      } else {
-        this.setState({ isLoggedin: !this.state.isLoggedin });
-      }
-    });
+    Meteor.logout(err => true);
   }
 
   render() {

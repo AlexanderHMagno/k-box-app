@@ -37,7 +37,6 @@ Meteor.methods({
     });
   },
   "links.addFavorites"(owner, title, artist) {
-    console.log("add to favorites");
     Links.update(
       { _id: owner },
       { $push: { favorites: { title, artist, createdAt: new Date() } } }
@@ -45,8 +44,6 @@ Meteor.methods({
   },
 
   "links.removeFavorites"(owner, title, artist) {
-    console.log("removing favorite");
-    // check(taskId, String);
     Links.update({ _id: owner }, { $pull: { favorites: { title, artist } } });
   },
   "links.setChecked"(taskId, setChecked) {
@@ -87,7 +84,6 @@ Meteor.methods({
   },
 
   "rooms.addFavorites"(room_id, title, artist) {
-    console.log("add to favorites");
     Rooms.update(
       { _id: room_id },
       {
@@ -98,7 +94,6 @@ Meteor.methods({
     );
   },
   "rooms.removeFavorites"(room_id, title, artist) {
-    console.log("remove favorites");
     Rooms.update(
       { _id: room_id },
       {

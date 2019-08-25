@@ -27,28 +27,37 @@ class LastFM extends React.Component {
   }
 
   componentWillMount() {
-    this.update_component(this.props.item_search);
+    this.update_component(this.props.item_search, this.props.selectedTab);
   }
 
   componentWillReceiveProps(data) {
-    this.update_component(data.item_search);
+    this.update_component(data.item_search, data.selectedTab);
   }
 
-  update_component(dataka) {
+  update_component(keyWord, searchBy) {
     const source = "http://ws.audioscrobbler.com/2.0/";
     // const method = "?method=artist.search&artist=";
-    const method = "?method=artist.gettoptracks&artist=";
-    // const method = "method=artist.getinfo&artist=";
+
+    // searchBy { if is 0 = search by artist
+    //            if is 1 = search by song}
+
+    const method =
+      searchBy === 0
+        ? "?method=artist.gettoptracks&artist="
+        : "?method=track.search&track=";
 
     const key = "&api_key=a0db55d657d3405364a7450efc1f97c4";
     const format = "&format=json";
-    fetch(`${source}${method}${dataka}${key}${format}`)
+    fetch(`${source}${method}${keyWord}${key}${format}`)
       .then(res => res.json())
       .then(
         result => {
           this.setState({
             isLoaded: true,
-            items: result.toptracks.track
+            items:
+              searchBy === 0
+                ? result.toptracks.track
+                : result.results.trackmatches.track
           });
         },
         // Note: it's important to handle errors here
@@ -70,8 +79,10 @@ class LastFM extends React.Component {
       room_id,
       favorite_room,
       updating_room_state,
-      classes
+      classes,
+      selectedTab
     } = this.props;
+
     const user_id = Meteor.userId();
     if (error) {
       console.log("we have a problem:  ", error.message);
@@ -81,13 +92,16 @@ class LastFM extends React.Component {
     } else {
       return (
         <div className={classes.root}>
+          {console.log(items)}
           <Grid container spacing={3}>
             <ul style={{ display: "flex", flexWrap: "wrap" }}>
               {items.map(item => (
                 <Grid item xs={12} sm={6} md={4} key={item.name}>
                   <div>
                     <Song
-                      artist={item.artist.name}
+                      artist={
+                        selectedTab === 0 ? item.artist.name : item.artist
+                      }
                       title={item.name}
                       owner={user_id}
                       source_of_request={source_of_request}

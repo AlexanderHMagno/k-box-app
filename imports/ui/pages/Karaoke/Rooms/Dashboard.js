@@ -70,9 +70,7 @@ class Dashboard extends React.Component {
                 <Paper
                   className={fixedHeightPaper}
                   style={{
-                    backgroundImage: `linear-gradient(to bottom,rgba(0, 0, 0, 0.52),rgba(0, 0, 0, 0.52)),url(${
-                      structure.image
-                    })`,
+                    backgroundImage: `linear-gradient(to bottom,rgba(0, 0, 0, 0.52),rgba(0, 0, 0, 0.52)),url(${structure.image})`,
                     backgroundPosition: "center",
                     backgroundSize: "cover",
                     color: "white"

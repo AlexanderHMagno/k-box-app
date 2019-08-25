@@ -25,7 +25,7 @@ const categories = [
       {
         id: "Search",
         icon: <SearchIcon />,
-        route: "/profile"
+        route: "/search"
       },
       {
         id: "Favorites",
@@ -35,7 +35,7 @@ const categories = [
       {
         id: "Karaoke",
         icon: <VoiceIcon />,
-        route: "/karoke"
+        route: "/karaoke"
       },
       { id: "Friends", icon: <PeopleIcon />, route: "/friends" }
     ]

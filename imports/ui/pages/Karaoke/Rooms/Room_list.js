@@ -7,9 +7,11 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import HomeIcon from "@material-ui/icons/PlaylistAddTwoTone";
 import Tooltip from "@material-ui/core/Tooltip";
+import Button from "@material-ui/core/Button";
 import Title from "./Title";
-import Search from "../../Profile/Content";
+import Search from "../../Search/ArtistSearcher";
 import { withStyles } from "@material-ui/core/styles";
+import Events from "material-ui/utils/events";
 
 const styles = theme => ({
   seeMore: {
@@ -22,7 +24,9 @@ class ListOfSongs extends React.Component {
     super(props);
     this.state = {
       songs: [],
-      search_drawer_open: false
+      search_drawer_open: false,
+      searchBy: 0,
+      buttons: { singer: "secondary", song: "primary" }
     };
   }
   componentWillMount() {
@@ -38,7 +42,12 @@ class ListOfSongs extends React.Component {
       songs: props.songs
     });
   }
-
+  selectTab(searchBy, event) {
+    this.setState({ searchBy });
+    event === "singer"
+      ? this.setState({ buttons: { singer: "secondary", song: "primary" } })
+      : this.setState({ buttons: { singer: "primary", song: "secondary" } });
+  }
   toggle_search_drawer() {
     this.setState({
       search_drawer_open: !this.state.search_drawer_open
@@ -98,19 +107,36 @@ class ListOfSongs extends React.Component {
             onClick={() => this.toggle_search_drawer()}
             style={{ cursor: "pointer" }}
           >
-            {!this.state.search_drawer_open && "Add More Songs!"}
-            {this.state.search_drawer_open && "Close the search bar"}
+            {!this.state.search_drawer_open
+              ? "Add More Songs!"
+              : "Close the search bar"}
           </Link>
           {this.state.search_drawer_open && (
             <div>
-              <br />
-              <Search
-                source_of_request="room"
-                room_id={room_id}
-                favorite_room={favorite_room}
-                // updating_room_state={this.adding_removing_song.bind(this)}
-                updating_room_state={updating_room_state}
-              />
+              <Button
+                variant="contained"
+                color={this.state.buttons.singer}
+                onClick={event => this.selectTab(0, "singer")}
+              >
+                Singer
+              </Button>
+              <Button
+                variant="contained"
+                color={this.state.buttons.song}
+                onClick={event => this.selectTab(1, "song")}
+              >
+                Song
+              </Button>
+              <div>
+                <br />
+                <Search
+                  source_of_request="room"
+                  room_id={room_id}
+                  favorite_room={favorite_room}
+                  updating_room_state={updating_room_state}
+                  selectedTab={this.state.searchBy}
+                />
+              </div>
             </div>
           )}
         </div>

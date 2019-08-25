@@ -1,8 +1,8 @@
 import React, { Fragment, Component } from "react";
 import { Redirect, Route, Switch } from "react-router";
 import Home from "../pages/Home";
-import Profile from "../pages/Profile";
-import Karoke from "../pages/Karoke";
+import Search from "../pages/Search";
+import Karaoke from "../pages/Karaoke";
 import Favorite from "../pages/Favorites";
 import Friends from "../pages/Friends";
 
@@ -11,13 +11,13 @@ class Router extends Component {
     const userRoutes = (
       <Fragment>
         <Switch>
-          <Route exact path="/karoke" component={Karoke} />
-          <Route exact path="/profile" component={Profile} />
-          <Route exact path="/profile/:userid" component={Profile} />
+          <Route exact path="/karaoke" component={Karaoke} />
+          <Route exact path="/search" component={Search} />
+          <Route exact path="/search/:userid" component={Search} />
           <Route exact path="/favorites" component={Favorite} />
           <Route exact path="/friends" component={Friends} />
 
-          <Redirect from="*" to="/karoke" />
+          <Redirect from="*" to="/karaoke" />
         </Switch>
       </Fragment>
     );

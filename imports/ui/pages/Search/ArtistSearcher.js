@@ -13,33 +13,9 @@ import { withStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import Api from "../../components/siteLayout/API";
+import { searcherStyles } from "./styles";
 
-// import RenderToLayer from "material-ui/internal/RenderToLayer";
-
-const styles = theme => ({
-  paper: {
-    maxWidth: 936,
-    margin: "auto",
-    overflow: "hidden"
-  },
-  searchBar: {
-    borderBottom: "1px solid rgba(0, 0, 0, 0.12)"
-  },
-  searchInput: {
-    fontSize: theme.typography.fontSize
-  },
-  block: {
-    display: "block"
-  },
-  addUser: {
-    marginRight: theme.spacing(1)
-  },
-  contentWrapper: {
-    margin: "40px 16px"
-  }
-});
-
-class Content extends React.Component {
+class ArtistSearcher extends React.Component {
   constructor(props) {
     super(props);
     this.search_value = React.createRef();
@@ -51,22 +27,20 @@ class Content extends React.Component {
     };
   }
 
-  search_name() {
-    console.log(this.state.search_information);
-  }
-
-  set_information() {
+  setInformation() {
     this.setState({
       search_information: this.search_value.current.firstElementChild
         .children[0].value
     });
   }
 
-  get_information() {
-    return this.state.search_information;
+  backSpacePress() {
+    this.setState({
+      search_information: ""
+    });
   }
 
-  reset_state() {
+  resetState() {
     this.setState({
       search_information: ""
     });
@@ -79,8 +53,10 @@ class Content extends React.Component {
       source_of_request,
       room_id,
       favorite_room,
-      updating_room_state
+      updating_room_state,
+      selectedTab
     } = this.props;
+
     return (
       <Paper className={classes.paper}>
         <AppBar
@@ -97,13 +73,26 @@ class Content extends React.Component {
               <Grid item xs>
                 <TextField
                   fullWidth
-                  placeholder="Search by artist...."
+                  placeholder={
+                    selectedTab === 0
+                      ? "Search by artist...."
+                      : "Search by song"
+                  }
                   InputProps={{
                     disableUnderline: true,
                     className: classes.searchInput
                   }}
                   ref={this.search_value}
-                  // onChange={data => this.set_information(data.target.value)}
+                  onKeyDown={event => {
+                    switch (event.keyCode) {
+                      case 13:
+                        this.setInformation();
+                        break;
+                      case 8:
+                        this.backSpacePress();
+                        break;
+                    }
+                  }}
                 />
               </Grid>
               <Grid item>
@@ -111,12 +100,12 @@ class Content extends React.Component {
                   variant="contained"
                   color="secondary"
                   className={classes.addUser}
-                  onClick={() => this.set_information()}
+                  onClick={() => this.setInformation()}
                 >
                   Search
                 </Button>
                 <Tooltip title="Reset">
-                  <IconButton onClick={() => this.reset_state()}>
+                  <IconButton onClick={() => this.resetState()}>
                     <RefreshIcon className={classes.block} color="inherit" />
                   </IconButton>
                 </Tooltip>
@@ -136,6 +125,7 @@ class Content extends React.Component {
               room_id={room_id}
               favorite_room={favorite_room}
               updating_room_state={updating_room_state}
+              selectedTab={selectedTab}
             />
           )}
         </div>
@@ -144,8 +134,8 @@ class Content extends React.Component {
   }
 }
 
-Content.propTypes = {
+ArtistSearcher.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Content);
+export default withStyles(searcherStyles)(ArtistSearcher);

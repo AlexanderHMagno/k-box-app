@@ -34,7 +34,13 @@ const styles = theme => ({
 });
 
 function Header(props) {
-  const { classes } = props;
+  const { classes, onDrawerToggle } = props;
+  const [value, setValue] = React.useState(0);
+
+  function handleChange(event, newValue) {
+    onDrawerToggle(newValue);
+    setValue(newValue);
+  }
 
   return (
     <React.Fragment>
@@ -63,8 +69,9 @@ function Header(props) {
         position="static"
         elevation={0}
       >
-        <Tabs value={0} textColor="inherit">
-          <Tab textColor="inherit" label="Search K-Box Music Artists" />
+        <Tabs value={value} onChange={handleChange} textColor="inherit">
+          <Tab textColor="inherit" label="Search by Artist" />
+          <Tab textColor="inherit" label="Search by Song" />
         </Tabs>
       </AppBar>
     </React.Fragment>

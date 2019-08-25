@@ -1,14 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
 import { createMuiTheme, withStyles } from "@material-ui/core/styles";
-import { ThemeProvider } from "@material-ui/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Hidden from "@material-ui/core/Hidden";
-import Navigator from "../../components/siteLayout/Navigator";
-import Content from "./Content";
-import UserHeader from "./UserHeader";
+export const drawerWidth = 256;
 
-let theme = createMuiTheme({
+let themeGeneral = createMuiTheme({
   typography: {
     h5: {
       fontWeight: 500,
@@ -37,8 +30,8 @@ let theme = createMuiTheme({
   }
 });
 
-theme = {
-  ...theme,
+export const theme = {
+  ...themeGeneral,
   overrides: {
     MuiDrawer: {
       paper: {
@@ -58,13 +51,13 @@ theme = {
     },
     MuiTabs: {
       root: {
-        marginLeft: theme.spacing(1)
+        marginLeft: themeGeneral.spacing(1)
       },
       indicator: {
         height: 3,
         borderTopLeftRadius: 3,
         borderTopRightRadius: 3,
-        backgroundColor: theme.palette.common.white
+        backgroundColor: themeGeneral.palette.common.white
       }
     },
     MuiTab: {
@@ -73,7 +66,7 @@ theme = {
         margin: "0 16px",
         minWidth: 0,
         padding: 0,
-        [theme.breakpoints.up("md")]: {
+        [themeGeneral.breakpoints.up("md")]: {
           padding: 0,
           minWidth: 0
         }
@@ -81,7 +74,7 @@ theme = {
     },
     MuiIconButton: {
       root: {
-        padding: theme.spacing(1)
+        padding: themeGeneral.spacing(1)
       }
     },
     MuiTooltip: {
@@ -96,7 +89,7 @@ theme = {
     },
     MuiListItemText: {
       primary: {
-        fontWeight: theme.typography.fontWeightMedium
+        fontWeight: themeGeneral.typography.fontWeightMedium
       }
     },
     MuiListItemIcon: {
@@ -121,16 +114,14 @@ theme = {
     }
   },
   mixins: {
-    ...theme.mixins,
+    ...themeGeneral.mixins,
     toolbar: {
       minHeight: 48
     }
   }
 };
 
-const drawerWidth = 256;
-
-const styles = {
+export const userStyles = {
   root: {
     display: "flex",
     minHeight: "100vh"
@@ -154,49 +145,39 @@ const styles = {
   }
 };
 
-class UserPage extends React.Component {
-  state = {
-    mobileOpen: false
-  };
-
-  handleDrawerToggle = () => {
-    this.setState(state => ({ mobileOpen: !state.mobileOpen }));
-  };
-
-  render() {
-    const { classes } = this.props;
-
-    return (
-      <ThemeProvider theme={theme}>
-        <div className={classes.root}>
-          <CssBaseline />
-          <nav className={classes.drawer}>
-            <Hidden smUp implementation="js">
-              <Navigator
-                PaperProps={{ style: { width: drawerWidth } }}
-                variant="temporary"
-                open={this.state.mobileOpen}
-                onClose={this.handleDrawerToggle}
-              />
-            </Hidden>
-            <Hidden xsDown implementation="css">
-              <Navigator PaperProps={{ style: { width: drawerWidth } }} />
-            </Hidden>
-          </nav>
-          <div className={classes.appContent}>
-            <UserHeader onDrawerToggle={this.handleDrawerToggle} />
-            <main className={classes.mainContent}>
-              <Content source_of_request="search_favorites" room_id={1} />
-            </main>
-          </div>
-        </div>
-      </ThemeProvider>
-    );
+export const searcherStyles = theme => ({
+  paper: {
+    maxWidth: 936,
+    margin: "auto",
+    overflow: "hidden"
+  },
+  searchBar: {
+    borderBottom: "1px solid rgba(0, 0, 0, 0.12)"
+  },
+  searchInput: {
+    fontSize: theme.typography.fontSize
+  },
+  block: {
+    display: "block"
+  },
+  addUser: {
+    marginRight: theme.spacing(1)
+  },
+  contentWrapper: {
+    margin: "40px 16px"
   }
-}
+});
 
-UserPage.propTypes = {
-  classes: PropTypes.object.isRequired
-};
+const styles = themeGeneral => ({
+  root: {
+    flexGrow: 1,
+    height: "100%",
+    background: theme.palette.primary.main,
+    padding: theme.spacing(5),
+    [theme.breakpoints.up("md")]: {
+      padding: theme.spacing(20)
+    }
+  }
+});
 
-export default withStyles(styles)(UserPage);
+export default styles;

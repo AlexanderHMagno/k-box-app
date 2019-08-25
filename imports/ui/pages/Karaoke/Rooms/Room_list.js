@@ -10,8 +10,8 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 import Title from "./Title";
 import Search from "../../Search/ArtistSearcher";
+import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
-import Events from "material-ui/utils/events";
 
 const styles = theme => ({
   seeMore: {
@@ -26,7 +26,7 @@ class ListOfSongs extends React.Component {
       songs: [],
       search_drawer_open: false,
       searchBy: 0,
-      buttons: { singer: "secondary", song: "primary" }
+      buttons: { Artist: "secondary", song: "default" }
     };
   }
   componentWillMount() {
@@ -44,9 +44,9 @@ class ListOfSongs extends React.Component {
   }
   selectTab(searchBy, event) {
     this.setState({ searchBy });
-    event === "singer"
-      ? this.setState({ buttons: { singer: "secondary", song: "primary" } })
-      : this.setState({ buttons: { singer: "primary", song: "secondary" } });
+    event === "artist"
+      ? this.setState({ buttons: { Artist: "secondary", song: "default" } })
+      : this.setState({ buttons: { Artist: "default", song: "secondary" } });
   }
   toggle_search_drawer() {
     this.setState({
@@ -60,8 +60,7 @@ class ListOfSongs extends React.Component {
       room_id,
       favorite_room,
       updating_room_state,
-      change_state_queue,
-      songs
+      change_state_queue
     } = this.props;
     return (
       <React.Fragment>
@@ -72,7 +71,7 @@ class ListOfSongs extends React.Component {
               <TableCell>Position</TableCell>
               <TableCell>Title</TableCell>
               <TableCell>Artist</TableCell>
-              <TableCell>Singer </TableCell>
+              <TableCell>Artist </TableCell>
               <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
@@ -82,13 +81,7 @@ class ListOfSongs extends React.Component {
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{row.title}</TableCell>
                 <TableCell>{row.artist}</TableCell>
-                {row.singer !== undefined && (
-                  <TableCell>{row.singer}</TableCell>
-                )}
-                {row.singer === undefined && (
-                  <TableCell>{Meteor.user().username}</TableCell>
-                )}
-
+                <TableCell>{row.singer || Meteor.user().username}</TableCell>
                 <TableCell align="right">
                   <Tooltip title="Play Next">
                     <HomeIcon
@@ -113,17 +106,18 @@ class ListOfSongs extends React.Component {
           </Link>
           {this.state.search_drawer_open && (
             <div>
+              <Typography>Search By</Typography>
               <Button
                 variant="contained"
-                color={this.state.buttons.singer}
-                onClick={event => this.selectTab(0, "singer")}
+                color={this.state.buttons.Artist}
+                onClick={() => this.selectTab(0, "artist")}
               >
-                Singer
+                Artist
               </Button>
               <Button
                 variant="contained"
                 color={this.state.buttons.song}
-                onClick={event => this.selectTab(1, "song")}
+                onClick={() => this.selectTab(1, "song")}
               >
                 Song
               </Button>

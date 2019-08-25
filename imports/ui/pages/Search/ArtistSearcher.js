@@ -27,6 +27,9 @@ class ArtistSearcher extends React.Component {
     };
   }
 
+  componentWillReceiveProps() {
+    this.resetState();
+  }
   setInformation() {
     this.setState({
       search_information: this.search_value.current.firstElementChild

@@ -1,7 +1,6 @@
 import React from "react";
 import Song from "./Song_container";
 import { withStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 
 const styles = theme => ({

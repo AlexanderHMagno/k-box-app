@@ -23,12 +23,16 @@ class ArtistSearcher extends React.Component {
       search_information: "",
       error: null,
       isLoaded: false,
-      items: []
+      items: [],
+      tab: 0
     };
   }
 
-  componentWillReceiveProps() {
-    this.resetState();
+  componentWillReceiveProps(info) {
+    if (info.selectedTab != this.state.tab) {
+      this.resetState();
+      this.setState({ tab: info.selectedTab });
+    }
   }
   setInformation() {
     this.setState({

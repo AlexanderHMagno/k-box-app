@@ -35,11 +35,6 @@ class LastFM extends React.Component {
 
   update_component(keyWord, searchBy) {
     const source = "http://ws.audioscrobbler.com/2.0/";
-    // const method = "?method=artist.search&artist=";
-
-    // searchBy { if is 0 = search by artist
-    //            if is 1 = search by song}
-
     const method =
       searchBy === 0
         ? "?method=artist.gettoptracks&artist="
@@ -91,11 +86,10 @@ class LastFM extends React.Component {
     } else {
       return (
         <div className={classes.root}>
-          {console.log(items)}
           <Grid container spacing={3}>
             <ul style={{ display: "flex", flexWrap: "wrap" }}>
-              {items.map(item => (
-                <Grid item xs={12} sm={6} md={4} key={item.name}>
+              {items.map((item, index) => (
+                <Grid item xs={12} sm={6} md={4} key={item.name + index}>
                   <div>
                     <Song
                       artist={

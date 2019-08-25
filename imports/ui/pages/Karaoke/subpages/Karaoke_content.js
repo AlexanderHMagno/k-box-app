@@ -35,7 +35,6 @@ class CenteredGrid extends React.Component {
   }
   render() {
     const { classes, rooms, favoriteRoom } = this.props;
-
     return (
       <div className={classes.root}>
         {!this.state.open_room && (

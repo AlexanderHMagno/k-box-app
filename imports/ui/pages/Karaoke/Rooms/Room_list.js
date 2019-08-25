@@ -6,6 +6,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import HomeIcon from "@material-ui/icons/PlaylistAddTwoTone";
+import RemoveIcon from "@material-ui/icons/RemoveCircle";
+import PlayNowIcon from "@material-ui/icons/PlayArrow";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 import Title from "./Title";
@@ -36,8 +38,6 @@ class ListOfSongs extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    // console.log(props);
-    // console.log(this.props);
     this.setState({
       songs: props.songs
     });
@@ -60,8 +60,11 @@ class ListOfSongs extends React.Component {
       room_id,
       favorite_room,
       updating_room_state,
-      change_state_queue
+      options: { changeStateQueue, removeFromQueue, playNextSong },
+      admin
     } = this.props;
+    const administrator = admin._id === Meteor.userId();
+
     return (
       <React.Fragment>
         <Title>Coming Soon</Title>
@@ -71,7 +74,7 @@ class ListOfSongs extends React.Component {
               <TableCell>Position</TableCell>
               <TableCell>Title</TableCell>
               <TableCell>Artist</TableCell>
-              <TableCell>Artist </TableCell>
+              <TableCell>Singer </TableCell>
               <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
@@ -83,12 +86,40 @@ class ListOfSongs extends React.Component {
                 <TableCell>{row.artist}</TableCell>
                 <TableCell>{row.singer || Meteor.user().username}</TableCell>
                 <TableCell align="right">
-                  <Tooltip title="Play Next">
-                    <HomeIcon
-                      style={{ cursor: "pointer" }}
-                      onClick={() => change_state_queue(index)}
-                    />
-                  </Tooltip>
+                  {administrator && (
+                    <Tooltip title="Play now">
+                      <PlayNowIcon
+                        style={{ cursor: "pointer" }}
+                        onClick={() => console.log(index)}
+                      />
+                    </Tooltip>
+                  )}
+                  {administrator && (
+                    <Tooltip title="Play Next">
+                      <HomeIcon
+                        style={{ cursor: "pointer" }}
+                        onClick={() => changeStateQueue(index)}
+                      />
+                    </Tooltip>
+                  )}
+
+                  {(Meteor.user().username === row.singer || administrator) && (
+                    <Tooltip title="Remove">
+                      <RemoveIcon
+                        color={"secondary"}
+                        style={{ cursor: "pointer" }}
+                        onClick={() =>
+                          removeFromQueue(
+                            row.title,
+                            row.artist,
+                            row.singerId,
+                            room_id,
+                            favorite_room
+                          )
+                        }
+                      />
+                    </Tooltip>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

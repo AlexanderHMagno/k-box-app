@@ -132,7 +132,7 @@ class Song_container extends React.Component {
     if (verify_source) {
       Meteor.call("links.addFavorites", owner, title, artist);
     } else if (source_of_request === "room") {
-      Meteor.call("rooms.addFavorites", room_id, title, artist);
+      Meteor.call("rooms.addFavorites", room_id, title, artist, owner);
     }
     MySwal.fire({
       html: `<span>${title} of ${artist} has been added to your ${name_of_source}</span>`,
@@ -193,7 +193,7 @@ class Song_container extends React.Component {
       });
 
       if (protector.count() > 0) {
-        Meteor.call("rooms.removeFavorites", room_id, title, artist);
+        Meteor.call("rooms.removeFavorites", room_id, title, artist, owner);
         this.setState({
           visible: !this.state.visible
         });

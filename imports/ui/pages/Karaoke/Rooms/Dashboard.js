@@ -28,7 +28,13 @@ class Dashboard extends React.Component {
 
   //test_updating_ui from here
 
-  change_state_queue(position) {
+  changeStateQueue(position) {
+    this.setState({
+      youtube_position_queue: position
+    });
+  }
+
+  playNextSong(position) {
     this.setState({
       youtube_position_queue: position
     });
@@ -52,10 +58,20 @@ class Dashboard extends React.Component {
       });
     }
   }
+
+  remove_title(title, artist, owner, room_id, favorite_room) {
+    if (favorite_room === "yes") {
+      Meteor.call("links.removeFavorites", owner, title, artist);
+    } else {
+      Meteor.call("rooms.removeFavorites", room_id, title, artist, owner);
+    }
+  }
+
   render() {
     const { structure, classes, rooms, favoriteRoom } = this.props;
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     const thisRoom = rooms.filter(room => room._id === this.props.structure.id);
+
     const finalSong =
       thisRoom[0].favorite_room == "yes"
         ? favoriteRoom[0].favorites
@@ -114,7 +130,12 @@ class Dashboard extends React.Component {
                     room_id={structure.id}
                     favorite_room={structure.favorite_room}
                     updating_room_state={this.adding_removing_song.bind(this)}
-                    change_state_queue={this.change_state_queue.bind(this)}
+                    options={{
+                      changeStateQueue: this.changeStateQueue.bind(this),
+                      removeFromQueue: this.remove_title.bind(this),
+                      playNextSong: this.playNextSong.bind(this)
+                    }}
+                    admin={structure.admin}
                   />
                 </Paper>
               </Grid>

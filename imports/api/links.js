@@ -39,7 +39,11 @@ Meteor.methods({
   "links.addFavorites"(owner, title, artist) {
     Links.update(
       { _id: owner },
-      { $push: { favorites: { title, artist, createdAt: new Date() } } }
+      {
+        $push: {
+          favorites: { title, artist, createdAt: new Date(), singerId: owner }
+        }
+      }
     );
   },
 
@@ -83,26 +87,41 @@ Meteor.methods({
     });
   },
 
-  "rooms.addFavorites"(room_id, title, artist) {
+  "rooms.addFavorites"(room_id, title, artist, singerId) {
     Rooms.update(
       { _id: room_id },
       {
         $push: {
-          tracks: { title, artist, singer: Meteor.user().username }
+          tracks: {
+            title,
+            artist,
+            singer: Meteor.user().username,
+            singerId: singerId
+          }
         }
       }
     );
   },
-  "rooms.removeFavorites"(room_id, title, artist) {
+  "rooms.removeFavorites"(room_id, title, artist, singerId) {
     Rooms.update(
       { _id: room_id },
       {
         $pull: {
-          tracks: { title, artist, singer: Meteor.user().username }
+          tracks: { title, artist, singerId }
         }
       }
     );
   },
+  // "rooms.removeFavorites"(room_id, title, artist) {
+  //   Rooms.update(
+  //     { _id: room_id },
+  //     {
+  //       $pull: {
+  //         tracks: { title, artist, singer: Meteor.user().username }
+  //       }
+  //     }
+  //   );
+  // },
   "rooms.subscription"(id) {
     Rooms.update({ _id: id }, { $push: { users: { user: Meteor.userId() } } });
   },

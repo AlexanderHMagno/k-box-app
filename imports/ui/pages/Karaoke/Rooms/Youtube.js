@@ -21,29 +21,17 @@ class Youtube extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    this.setState({
-      songs: props.songs.map(x => `${x.title}  ${x.artist}`)
-    });
-    //if the user update the queue it will trigger the change here
-    if (!(props.youtube_position_queue == -1)) {
-      if (props.admin._id != Meteor.userId()) {
-        Swal.fire({
-          position: "bottom-end",
-          type: "warning",
-          title: "Contact admin to change queue",
-          showConfirmButton: false,
-          timer: 1000
-        });
-      } else {
-        this.setState({
-          position: props.youtube_position_queue
-        });
+    if (props.youtube_position_queue != this.state.position) {
+      this.setState({
+        songs: props.songs.map(x => `${x.title}  ${x.artist}`),
+        position: props.youtube_position_queue
+      });
+      const message = this.state.songs[props.youtube_position_queue];
+      if (message) {
         Swal.fire({
           position: "bottom-end",
           type: "success",
-          title: `${
-            this.state.songs[props.youtube_position_queue]
-          } add to queue`,
+          title: `${message} add to queue`,
           showConfirmButton: false,
           timer: 1500
         });

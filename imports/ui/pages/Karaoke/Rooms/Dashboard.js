@@ -22,7 +22,8 @@ class Dashboard extends React.Component {
       room_info: [],
       setOpen: "",
       list_to_play: "",
-      youtube_position_queue: -1
+      youtube_position_queue: -1,
+      changeRequest: ""
     };
   }
 
@@ -30,13 +31,15 @@ class Dashboard extends React.Component {
 
   changeStateQueue(position) {
     this.setState({
-      youtube_position_queue: position
+      youtube_position_queue: position,
+      changeRequest: "organize"
     });
   }
 
   playNextSong(position) {
     this.setState({
-      youtube_position_queue: position
+      youtube_position_queue: position,
+      changeRequest: "nextSong"
     });
   }
 
@@ -46,7 +49,8 @@ class Dashboard extends React.Component {
     if (structure.favorite_room === "yes") {
       this.setState({
         list_to_play: songs,
-        youtube_position_queue: -1
+        youtube_position_queue: -1,
+        changeRequest: "organize"
       });
     } else {
       this.setState({
@@ -54,7 +58,8 @@ class Dashboard extends React.Component {
           { _id: structure.id },
           { tracks: 1, _id: 0 }
         ).fetch(),
-        youtube_position_queue: -1
+        youtube_position_queue: -1,
+        changeRequest: "organize"
       });
     }
   }
@@ -118,6 +123,7 @@ class Dashboard extends React.Component {
                     room_id={structure.id}
                     youtube_position_queue={this.state.youtube_position_queue}
                     admin={structure.admin}
+                    changeRequest={this.state.changeRequest}
                   />
                 </Paper>
               </Grid>

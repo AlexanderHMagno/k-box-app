@@ -90,7 +90,7 @@ class ListOfSongs extends React.Component {
                     <Tooltip title="Play now">
                       <PlayNowIcon
                         style={{ cursor: "pointer" }}
-                        onClick={() => console.log(index)}
+                        onClick={() => playNextSong(index)}
                       />
                     </Tooltip>
                   )}
